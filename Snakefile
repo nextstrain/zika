@@ -7,20 +7,22 @@ configfile: "config.yaml"
 if Path("config_local.yaml").is_file():
     configfile: "config_local.yaml"
 
+build = Path(config.get("build_dir", "build"))
+
 
 # Rules
 rule all:
     input:
-        auspice_tree = "auspice/zika_tree.json",
-        auspice_meta = "auspice/zika_meta.json"
+        auspice_tree = build / "auspice/zika_tree.json",
+        auspice_meta = build / "auspice/zika_meta.json",
 
 rule parse:
     message: "Parsing sequences and metadata"
     input:
         config["input_fasta"],
     output:
-        sequences = "results/sequences.fasta",
-        metadata  = "results/metadata.tsv",
+        sequences = build / "results/sequences.fasta",
+        metadata  = build / "results/metadata.tsv",
     params:
         fasta_fields = config["fasta_fields"],
     shell:
@@ -44,7 +46,7 @@ rule filter:
         metadata  = rules.parse.output.metadata,
         exclude   = config['filter']['exclude'],
     output:
-        "results/filtered.fasta"
+        build / "results/filtered.fasta"
     params:
         sequences_per_category = config['filter']['sequences_per_category'],
         categories             = config['filter']['category_fields'],
@@ -67,7 +69,7 @@ rule align:
         sequences = rules.filter.output,
         reference = config['reference'],
     output:
-        "results/aligned.fasta"
+        build / "results/aligned.fasta"
     shell:
         """
         augur align \
@@ -82,7 +84,7 @@ rule tree:
     input:
         alignment = rules.align.output,
     output:
-        tree = "results/tree_raw.nwk",
+        tree = build / "results/tree_raw.nwk"
     shell:
         """
         augur tree \
@@ -97,8 +99,8 @@ rule timetree:
         alignment = rules.align.output,
         metadata  = rules.parse.output.metadata,
     output:
-        tree      = "results/tree.nwk",
-        node_data = "results/node_data.json",
+        tree      = build / "results/tree.nwk",
+        node_data = build / "results/node_data.json",
     params:
         n_iqd = config['timetree']['n_iqd'],
     shell:
@@ -122,7 +124,7 @@ rule traits:
         tree     = rules.timetree.output.tree,
         metadata = rules.parse.output.metadata,
     output:
-        "results/traits.json",
+        build / "results/traits.json",
     params:
         columns = config['traits'],
     shell:
@@ -142,7 +144,7 @@ rule translate:
         node_data = rules.timetree.output.node_data,
         reference = config['reference'],
     output:
-        "results/aa_muts.json"
+        build / "results/aa_muts.json"
     shell:
         """
         augur translate \
