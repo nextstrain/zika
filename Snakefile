@@ -15,6 +15,7 @@ rule all:
         auspice_meta = "auspice/zika_meta.json"
 
 rule parse:
+    message: "Parsing sequences and metadata"
     input:
         config["input_fasta"],
     output:
@@ -32,6 +33,12 @@ rule parse:
         """
 
 rule filter:
+    message:
+        """
+        Filtering to
+          - {params.sequences_per_category} sequence(s) per {params.categories!s}
+          - from {params.min_date} onwards
+        """
     input:
         sequences = rules.parse.output.sequences,
         metadata  = rules.parse.output.metadata,
@@ -55,6 +62,7 @@ rule filter:
         """
 
 rule align:
+    message: "Aligning sequences"
     input:
         sequences = rules.filter.output,
         reference = config['reference'],
@@ -70,6 +78,7 @@ rule align:
         """
 
 rule tree:
+    message: "Building tree"
     input:
         alignment = rules.align.output,
     output:
@@ -82,6 +91,7 @@ rule tree:
         """
 
 rule timetree:
+    message: "Building timetree (filtering nodes with IQD > {params.n_iqd})"
     input:
         tree      = rules.tree.output.tree,
         alignment = rules.align.output,
@@ -107,6 +117,7 @@ rule timetree:
         """
 
 rule traits:
+    message: "Inferring ancestral traits {params.columns!s}"
     input:
         tree     = rules.timetree.output.tree,
         metadata = rules.parse.output.metadata,
@@ -125,6 +136,7 @@ rule traits:
         """
 
 rule translate:
+    message: "Identifying amino acid changes"
     input:
         tree      = rules.timetree.output.tree,
         node_data = rules.timetree.output.node_data,
@@ -141,6 +153,7 @@ rule translate:
         """
 
 rule export:
+    message: "Exporting data files for for auspice"
     input:
         tree      = rules.timetree.output.tree,
         node_data = rules.timetree.output.node_data,
