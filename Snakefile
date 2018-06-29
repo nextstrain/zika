@@ -1,5 +1,11 @@
+from pathlib import Path
+
+
 # Config
 configfile: "config.yaml"
+
+if Path("config_local.yaml").is_file():
+    configfile: "config_local.yaml"
 
 
 # Rules

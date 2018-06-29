@@ -1,2 +1,5 @@
 # Snakemake state dir
 /.snakemake
+
+# Local config overrides
+/config_local.yaml
