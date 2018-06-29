@@ -1,0 +1,49 @@
+---
+# Paths in this file are relative to this pathogen repo, which may be inside
+# the build container at /nextstrain/build or on the local filesystem as a
+# sibling of augur, auspice, etc.
+
+input_fasta: data/zika.fasta
+
+# The reference file must be in GenBank or GFF3 format.  It should contain CDS
+# feature definitions to analyze for amino acid changes.
+reference: config/zika_outgroup.gb
+
+# This defines the fields in the pipe-delimited FASTA header of each sequence.
+fasta_fields:
+  - strain
+  - virus
+  - accession
+  - date
+  - region
+  - country
+  - division
+  - city
+  - db
+  - segment
+  - authors
+  - url
+  - title
+  - journal
+  - paper_url
+
+# Parameters for filtering and subsampling step.
+filter:
+  exclude: config/dropped_strains.txt
+  min_date: 2012
+  sequences_per_category: 20
+  category_fields:
+    - year
+    - month
+
+timetree:
+  n_iqd: 4
+
+traits:
+  # These correspond to fields in "fasta_fields" above.
+  - region
+  - country
+
+auspice:
+  config: config/auspice_config.json
+  colors: config/colors.tsv

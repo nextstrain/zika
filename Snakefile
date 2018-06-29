@@ -1,40 +1,36 @@
+# Config
+configfile: "config.yaml"
+
+
+# Rules
 rule all:
     input:
         auspice_tree = "auspice/zika_tree.json",
         auspice_meta = "auspice/zika_meta.json"
 
-rule config:
-    params:
-        input_fasta = "../../../fauna/data/zika.fasta",
-        fasta_fields = "strain virus accession date region country division city db segment authors url title journal paper_url",
-        dropped_strains = "config/dropped_strains.txt",
-        reference = "config/zika_outgroup.gb",
-        colors = "config/colors.tsv",
-        auspice_config = "config/auspice_config.json"
-
-config = rules.config.params
-
 rule parse:
     input:
-       config.input_fasta
+       config["input_fasta"]
     output:
        sequences = "results/sequences.fasta",
        metadata = "results/metadata.tsv"
+    params:
+        fasta_fields = config["fasta_fields"]
     shell:
         'augur parse --sequences {input} --output-sequences {output.sequences} --output-metadata {output.metadata} '
-            '--fields {config.fasta_fields}'
+            '--fields {params.fasta_fields}'
 
 rule filter:
     input:
         sequences = rules.parse.output.sequences,
         metadata = rules.parse.output.metadata,
-        exclude = config.dropped_strains
+        exclude = config["filter"]["exclude"]
     output:
         "results/filtered.fasta"
     params:
-        sequences_per_category = 20,
-        categories = "country year month",
-        min_date = 2012
+        sequences_per_category = config['filter']['sequences_per_category'],
+        categories             = config['filter']['category_fields'],
+        min_date               = config['filter']['min_date'],
     shell:
         'augur filter --sequences {input.sequences} --output {output} --metadata {input.metadata} '
             '--sequences-per-category {params.sequences_per_category} '
@@ -43,7 +39,7 @@ rule filter:
 rule align:
     input:
         sequences = rules.filter.output,
-        ref = config.reference
+        ref = config["reference"]
     output:
         "results/aligned.fasta"
     shell:
@@ -67,7 +63,7 @@ rule timetree:
         node_data = "results/node_data.json",
         tree = "results/tree.nwk",
     params:
-        n_iqd = 4
+        n_iqd = config['timetree']['n_iqd'],
     shell:
         'augur treetime --tree {input.tree} --alignment {input.alignment} '
             '--metadata {input.metadata}'
@@ -82,14 +78,14 @@ rule traits:
     output:
         "results/traits.json",
     params:
-        columns = "region country"
+        columns = config['traits'],
     shell:
         'augur traits --confidence --tree {input.tree} --metadata {input.metadata} --output {output} --columns {params.columns}'
 
 rule translate:
     input:
         tree = rules.timetree.output.tree,
-        ref = config.reference,
+        ref = config["reference"],
         node_data = rules.timetree.output.node_data,
     output:
         "results/aa_muts.json"
@@ -103,8 +99,8 @@ rule export:
         metadata = rules.parse.output.metadata,
         traits = rules.traits.output,
         aa_muts = rules.translate.output,
-        colors = config.colors,
-        auspice_config = config.auspice_config
+        colors = config["auspice"]["colors"],
+        auspice_config = config["auspice"]["auspice_config"]
     output:
         auspice_tree = rules.all.input.auspice_tree,
         auspice_meta = rules.all.input.auspice_meta
