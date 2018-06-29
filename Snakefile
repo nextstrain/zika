@@ -179,3 +179,12 @@ rule export:
             --output-tree {output.auspice_tree:q} \
             --output-meta {output.auspice_meta:q}
         """
+
+rule clean:
+    message: "Removing directories: {params}"
+    params:
+        build / "data",
+        build / "results",
+        build / "auspice",
+    shell:
+        "rm -rfv {params:q}"
