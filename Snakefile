@@ -16,21 +16,26 @@ rule all:
 
 rule parse:
     input:
-       config["input_fasta"]
+        config["input_fasta"],
     output:
-       sequences = "results/sequences.fasta",
-       metadata = "results/metadata.tsv"
+        sequences = "results/sequences.fasta",
+        metadata  = "results/metadata.tsv",
     params:
-        fasta_fields = config["fasta_fields"]
+        fasta_fields = config["fasta_fields"],
     shell:
-        'augur parse --sequences {input} --output-sequences {output.sequences} --output-metadata {output.metadata} '
-            '--fields {params.fasta_fields}'
+        """
+        augur parse \
+            --sequences {input:q} \
+            --fields {params.fields:q} \
+            --output-sequences {output.sequences:q} \
+            --output-metadata {output.metadata:q}
+        """
 
 rule filter:
     input:
         sequences = rules.parse.output.sequences,
-        metadata = rules.parse.output.metadata,
-        exclude = config["filter"]["exclude"]
+        metadata  = rules.parse.output.metadata,
+        exclude   = config['filter']['exclude'],
     output:
         "results/filtered.fasta"
     params:
@@ -38,80 +43,124 @@ rule filter:
         categories             = config['filter']['category_fields'],
         min_date               = config['filter']['min_date'],
     shell:
-        'augur filter --sequences {input.sequences} --output {output} --metadata {input.metadata} '
-            '--sequences-per-category {params.sequences_per_category} '
-            '--exclude {input.exclude} --categories {params.categories} --min-date {params.min_date}'
+        """
+        augur filter \
+            --sequences {input.sequences:q} \
+            --metadata {input.metadata:q} \
+            --exclude {input.exclude:q} \
+            --sequences-per-category {params.sequences_per_category:q} \
+            --categories {params.categories:q} \
+            --min-date {params.min_date:q} \
+            --output {output:q}
+        """
 
 rule align:
     input:
         sequences = rules.filter.output,
-        ref = config["reference"]
+        reference = config['reference'],
     output:
         "results/aligned.fasta"
     shell:
-        'augur align --sequences {input.sequences} --output {output} '
-         '--reference-sequence {input.ref}  --fill-gaps'
+        """
+        augur align \
+            --sequences {input.sequences:q} \
+            --reference-sequence {input.reference:q} \
+            --fill-gaps \
+            --output {output:q}
+        """
 
 rule tree:
     input:
-        alignment = rules.align.output
+        alignment = rules.align.output,
     output:
         tree = "results/tree_raw.nwk",
     shell:
-        'augur tree --alignment {input.alignment} --output {output.tree}'
+        """
+        augur tree \
+            --alignment {input.alignment:q} \
+            --output {output.tree:q}
+        """
 
 rule timetree:
     input:
+        tree      = rules.tree.output.tree,
         alignment = rules.align.output,
-        metadata = rules.parse.output.metadata,
-        tree = rules.tree.output.tree,
+        metadata  = rules.parse.output.metadata,
     output:
+        tree      = "results/tree.nwk",
         node_data = "results/node_data.json",
-        tree = "results/tree.nwk",
     params:
         n_iqd = config['timetree']['n_iqd'],
     shell:
-        'augur treetime --tree {input.tree} --alignment {input.alignment} '
-            '--metadata {input.metadata}'
-            ' --output {output.tree} --node-data {output.node_data}'
-            ' --timetree --date-confidence --time-marginal --coalescent opt'
-            ' --n-iqd {params.n_iqd}'
+        """
+        augur treetime \
+            --tree {input.tree:q} \
+            --alignment {input.alignment:q} \
+            --metadata {input.metadata:q} \
+            --timetree \
+            --date-confidence \
+            --time-marginal \
+            --coalescent opt \
+            --n-iqd {params.n_iqd:q} \
+            --output {output.tree:q} \
+            --node-data {output.node_data:q}
+        """
 
 rule traits:
     input:
-        tree = rules.timetree.output.tree,
-        metadata = rules.parse.output.metadata
+        tree     = rules.timetree.output.tree,
+        metadata = rules.parse.output.metadata,
     output:
         "results/traits.json",
     params:
         columns = config['traits'],
     shell:
-        'augur traits --confidence --tree {input.tree} --metadata {input.metadata} --output {output} --columns {params.columns}'
+        """
+        augur traits \
+            --confidence \
+            --tree {input.tree:q} \
+            --metadata {input.metadata:q} \
+            --columns {params.columns:q} \
+            --output {output:q}
+        """
 
 rule translate:
     input:
-        tree = rules.timetree.output.tree,
-        ref = config["reference"],
+        tree      = rules.timetree.output.tree,
         node_data = rules.timetree.output.node_data,
+        reference = config['reference'],
     output:
         "results/aa_muts.json"
     shell:
-        'augur translate --tree {input.tree} --node-data {input.node_data} --output {output} --reference-sequence {input.ref}'
+        """
+        augur translate \
+            --tree {input.tree:q} \
+            --node-data {input.node_data:q} \
+            --reference-sequence {input.reference:q} \
+            --output {output:q}
+        """
 
 rule export:
     input:
-        tree = rules.timetree.output.tree,
+        tree      = rules.timetree.output.tree,
         node_data = rules.timetree.output.node_data,
-        metadata = rules.parse.output.metadata,
-        traits = rules.traits.output,
-        aa_muts = rules.translate.output,
-        colors = config["auspice"]["colors"],
-        auspice_config = config["auspice"]["auspice_config"]
+        metadata  = rules.parse.output.metadata,
+        traits    = rules.traits.output,
+        aa_muts   = rules.translate.output,
+
+        colors    = config['auspice']['colors'],
+        config    = config['auspice']['config'],
     output:
         auspice_tree = rules.all.input.auspice_tree,
-        auspice_meta = rules.all.input.auspice_meta
+        auspice_meta = rules.all.input.auspice_meta,
     shell:
-        'augur export --tree {input.tree} --metadata {input.metadata}'
-            ' --node-data {input.node_data} {input.traits} {input.aa_muts}' # node decorations for the tree JSON
-            ' --colors {input.colors} --auspice-config {input.auspice_config}' #for the meta JSON
-            ' --output-tree {output.auspice_tree} --output-meta {output.auspice_meta}'
+        """
+        augur export \
+            --tree {input.tree:q} \
+            --metadata {input.metadata:q} \
+            --node-data {input.node_data:q} {input.traits:q} {input.aa_muts:q} \
+            --colors {input.colors:q} \
+            --auspice-config {input.config:q} \
+            --output-tree {output.auspice_tree:q} \
+            --output-meta {output.auspice_meta:q}
+        """
