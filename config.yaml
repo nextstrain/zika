@@ -3,29 +3,37 @@
 # the build container at /nextstrain/build or on the local filesystem as a
 # sibling of augur, auspice, etc.
 
-input_fasta: data/zika.fasta
-
 # The reference file must be in GenBank or GFF3 format.  It should contain CDS
 # feature definitions to analyze for amino acid changes.
 reference: config/zika_outgroup.gb
 
+# Credentials for pulling data from fauna/rethink.  These are not provided here
+# for data privacy and security reasons.  Please provide them in your
+# config_local.yaml file.
+credentials:
+  rethink:
+    host: ""
+    auth_key: ""
+
 # This defines the fields in the pipe-delimited FASTA header of each sequence.
+# It is used both for downloading from fauna and processing in augur.  Fields
+# may be mapped from one name in fauna to another in augur using "- from: to".
 fasta_fields:
   - strain
   - virus
   - accession
-  - date
+  - collection_date: date
   - region
   - country
   - division
-  - city
-  - db
-  - segment
+  - location: city
+  - source: db
+  - locus: segment
   - authors
   - url
   - title
   - journal
-  - paper_url
+  - puburl: paper_url
 
 # Parameters for filtering and subsampling step.
 filter:

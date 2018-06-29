@@ -1,4 +1,26 @@
 from pathlib import Path
+from collections import Mapping
+
+# XXX TODO: I expect similar logic will be desired in other pathogen builds, so
+# this really belongs in a shared Python library which can be imported or in a
+# shared Snakefile file which can be included.  For now it's here for
+# demonstration purposes without even further scaffolding necessary.
+#   -trs, 27 June 2018
+def field_map(fields):
+    """
+    Normalize a list of fields which map input names to output names as a list
+    of (input, output) tuples.  The original list items may be simple strings,
+    in which case the input and output field names are the same, or a single
+    key-value map which specify the individual names.  This exists to make the
+    config.yaml entries more concise and readable.
+    """
+    def first_pair(mapping):
+        return [ *mapping.items() ][0]
+
+    return [
+        first_pair(f) if isinstance(f, Mapping) else (f, f)
+            for f in fields
+    ]
 
 
 # Config
@@ -9,6 +31,8 @@ if Path("config_local.yaml").is_file():
 
 build = Path(config.get("build_dir", "build"))
 
+fasta_fields = field_map(config['fasta_fields'])
+
 
 # Rules
 rule all:
@@ -16,15 +40,38 @@ rule all:
         auspice_tree = build / "auspice/zika_tree.json",
         auspice_meta = build / "auspice/zika_meta.json",
 
+rule download:
+    message: "Downloading sequences from fauna"
+    output:
+        build / "data/zika.fasta"
+    params:
+        fields = [ f[0] for f in fasta_fields ],
+
+        rethink_host     = config["credentials"]["rethink"]["host"],
+        rethink_auth_key = config["credentials"]["rethink"]["auth_key"],
+    shell:
+        """
+        env PYTHONPATH=../fauna \
+            RETHINK_HOST={params.rethink_host:q} \
+            RETHINK_AUTH_KEY={params.rethink_auth_key:q} \
+                python2 ../fauna/vdb/download.py \
+                    --database vdb \
+                    --virus zika \
+                    --fasta_fields {params.fields:q} \
+                    --resolve_method choose_genbank \
+                    --path $(dirname {output:q}) \
+                    --fstem $(basename {output:q} .fasta)
+        """
+
 rule parse:
     message: "Parsing sequences and metadata"
     input:
-        config["input_fasta"],
+        rules.download.output,
     output:
         sequences = build / "results/sequences.fasta",
         metadata  = build / "results/metadata.tsv",
     params:
-        fasta_fields = config["fasta_fields"],
+        fields = [ f[1] for f in fasta_fields ],
     shell:
         """
         augur parse \
