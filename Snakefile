@@ -32,6 +32,7 @@ rule download:
         """
 
 rule parse:
+    message: "Parsing fasta into sequences and metadata"
     input:
         sequences = files.input_fasta
     output:
@@ -49,7 +50,13 @@ rule parse:
         """
 
 rule filter:
-    message: "Filtering sequences"
+    message:
+        """
+        Filtering to
+          - {params.sequences_per_group} sequence(s) per {params.group_by!s}
+          - from {params.min_date} onwards
+          - excluding strains in {input.exclude}
+        """
     input:
         sequences = rules.parse.output.sequences,
         metadata = rules.parse.output.metadata,
@@ -73,7 +80,11 @@ rule filter:
         """
 
 rule align:
-    message: "Aligning sequences"
+    message:
+        """
+        Aligning sequences to {input.reference}
+          - filling gaps with N
+        """
     input:
         sequences = rules.filter.output.sequences,
         reference = files.reference
@@ -102,7 +113,14 @@ rule tree:
         """
 
 rule refine:
-    message: "Refining tree"
+    message:
+        """
+        Refining tree
+          - estimate timetree
+          - use {params.coalescent} coalescent timescale
+          - estimate {params.date_inference} node dates
+          - filter tips more than {params.clock_filter_iqd} IQDs from clock expectation
+        """
     input:
         tree = rules.tree.output.tree,
         alignment = rules.align.output,
@@ -165,7 +183,7 @@ rule translate:
         """
 
 rule traits:
-    message: "Inferring ancestral traits"
+    message: "Inferring ancestral traits for {params.columns!s}"
     input:
         tree = rules.refine.output.tree,
         metadata = rules.parse.output.metadata
