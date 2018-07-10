@@ -1,20 +1,13 @@
-sudo: required
-
 services:
   - docker
-
 language: python
 python:
-  - "3.5"
   - "3.6"
-  - "3.7-dev"
-
 install:
   - pip3 install git+https://github.com/nextstrain/cli
   - nextstrain version
   - nextstrain check-setup
   - nextstrain update
-
 script:
   - mkdir -p data/
   - cp -v example_data/zika.fasta data/
