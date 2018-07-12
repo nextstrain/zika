@@ -28,57 +28,30 @@ Alternatively, you should be able to run the build using `snakemake` within an
 suitably-configured local environment.  Details of setting that up are not yet
 well-documented, but will be in the future.
 
-All build output files will go into a new `build/` directory.
+Build output goes into the directories `data/`, `results/` and `auspice/`.
 
 Once you've run the build, you can view the results in auspice:
 
-    nextstrain view build/auspice/
+    nextstrain view auspice/
 
 
 ## Configuration
 
-The main configuration file is `config.yaml`, with supporting files in the
-`config/` directory.
+Configuration takes place entirely with the `Snakefile`. This can be read top-to-bottom, each rule
+specifies its file inputs and output and also its parameters. There is little redirection and each
+rule should be able to be reasoned with on its own.
 
-To override any part of the config, you can create a file named
-`config_local.yaml` and add the bits you want you change.  For example, it's
-useful during development to speed up build times by very heavily subsampling
-the dataset.  You can use this `config_local.yaml` to do that:
-
-```yaml
----
-filter:
-    sequences_per_category: 1
-```
 
 ### fauna / RethinkDB credentials
 
-This build starts by pulling sequences from our live [fauna][] database (a
-RethinkDB instance).  For data privacy and security reasons, you'll need to
-provide credentials to the database yourself, using a `config_local.yaml`
-snippet like so:
+This build starts by pulling sequences from our live [fauna][] database (a RethinkDB instance). This
+requires environment variables `RETHINK_HOST` and `RETHINK_AUTH_KEY` to be set.
 
-```yaml
----
-credentials:
-  rethink:
-    host: ...
-    auth_key: ...
-```
+If you don't have access to our database, you can run the build using the example data provided in
+this repository.  Before running the build, copy the example sequences into the `data/` directory
+like so:
 
-If you don't have access to our database, you can run the build using the
-example data provided in this repository.  Before running the build, copy the
-sequences into the `build/` directory like so:
-
-    mkdir -p build/data/
-    cp example_data/zika.fasta build/data/
-
-### Per-run config
-
-It is also possible to override config values for each run by passing
-`--config` or `--configfile` options to `snakemake`.  See the [`snakemake`
-command-line options documentation][snakemake cli].
-
+    mkdir -p data/ cp example_data/zika.fasta data/
 
 [Nextstrain]: https://nextstrain.org
 [fauna]: https://github.com/nextstrain/fauna

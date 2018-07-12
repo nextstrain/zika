@@ -1,237 +1,237 @@
-from pathlib import Path
-from collections import Mapping
-
-# XXX TODO: I expect similar logic will be desired in other pathogen builds, so
-# this really belongs in a shared Python library which can be imported or in a
-# shared Snakefile file which can be included.  For now it's here for
-# demonstration purposes without even further scaffolding necessary.
-#   -trs, 27 June 2018
-def field_map(fields):
-    """
-    Normalize a list of fields which map input names to output names as a list
-    of (input, output) tuples.  The original list items may be simple strings,
-    in which case the input and output field names are the same, or a single
-    key-value map which specify the individual names.  This exists to make the
-    config.yaml entries more concise and readable.
-    """
-    def first_pair(mapping):
-        return [ *mapping.items() ][0]
-
-    return [
-        first_pair(f) if isinstance(f, Mapping) else (f, f)
-            for f in fields
-    ]
-
-
-# Config
-configfile: "config.yaml"
-
-if Path("config_local.yaml").is_file():
-    configfile: "config_local.yaml"
-
-build = Path(config.get("build_dir", "build"))
-
-fasta_fields = field_map(config['fasta_fields'])
-
-
-# Rules
 rule all:
     input:
-        auspice_tree = build / "auspice/zika_tree.json",
-        auspice_meta = build / "auspice/zika_meta.json",
+        auspice_tree = "auspice/zika_tree.json",
+        auspice_meta = "auspice/zika_meta.json"
+
+rule files:
+    params:
+        input_fasta = "data/zika.fasta",
+        dropped_strains = "config/dropped_strains.txt",
+        reference = "config/zika_outgroup.gb",
+        colors = "config/colors.tsv",
+        auspice_config = "config/auspice_config.json"
+
+files = rules.files.params
 
 rule download:
     message: "Downloading sequences from fauna"
     output:
-        build / "data/zika.fasta"
+        sequences = "data/zika.fasta"
     params:
-        fields = [ f[0] for f in fasta_fields ],
-
-        rethink_host     = config["credentials"]["rethink"]["host"],
-        rethink_auth_key = config["credentials"]["rethink"]["auth_key"],
+        fasta_fields = "strain virus accession collection_date region country division location source locus authors url title journal puburl"
     shell:
         """
         env PYTHONPATH=../fauna \
-            RETHINK_HOST={params.rethink_host:q} \
-            RETHINK_AUTH_KEY={params.rethink_auth_key:q} \
-                python2 ../fauna/vdb/download.py \
-                    --database vdb \
-                    --virus zika \
-                    --fasta_fields {params.fields:q} \
-                    --resolve_method choose_genbank \
-                    --path $(dirname {output:q}) \
-                    --fstem $(basename {output:q} .fasta)
+            python2 ../fauna/vdb/download.py \
+                --database vdb \
+                --virus zika \
+                --fasta_fields {params.fasta_fields} \
+                --resolve_method choose_genbank \
+                --path $(dirname {output.sequences}) \
+                --fstem $(basename {output.sequences} .fasta)
         """
 
 rule parse:
-    message: "Parsing sequences and metadata"
+    message: "Parsing fasta into sequences and metadata"
     input:
-        rules.download.output,
+        sequences = files.input_fasta
     output:
-        sequences = build / "results/sequences.fasta",
-        metadata  = build / "results/metadata.tsv",
+        sequences = "results/sequences.fasta",
+        metadata = "results/metadata.tsv"
     params:
-        fields = [ f[1] for f in fasta_fields ],
+        fasta_fields = "strain virus accession date region country division city db segment authors url title journal paper_url"
     shell:
         """
         augur parse \
-            --sequences {input:q} \
-            --fields {params.fields:q} \
-            --output-sequences {output.sequences:q} \
-            --output-metadata {output.metadata:q}
+            --sequences {input.sequences} \
+            --output-sequences {output.sequences} \
+            --output-metadata {output.metadata} \
+            --fields {params.fasta_fields}
         """
 
 rule filter:
     message:
         """
         Filtering to
-          - {params.sequences_per_category} sequence(s) per {params.categories!s}
+          - {params.sequences_per_group} sequence(s) per {params.group_by!s}
           - from {params.min_date} onwards
+          - excluding strains in {input.exclude}
         """
     input:
         sequences = rules.parse.output.sequences,
-        metadata  = rules.parse.output.metadata,
-        exclude   = config['filter']['exclude'],
+        metadata = rules.parse.output.metadata,
+        exclude = files.dropped_strains
     output:
-        build / "results/filtered.fasta"
+        sequences = "results/filtered.fasta"
     params:
-        sequences_per_category = config['filter']['sequences_per_category'],
-        categories             = config['filter']['category_fields'],
-        min_date               = config['filter']['min_date'],
+        group_by = "country year month",
+        sequences_per_group = 20,
+        min_date = 2012
     shell:
         """
         augur filter \
-            --sequences {input.sequences:q} \
-            --metadata {input.metadata:q} \
-            --exclude {input.exclude:q} \
-            --sequences-per-category {params.sequences_per_category:q} \
-            --categories {params.categories:q} \
-            --min-date {params.min_date:q} \
-            --output {output:q}
+            --sequences {input.sequences} \
+            --metadata {input.metadata} \
+            --exclude {input.exclude} \
+            --output {output.sequences} \
+            --group-by {params.group_by} \
+            --sequences-per-group {params.sequences_per_group} \
+            --min-date {params.min_date}
         """
 
 rule align:
-    message: "Aligning sequences"
+    message:
+        """
+        Aligning sequences to {input.reference}
+          - filling gaps with N
+        """
     input:
-        sequences = rules.filter.output,
-        reference = config['reference'],
+        sequences = rules.filter.output.sequences,
+        reference = files.reference
     output:
-        build / "results/aligned.fasta"
+        alignment = "results/aligned.fasta"
     shell:
         """
         augur align \
-            --sequences {input.sequences:q} \
-            --reference-sequence {input.reference:q} \
-            --fill-gaps \
-            --output {output:q}
+            --sequences {input.sequences} \
+            --reference-sequence {input.reference} \
+            --output {output.alignment} \
+            --fill-gaps
         """
 
 rule tree:
     message: "Building tree"
     input:
-        alignment = rules.align.output,
+        alignment = rules.align.output.alignment
     output:
-        tree = build / "results/tree_raw.nwk"
+        tree = "results/tree_raw.nwk"
     shell:
         """
         augur tree \
-            --alignment {input.alignment:q} \
-            --output {output.tree:q}
+            --alignment {input.alignment} \
+            --output {output.tree}
         """
 
-rule timetree:
-    message: "Building timetree (filtering nodes with IQD > {params.n_iqd})"
+rule refine:
+    message:
+        """
+        Refining tree
+          - estimate timetree
+          - use {params.coalescent} coalescent timescale
+          - estimate {params.date_inference} node dates
+          - filter tips more than {params.clock_filter_iqd} IQDs from clock expectation
+        """
     input:
-        tree      = rules.tree.output.tree,
+        tree = rules.tree.output.tree,
         alignment = rules.align.output,
-        metadata  = rules.parse.output.metadata,
+        metadata = rules.parse.output.metadata
     output:
-        tree      = build / "results/tree.nwk",
-        node_data = build / "results/node_data.json",
+        tree = "results/tree.nwk",
+        node_data = "results/branch_lengths.json"
     params:
-        n_iqd = config['timetree']['n_iqd'],
+        coalescent = "opt",
+        date_inference = "marginal",
+        clock_filter_iqd = 4
     shell:
         """
-        augur treetime \
-            --tree {input.tree:q} \
-            --alignment {input.alignment:q} \
-            --metadata {input.metadata:q} \
+        augur refine \
+            --tree {input.tree} \
+            --alignment {input.alignment} \
+            --metadata {input.metadata} \
+            --output-tree {output.tree} \
+            --output-node-data {output.node_data} \
             --timetree \
+            --coalescent {params.coalescent} \
             --date-confidence \
-            --time-marginal \
-            --coalescent opt \
-            --n-iqd {params.n_iqd:q} \
-            --output {output.tree:q} \
-            --node-data {output.node_data:q}
+            --date-inference {params.date_inference} \
+            --clock-filter-iqd {params.clock_filter_iqd}
         """
 
-rule traits:
-    message: "Inferring ancestral traits {params.columns!s}"
+rule ancestral:
+    message: "Reconstructing ancestral sequences and mutations"
     input:
-        tree     = rules.timetree.output.tree,
-        metadata = rules.parse.output.metadata,
+        tree = rules.refine.output.tree,
+        alignment = rules.align.output
     output:
-        build / "results/traits.json",
+        node_data = "results/nt_muts.json"
     params:
-        columns = config['traits'],
+        inference = "joint"
     shell:
         """
-        augur traits \
-            --confidence \
-            --tree {input.tree:q} \
-            --metadata {input.metadata:q} \
-            --columns {params.columns:q} \
-            --output {output:q}
+        augur ancestral \
+            --tree {input.tree} \
+            --alignment {input.alignment} \
+            --output {output.node_data} \
+            --inference {params.inference}
         """
 
 rule translate:
-    message: "Identifying amino acid changes"
+    message: "Translating amino acid sequences"
     input:
-        tree      = rules.timetree.output.tree,
-        node_data = rules.timetree.output.node_data,
-        reference = config['reference'],
+        tree = rules.refine.output.tree,
+        node_data = rules.ancestral.output.node_data,
+        reference = files.reference
     output:
-        build / "results/aa_muts.json"
+        node_data = "results/aa_muts.json"
     shell:
         """
         augur translate \
-            --tree {input.tree:q} \
-            --node-data {input.node_data:q} \
-            --reference-sequence {input.reference:q} \
-            --output {output:q}
+            --tree {input.tree} \
+            --ancestral-sequences {input.node_data} \
+            --reference-sequence {input.reference} \
+            --output {output.node_data} \
+        """
+
+rule traits:
+    message: "Inferring ancestral traits for {params.columns!s}"
+    input:
+        tree = rules.refine.output.tree,
+        metadata = rules.parse.output.metadata
+    output:
+        node_data = "results/traits.json",
+    params:
+        columns = "region country"
+    shell:
+        """
+        augur traits \
+            --tree {input.tree} \
+            --metadata {input.metadata} \
+            --output {output.node_data} \
+            --columns {params.columns} \
+            --confidence
         """
 
 rule export:
     message: "Exporting data files for for auspice"
     input:
-        tree      = rules.timetree.output.tree,
-        node_data = rules.timetree.output.node_data,
-        metadata  = rules.parse.output.metadata,
-        traits    = rules.traits.output,
-        aa_muts   = rules.translate.output,
-
-        colors    = config['auspice']['colors'],
-        config    = config['auspice']['config'],
+        tree = rules.refine.output.tree,
+        metadata = rules.parse.output.metadata,
+        branch_lengths = rules.refine.output.node_data,
+        traits = rules.traits.output.node_data,
+        nt_muts = rules.ancestral.output.node_data,
+        aa_muts = rules.translate.output.node_data,
+        colors = files.colors,
+        auspice_config = files.auspice_config
     output:
         auspice_tree = rules.all.input.auspice_tree,
-        auspice_meta = rules.all.input.auspice_meta,
+        auspice_meta = rules.all.input.auspice_meta
     shell:
         """
         augur export \
-            --tree {input.tree:q} \
-            --metadata {input.metadata:q} \
-            --node-data {input.node_data:q} {input.traits:q} {input.aa_muts:q} \
-            --colors {input.colors:q} \
-            --auspice-config {input.config:q} \
-            --output-tree {output.auspice_tree:q} \
-            --output-meta {output.auspice_meta:q}
+            --tree {input.tree} \
+            --metadata {input.metadata} \
+            --node-data {input.branch_lengths} {input.traits} {input.nt_muts} {input.aa_muts} \
+            --colors {input.colors} \
+            --auspice-config {input.auspice_config} \
+            --output-tree {output.auspice_tree} \
+            --output-meta {output.auspice_meta}
         """
 
 rule clean:
     message: "Removing directories: {params}"
     params:
-        build / "data",
-        build / "results",
-        build / "auspice",
+        "data "
+        "results ",
+        "auspice"
     shell:
-        "rm -rfv {params:q}"
+        "rm -rfv {params}"
