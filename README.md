@@ -1,6 +1,6 @@
 # nextstrain.org/zika
 
-This is the [Nextstrain][https://nextstrain.org] build for Zika, visible at
+This is the [Nextstrain](https://nextstrain.org) build for Zika, visible at
 [nextstrain.org/zika](https://nextstrain.org/zika).
 
 The build encompasses fetching data, preparing it for analysis, doing quality
