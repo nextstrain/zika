@@ -1,10 +1,7 @@
 # nextstrain.org/zika
 
-**This is currently a preliminary example of moving pathogen builds to
-independent repositories.  It is not currently used for the live site.**
-
-This is the [Nextstrain][] build for Zika, visible at
-<https://nextstrain.org/zika>.
+This is the [Nextstrain][https://nextstrain.org] build for Zika, visible at
+[nextstrain.org/zika](https://nextstrain.org/zika).
 
 The build encompasses fetching data, preparing it for analysis, doing quality
 control, performing analyses, and saving the results in a format suitable for
