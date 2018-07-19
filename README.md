@@ -44,11 +44,13 @@ rule should be able to be reasoned with on its own.
 This build starts by pulling sequences from our live [fauna][] database (a RethinkDB instance). This
 requires environment variables `RETHINK_HOST` and `RETHINK_AUTH_KEY` to be set.
 
-If you don't have access to our database, you can run the build using the example data provided in
-this repository.  Before running the build, copy the example sequences into the `data/` directory
-like so:
+If you don't have access to our database, you can run the build using the
+example data provided in this repository.  Before running the build, copy the
+example sequences into the `data/` directory like so:
 
-    mkdir -p data/ cp example_data/zika.fasta data/
+    mkdir -p data/
+    cp example_data/zika.fasta data/
+
 
 [Nextstrain]: https://nextstrain.org
 [fauna]: https://github.com/nextstrain/fauna
