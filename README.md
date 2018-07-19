@@ -41,8 +41,13 @@ rule should be able to be reasoned with on its own.
 
 ### fauna / RethinkDB credentials
 
-This build starts by pulling sequences from our live [fauna][] database (a RethinkDB instance). This
-requires environment variables `RETHINK_HOST` and `RETHINK_AUTH_KEY` to be set.
+This build starts by pulling sequences from our live [fauna][] database (a
+RethinkDB instance).  This requires environment variables `RETHINK_HOST` and
+`RETHINK_AUTH_KEY` to be set.  You may persist credentials to the database by
+creating two files in the `env/` directory: `env/RETHINK_HOST` and
+`env/RETHINK_AUTH_KEY`.  Each file should contain the appropriate value on a
+single line.  These files are ignored by git, so you can't (and shouldn't)
+commit them.
 
 If you don't have access to our database, you can run the build using the
 example data provided in this repository.  Before running the build, copy the

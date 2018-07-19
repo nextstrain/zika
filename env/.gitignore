@@ -1,0 +1,18 @@
+# Files in this directory name environment variables to set during the build.
+# The contents of the files become the value of the named environment variable.
+#
+# Environment variables tend to be used for sensitive/secret values, so all
+# definitions (files in this directory) are ignored by default so they aren't
+# accidentally committed to git.
+#
+# Any environment variables which _should_ be tracked in git can be unignored
+# on a case-by-case basis by appending lines like:
+#
+#   !/SOME_ENV_NAME
+#
+# This file also preserves the containing empty directory in the git repo, so
+# that folks cloning the repo don't have to know to create the directory
+# themselves.
+
+/*
+!/.gitignore

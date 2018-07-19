@@ -1,3 +1,8 @@
+# Import environment variables from env/
+import envdir
+envdir.open("env/")
+
+
 rule all:
     input:
         auspice_tree = "auspice/zika_tree.json",
