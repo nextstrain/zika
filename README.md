@@ -21,7 +21,7 @@ command-line tool][nextstrain-cli]:
 
 See the [nextstrain-cli README][] for how to install the `nextstrain` command.
 
-Alternatively, you should be able to run the build using `snakemake` within an
+Alternatively, you should be able to run the build using `snakemake` within a
 suitably-configured local environment.  Details of setting that up are not yet
 well-documented, but will be in the future.
 
