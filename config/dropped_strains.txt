@@ -1,50 +1,48 @@
-34997/Pavia/2016
-AFMC_S
-AFMC_U
-Bahia04
-Bahia05
-Bahia11
-Bahia12
-Boracay/16423
-BRA/2016/FC_DQ60D1
-BRA/2016/FC_DQ75D1
-COL/FLR_00034/2015
-COL/FLR_00035/2015
-COL/FLR_00036/2015
-COL/FLR_00038/2015
-COL/FLR_00040/2015
-COL/FLR_00041/2015
-COL/FLR_00042/2015
-COL/PAN_00029/2015
-COL/PAN_00030/2015
-COL/PRV_00027/2015
-COL/PRV_00028/2015
-CX17
-CX5
-DMSc05684_16
-DOM/2016/MA_WGS16_009
-Dominican_Republic/2016/PD2
-GD01
-GDZ16001
-JAM/2016/WI_JM6
-JMB_185
-PHL/2012/CPC_0740
-SG_030
-SG_042
-SI_BKK01
-SI_BKK01
-SK364/13AS
-SK403/13AS
-SV0010/15
-THA/PLCal_ZV/2013
-Thailand/1605aTw
-USA/2016/FLUR057
-VE_Ganxian
-VEN/UF_2/2016
-VIE/Bra/2016
-VR10599/Pavia/2016
-ZBRC15
-ZF36_36S
-ZK_YN001
-ZZ_1
-USA/2016/FLUR002
+AFMC_U # too basal
+AFMC_S # too basal
+Boracay/16423 # too basal
+JMB_185 # too basal
+PHL/2012/CPC_0740 # too basal
+VIE/Bra/2016 # too basal
+Dominican_Republic/2016/PD2 # duplicate of other strain in dataset
+GD01 # duplicate of other strain in dataset
+GDZ16001 # duplicate of other strain in dataset
+VEN/UF_2/2016 # duplicate of other strain in dataset
+ZZ_1 # duplicate of other strain in dataset
+VR10599/Pavia/2016 # export with unknown origin
+34997/Pavia/2016 # export with unknown origin
+COL/PRV_00027/2015 # misdated
+COL/PRV_00028/2015 # misdated
+COL/PAN_00029/2015 # misdated
+COL/PAN_00030/2015 # misdated
+COL/FLR_00034/2015 # misdated
+COL/FLR_00035/2015 # misdated
+COL/FLR_00036/2015 # misdated
+COL/FLR_00038/2015 # misdated
+COL/FLR_00040/2015 # misdated
+COL/FLR_00041/2015 # misdated
+COL/FLR_00042/2015 # misdated
+BRA/2016/FC_DQ12D1 # large indel
+Brazil/2016/ZBRX8 # large indel
+Brazil/2016/ZBRX11 # large indel
+CX17 # large indel
+MEX/2016/mex27 # large indel
+MEX/2016/mex50 # large indel
+SLV/2016/ElSalvador_1055 # large indel
+USVI/20/2016 # large indel
+USVI/21/2016 # large indel
+USVI/23/2016 # large indel
+USVI/27/2016 # large indel
+USVI/30/2016 # large indel
+USVI/32/2016 # large indel
+Thailand/1605aTw # excess divergence
+VE_Ganxian # excess divergence
+ZK_YN001 # excess divergence
+Haiti/0029/2014 # contamination present
+Haiti/0033/2014 # contamination present
+Haiti/0036/2014 # contamination present
+Haiti/0054/2014 # contamination present
+Haiti/0074/2014 # contamination present
+Haiti/0097/2014 # contamination present
+mosquito/Haiti/1682/2016 # contamination present
+ZF36_36S # contamination present

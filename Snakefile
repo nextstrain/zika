@@ -7,7 +7,7 @@ rule files:
     params:
         input_fasta = "data/zika.fasta",
         dropped_strains = "config/dropped_strains.txt",
-        reference = "config/zika_outgroup.gb",
+        reference = "config/zika_reference.gb",
         colors = "config/colors.tsv",
         auspice_config = "config/auspice_config.json"
 
@@ -56,6 +56,7 @@ rule filter:
           - {params.sequences_per_group} sequence(s) per {params.group_by!s}
           - from {params.min_date} onwards
           - excluding strains in {input.exclude}
+          - minimum genome length of {params.min_length} (50% of Zika virus genome)
         """
     input:
         sequences = rules.parse.output.sequences,
@@ -66,7 +67,8 @@ rule filter:
     params:
         group_by = "country year month",
         sequences_per_group = 20,
-        min_date = 2012
+        min_date = 2012,
+        min_length = 5385
     shell:
         """
         augur filter \
@@ -76,7 +78,8 @@ rule filter:
             --output {output.sequences} \
             --group-by {params.group_by} \
             --sequences-per-group {params.sequences_per_group} \
-            --min-date {params.min_date}
+            --min-date {params.min_date} \
+            --min-length {params.min_length}
         """
 
 rule align:
@@ -96,7 +99,8 @@ rule align:
             --sequences {input.sequences} \
             --reference-sequence {input.reference} \
             --output {output.alignment} \
-            --fill-gaps
+            --fill-gaps \
+            --remove-reference
         """
 
 rule tree:
@@ -183,14 +187,19 @@ rule translate:
         """
 
 rule traits:
-    message: "Inferring ancestral traits for {params.columns!s}"
+    message:
+        """
+        Inferring ancestral traits for {params.columns!s}
+          - increase uncertainty of reconstruction by {params.sampling_bias_correction} to partially account for sampling bias
+        """
     input:
         tree = rules.refine.output.tree,
         metadata = rules.parse.output.metadata
     output:
         node_data = "results/traits.json",
     params:
-        columns = "region country"
+        columns = "region country",
+        sampling_bias_correction = 3
     shell:
         """
         augur traits \
@@ -198,7 +207,8 @@ rule traits:
             --metadata {input.metadata} \
             --output {output.node_data} \
             --columns {params.columns} \
-            --confidence
+            --confidence \
+            --sampling-bias-correction {params.sampling_bias_correction}
         """
 
 rule export:
