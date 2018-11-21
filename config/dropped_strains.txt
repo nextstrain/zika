@@ -72,3 +72,4 @@ Haiti/0074/2014 # contamination present
 Haiti/0097/2014 # contamination present
 mosquito/Haiti/1682/2016 # contamination present
 ZF36_36S # contamination present
+MR766 # lab strain
