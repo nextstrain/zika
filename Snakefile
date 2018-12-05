@@ -34,7 +34,7 @@ rule download:
 rule parse:
     message: "Parsing fasta into sequences and metadata"
     input:
-        sequences = files.input_fasta
+        sequences = rules.download.output.sequences
     output:
         sequences = "results/sequences.fasta",
         metadata = "results/metadata.tsv"
