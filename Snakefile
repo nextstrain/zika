@@ -21,14 +21,13 @@ rule download:
         fasta_fields = "strain virus accession collection_date region country division location source locus authors url title journal puburl"
     shell:
         """
-        env PYTHONPATH=../fauna \
-            python2 ../fauna/vdb/download.py \
-                --database vdb \
-                --virus zika \
-                --fasta_fields {params.fasta_fields} \
-                --resolve_method choose_genbank \
-                --path $(dirname {output.sequences}) \
-                --fstem $(basename {output.sequences} .fasta)
+        python3 ../fauna/vdb/download.py \
+            --database vdb \
+            --virus zika \
+            --fasta_fields {params.fasta_fields} \
+            --resolve_method choose_genbank \
+            --path $(dirname {output.sequences}) \
+            --fstem $(basename {output.sequences} .fasta)
         """
 
 rule parse:
