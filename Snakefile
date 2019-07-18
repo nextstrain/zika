@@ -1,17 +1,12 @@
 rule all:
     input:
-        auspice_tree = "auspice/zika_tree.json",
-        auspice_meta = "auspice/zika_meta.json"
+        auspice_json = "auspice/zika.json",
 
-rule files:
-    params:
-        input_fasta = "data/zika.fasta",
-        dropped_strains = "config/dropped_strains.txt",
-        reference = "config/zika_reference.gb",
-        colors = "config/colors.tsv",
-        auspice_config = "config/auspice_config.json"
-
-files = rules.files.params
+input_fasta_file = "data/zika.fasta",
+dropped_strains_file = "config/dropped_strains.txt",
+reference_file = "config/zika_reference.gb",
+colors_file = "config/colors.tsv",
+auspice_config_file = "config/auspice_config.json"
 
 rule download:
     message: "Downloading sequences from fauna"
@@ -60,7 +55,7 @@ rule filter:
     input:
         sequences = rules.parse.output.sequences,
         metadata = rules.parse.output.metadata,
-        exclude = files.dropped_strains
+        exclude = dropped_strains_file
     output:
         sequences = "results/filtered.fasta"
     params:
@@ -89,7 +84,7 @@ rule align:
         """
     input:
         sequences = rules.filter.output.sequences,
-        reference = files.reference
+        reference = reference_file
     output:
         alignment = "results/aligned.fasta"
     shell:
@@ -173,7 +168,7 @@ rule translate:
     input:
         tree = rules.refine.output.tree,
         node_data = rules.ancestral.output.node_data,
-        reference = files.reference
+        reference = reference_file
     output:
         node_data = "results/aa_muts.json"
     shell:
@@ -219,21 +214,19 @@ rule export:
         traits = rules.traits.output.node_data,
         nt_muts = rules.ancestral.output.node_data,
         aa_muts = rules.translate.output.node_data,
-        colors = files.colors,
-        auspice_config = files.auspice_config
+        colors = colors_file,
+        auspice_config = auspice_config_file
     output:
-        auspice_tree = rules.all.input.auspice_tree,
-        auspice_meta = rules.all.input.auspice_meta
+        auspice_json = rules.all.input.auspice_json,
     shell:
         """
-        augur export \
+        augur export v2 \
             --tree {input.tree} \
             --metadata {input.metadata} \
             --node-data {input.branch_lengths} {input.traits} {input.nt_muts} {input.aa_muts} \
             --colors {input.colors} \
             --auspice-config {input.auspice_config} \
-            --output-tree {output.auspice_tree} \
-            --output-meta {output.auspice_meta}
+            --output-main {output.auspice_json}
         """
 
 rule clean:
