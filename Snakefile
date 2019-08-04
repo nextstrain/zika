@@ -2,11 +2,15 @@ rule all:
     input:
         auspice_json = "auspice/zika.json",
 
-input_fasta_file = "data/zika.fasta",
-dropped_strains_file = "config/dropped_strains.txt",
-reference_file = "config/zika_reference.gb",
-colors_file = "config/colors.tsv",
-auspice_config_file = "config/auspice_config.json"
+rule files:
+    params:
+        input_fasta = "data/zika.fasta",
+        dropped_strains = "config/dropped_strains.txt",
+        reference = "config/zika_reference.gb",
+        colors = "config/colors.tsv",
+        auspice_config = "config/auspice_config.json"
+
+files = rules.files.params
 
 rule download:
     message: "Downloading sequences from fauna"
@@ -55,7 +59,7 @@ rule filter:
     input:
         sequences = rules.parse.output.sequences,
         metadata = rules.parse.output.metadata,
-        exclude = dropped_strains_file
+        exclude = files.dropped_strains
     output:
         sequences = "results/filtered.fasta"
     params:
@@ -84,7 +88,7 @@ rule align:
         """
     input:
         sequences = rules.filter.output.sequences,
-        reference = reference_file
+        reference = files.reference
     output:
         alignment = "results/aligned.fasta"
     shell:
@@ -168,7 +172,7 @@ rule translate:
     input:
         tree = rules.refine.output.tree,
         node_data = rules.ancestral.output.node_data,
-        reference = reference_file
+        reference = files.reference
     output:
         node_data = "results/aa_muts.json"
     shell:
@@ -214,10 +218,10 @@ rule export:
         traits = rules.traits.output.node_data,
         nt_muts = rules.ancestral.output.node_data,
         aa_muts = rules.translate.output.node_data,
-        colors = colors_file,
-        auspice_config = auspice_config_file
+        colors = files.colors,
+        auspice_config = files.auspice_config
     output:
-        auspice_json = rules.all.input.auspice_json,
+        auspice_json = rules.all.input.auspice_json
     shell:
         """
         augur export v2 \
