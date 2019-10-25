@@ -22,12 +22,12 @@
       "type": "categorical"        
     }
   },
-  "geographic_info": [
+  "geo_resolutions": [
     "country",
     "region"
   ],
   "display_defaults": {
-    "mapTriplicate": true
+    "map_triplicate": true
   },  
   "maintainer": [
     "Trevor Bedford",

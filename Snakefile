@@ -230,7 +230,7 @@ rule export:
             --node-data {input.branch_lengths} {input.traits} {input.nt_muts} {input.aa_muts} \
             --colors {input.colors} \
             --auspice-config {input.auspice_config} \
-            --output-main {output.auspice_json}
+            --output {output.auspice_json}
         """
 
 rule clean:
