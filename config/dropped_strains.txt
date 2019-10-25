@@ -75,3 +75,4 @@ ZF36_36S # contamination present
 MR766 # lab strain
 Aedes_sp/MEX_I_44/2016 # duplicate of Aedes_aegypti/MEX/MEX_I_44/2016
 Puerto_Rico/2015/PRVABC59 # duplicate of PRVABC59
+V15555 # highly diverged
