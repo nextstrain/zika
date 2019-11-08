@@ -11,6 +11,8 @@ Nextstrain such as [fauna][] and [augur][].
 All Zika-specific steps and functionality for the Nextstrain pipeline should be
 housed in this repository.
 
+_This build requires Augur v6._
+
 [![Build Status](https://travis-ci.com/nextstrain/zika.svg?branch=master)](https://travis-ci.com/nextstrain/zika)
 
 ## Usage
