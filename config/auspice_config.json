@@ -15,11 +15,11 @@
     },
     "country": {
       "title": "country",
-      "type": "categorical"    
+      "type": "categorical"
     },
     "region": {
       "title": "region",
-      "type": "categorical"        
+      "type": "categorical"
     }
   },
   "geo_resolutions": [
@@ -28,10 +28,9 @@
   ],
   "display_defaults": {
     "map_triplicate": true
-  },  
-  "maintainer": [
-    "Trevor Bedford",
-    "http://bedford.io/team/trevor-bedford/"
+  },
+  "maintainers": [
+    {"name": "Trevor Bedford", "url": "http://bedford.io/team/trevor-bedford/"}
   ],
   "filters": [
     "country",
