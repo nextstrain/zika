@@ -1,7 +1,6 @@
 rule all:
     input:
-        auspice_tree = "auspice/zika_tree.json",
-        auspice_meta = "auspice/zika_meta.json"
+        auspice_json = "auspice/zika.json",
 
 rule files:
     params:
@@ -38,14 +37,16 @@ rule parse:
         sequences = "results/sequences.fasta",
         metadata = "results/metadata.tsv"
     params:
-        fasta_fields = "strain virus accession date region country division city db segment authors url title journal paper_url"
+        fasta_fields = "strain virus accession date region country division city db segment authors url title journal paper_url",
+        prettify_fields = "region country division city"
     shell:
         """
         augur parse \
             --sequences {input.sequences} \
             --output-sequences {output.sequences} \
             --output-metadata {output.metadata} \
-            --fields {params.fasta_fields}
+            --fields {params.fasta_fields} \
+            --prettify-fields {params.prettify_fields}
         """
 
 rule filter:
@@ -222,18 +223,16 @@ rule export:
         colors = files.colors,
         auspice_config = files.auspice_config
     output:
-        auspice_tree = rules.all.input.auspice_tree,
-        auspice_meta = rules.all.input.auspice_meta
+        auspice_json = rules.all.input.auspice_json
     shell:
         """
-        augur export v1 \
+        augur export v2 \
             --tree {input.tree} \
             --metadata {input.metadata} \
             --node-data {input.branch_lengths} {input.traits} {input.nt_muts} {input.aa_muts} \
             --colors {input.colors} \
             --auspice-config {input.auspice_config} \
-            --output-tree {output.auspice_tree} \
-            --output-meta {output.auspice_meta}
+            --output {output.auspice_json}
         """
 
 rule clean:

@@ -11,6 +11,8 @@ Nextstrain such as [fauna][] and [augur][].
 All Zika-specific steps and functionality for the Nextstrain pipeline should be
 housed in this repository.
 
+_This build requires Augur v6._
+
 [![Build Status](https://travis-ci.com/nextstrain/zika.svg?branch=master)](https://travis-ci.com/nextstrain/zika)
 
 ## Usage
@@ -18,22 +20,25 @@ housed in this repository.
 If you're unfamiliar with Nextstrain builds, you may want to follow our
 [quickstart guide][] first and then come back here.
 
-The easiest way to run this pathogen build is using the [Nextstrain
-command-line tool][nextstrain-cli]:
+There are two main ways to run & visualise the output from this build:
 
-    nextstrain build .
+The first, and easiest, way to run this pathogen build is using the [Nextstrain
+command-line tool][nextstrain-cli]:
+```
+nextstrain build .
+nextstrain view auspice/
+```
 
 See the [nextstrain-cli README][] for how to install the `nextstrain` command.
 
-Alternatively, you should be able to run the build using `snakemake` within a
-suitably-configured local environment.  Details of setting that up are not yet
-well-documented, but will be in the future.
+The second is to install augur & auspice using conda, following [these instructions](https://nextstrain.org/docs/getting-started/local-installation#install-augur--auspice-with-conda-recommended).
+The build may then be run via:
+```
+snakemake
+auspice --datasetDir auspice/
+```
 
 Build output goes into the directories `data/`, `results/` and `auspice/`.
-
-Once you've run the build, you can view the results in auspice:
-
-    nextstrain view auspice/
 
 
 ## Configuration

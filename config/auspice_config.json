@@ -1,43 +1,46 @@
 {
   "title": "Real-time tracking of Zika virus evolution",
-  "color_options": {
-    "gt": {
-      "menuItem": "genotype",
-      "legendTitle": "Genotype",
-      "type": "discrete",
-      "key": "genotype"
+  "maintainers": [
+    {"name": "Trevor Bedford", "url": "http://bedford.io/team/trevor-bedford/"}
+  ],
+  "build_url": "https://github.com/nextstrain/zika",
+  "colorings": [
+    {
+      "key": "gt",
+      "title": "genotype",
+      "type": "categorical"
     },
-    "num_date": {
-      "menuItem": "date",
-      "legendTitle": "Sampling date",
-      "type": "continuous",
-      "key": "num_date"
+    {
+      "key": "num_date",
+      "title": "date",
+      "type": "continuous"
     },
-    "authors": {
-      "key":"authors",
-      "legendTitle":"Authors",
-      "menuItem":"authors",
-      "type":"discrete"
+    {
+      "key": "author",
+      "title": "author",
+      "type": "categorical"
     },
-    "country": {
+    {
+      "key": "country",
+      "title": "country",
+      "type": "categorical"
     },
-    "region": {
+    {
+      "key": "region",
+      "title": "region",
+      "type": "categorical"
     }
-  },
-  "geo": [
+  ],
+  "geo_resolutions": [
     "country",
     "region"
   ],
-  "defaults": {
-    "mapTriplicate": true
-  },  
-  "maintainer": [
-    "Trevor Bedford",
-    "http://bedford.io/team/trevor-bedford/"
-  ],
+  "display_defaults": {
+    "map_triplicate": true
+  },
   "filters": [
     "country",
     "region",
-    "authors"
+    "author"
   ]
 }
