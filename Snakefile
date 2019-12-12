@@ -8,7 +8,8 @@ rule files:
         dropped_strains = "config/dropped_strains.txt",
         reference = "config/zika_reference.gb",
         colors = "config/colors.tsv",
-        auspice_config = "config/auspice_config.json"
+        auspice_config = "config/auspice_config.json",
+        footer_description = "config/description.md"
 
 files = rules.files.params
 
@@ -221,7 +222,8 @@ rule export:
         nt_muts = rules.ancestral.output.node_data,
         aa_muts = rules.translate.output.node_data,
         colors = files.colors,
-        auspice_config = files.auspice_config
+        auspice_config = files.auspice_config,
+        footer_description = files.footer_description
     output:
         auspice_json = rules.all.input.auspice_json
     shell:
@@ -232,6 +234,7 @@ rule export:
             --node-data {input.branch_lengths} {input.traits} {input.nt_muts} {input.aa_muts} \
             --colors {input.colors} \
             --auspice-config {input.auspice_config} \
+            --description {input.footer_description} \
             --output {output.auspice_json}
         """
 
