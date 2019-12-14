@@ -9,7 +9,7 @@ rule files:
         reference = "config/zika_reference.gb",
         colors = "config/colors.tsv",
         auspice_config = "config/auspice_config.json",
-        footer_description = "config/description.md"
+        description = "config/description.md"
 
 files = rules.files.params
 
@@ -223,7 +223,7 @@ rule export:
         aa_muts = rules.translate.output.node_data,
         colors = files.colors,
         auspice_config = files.auspice_config,
-        footer_description = files.footer_description
+        description = files.description
     output:
         auspice_json = rules.all.input.auspice_json
     shell:
@@ -234,7 +234,7 @@ rule export:
             --node-data {input.branch_lengths} {input.traits} {input.nt_muts} {input.aa_muts} \
             --colors {input.colors} \
             --auspice-config {input.auspice_config} \
-            --description {input.footer_description} \
+            --description {input.description} \
             --output {output.auspice_json}
         """
 
