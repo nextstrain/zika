@@ -166,7 +166,7 @@ rule ancestral:
         augur ancestral \
             --tree {input.tree} \
             --alignment {input.alignment} \
-            --output {output.node_data} \
+            --output-node-data {output.node_data} \
             --inference {params.inference}
         """
 
@@ -235,6 +235,7 @@ rule export:
             --colors {input.colors} \
             --auspice-config {input.auspice_config} \
             --description {input.description} \
+            --include-root-sequence \
             --output {output.auspice_json}
         """
 
