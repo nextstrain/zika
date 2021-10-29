@@ -79,3 +79,6 @@ Puerto_Rico/2015/PRVABC59 # duplicate of PRVABC59
 V15555 # highly diverged
 DK # lab strain
 DK23 # lab strain
+rGZ02a/2018 # highly diverged
+rGZ02p/2018 # highly diverged
+V211784 # highly diverged
