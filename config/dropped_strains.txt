@@ -82,3 +82,5 @@ DK23 # lab strain
 rGZ02a/2018 # highly diverged
 rGZ02p/2018 # highly diverged
 V211784 # highly diverged
+LMM/AG5643
+Faranah/18
