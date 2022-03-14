@@ -22,7 +22,6 @@ install:
   - mamba create -n nextstrain -c bioconda nextstrain-cli --yes
   - conda activate nextstrain
   - mamba install -c conda-forge -c bioconda augur auspice nextalign snakemake git --yes
-#  - pip3 install git+https://github.com/nextstrain/cli
   - nextstrain version
   - nextstrain check-setup
   - nextstrain update
