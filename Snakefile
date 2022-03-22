@@ -1,7 +1,3 @@
-from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
-
-HTTP = HTTPRemoteProvider()
-
 rule all:
     input:
         auspice_json = "auspice/zika.json",
