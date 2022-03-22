@@ -40,7 +40,6 @@ auspice --datasetDir auspice/
 
 Build output goes into the directories `data/`, `results/` and `auspice/`.
 
-
 ## Configuration
 
 Configuration takes place entirely with the `Snakefile`. This can be read top-to-bottom, each rule
@@ -72,6 +71,13 @@ data. Data generators should be cited where possible and collaborations should
 be sought in some circumstances. Please try to avoid scooping someone else's
 work. Reach out if uncertain. Authors, paper references (where available) and
 links to GenBank entries are provided in the metadata file.
+
+A faster build process can be run working from example data by copying over
+sequences and metadata from `example_data/` to `data/` via:
+```
+mkdir -p data/
+cp -v example_data/* data/
+```
 
 [Nextstrain]: https://nextstrain.org
 [fauna]: https://github.com/nextstrain/fauna
