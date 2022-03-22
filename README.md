@@ -48,18 +48,30 @@ specifies its file inputs and output and also its parameters. There is little re
 rule should be able to be reasoned with on its own.
 
 
-### fauna / RethinkDB credentials
+## Input data
 
-This build starts by pulling sequences from our live [fauna][] database (a RethinkDB instance). This
-requires environment variables `RETHINK_HOST` and `RETHINK_AUTH_KEY` to be set.
+This build starts by downloading sequences from
+[https://data.nextstrain.org/files/zika/sequences.fasta.xz](data.nextstrain.org/files/zika/sequences.fasta.xz)
+and metadata from
+[https://data.nextstrain.org/files/zika/metadata.tsv.gz](data.nextstrain.org/files/zika/metadata.tsv.gz).
+These are publicly provisioned data by the Nextstrain team by pulling sequences
+from NCBI GenBank via ViPR and performing additional bespoke curation. Our
+curation is described
+[here](https://github.com/nextstrain/fauna/blob/master/builds/ZIKA.md).
 
-If you don't have access to our database, you can run the build using the
-example data provided in this repository.  Before running the build, copy the
-example sequences into the `data/` directory like so:
+Data from GenBank follows Open Data principles, such that we can make input data
+and intermediate files available for further analysis. Open Data is data that
+can be freely used, re-used and redistributed by anyone - subject only, at most,
+to the requirement to attribute and sharealike.
 
-    mkdir -p data/
-    cp example_data/zika.fasta data/
-
+We gratefully acknowledge the authors, originating and submitting laboratories
+of the genetic sequences and metadata for sharing their work in open databases.
+Please note that although data generators have generously shared data in an open
+fashion, that does not mean there should be free license to publish on this
+data. Data generators should be cited where possible and collaborations should
+be sought in some circumstances. Please try to avoid scooping someone else's
+work. Reach out if uncertain. Authors, paper references (where available) and
+links to GenBank entries are provided in the metadata file.
 
 [Nextstrain]: https://nextstrain.org
 [fauna]: https://github.com/nextstrain/fauna
