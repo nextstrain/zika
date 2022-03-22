@@ -19,16 +19,16 @@ files = rules.files.params
 
 rule download:
     message: "Downloading sequences and metadata from data.nextstrain.org"
-    input:
-        sequences = HTTP.remote("data.nextstrain.org/files/zika/sequences.fasta.xz", keep_local=True),
-        metadata = HTTP.remote("data.nextstrain.org/files/zika/metadata.tsv.gz", keep_local=True)
     output:
         sequences = "data/sequences.fasta.xz",
         metadata = "data/metadata.tsv.gz"
+    params:
+        sequences_url = "https://data.nextstrain.org/files/zika/sequences.fasta.xz",
+        metadata_url = "https://data.nextstrain.org/files/zika/metadata.tsv.gz"
     shell:
         """
-        mv {input.sequences} {output.sequences}
-        mv {input.metadata} {output.metadata}
+        curl -fsSL --compressed {params.sequences_url:q} --output {output.sequences}
+        curl -fsSL --compressed {params.metadata_url:q} --output {output.metadata}
         """
 
 rule decompress:
