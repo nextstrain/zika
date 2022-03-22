@@ -27,5 +27,5 @@ install:
   - nextstrain update
 script:
   - mkdir -p data/
-  - cp -v example_data/zika.fasta data/
+  - cp -v example_data/* data/
   - nextstrain build .
