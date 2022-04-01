@@ -13,7 +13,7 @@ housed in this repository.
 
 _This build requires Augur v6._
 
-[![Build Status](https://travis-ci.com/nextstrain/zika.svg?branch=master)](https://travis-ci.com/nextstrain/zika)
+[![Build Status](https://github.com/nextstrain/zika/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/nextstrain/zika/actions/workflows/ci.yaml)
 
 ## Usage
 
