@@ -25,7 +25,7 @@ There are two main ways to run & visualise the output from this build:
 The first, and easiest, way to run this pathogen build is using the [Nextstrain
 command-line tool][nextstrain-cli]:
 ```
-nextstrain build . --cores all
+nextstrain build . 
 nextstrain view auspice/
 ```
 
