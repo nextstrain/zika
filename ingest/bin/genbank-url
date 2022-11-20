@@ -13,6 +13,7 @@ and observing the network activity at
 """
 from urllib.parse import urlencode
 import argparse
+from datetime import date
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -32,6 +33,7 @@ def build_query_url(ncbi_taxon_id: str):
     Generate URL to download all viral sequences and their curated metadata
     from GenBank via NCBI Virus.
     """
+    today = str(date.today().strftime("%Y-%m-%d"))
     endpoint = "https://www.ncbi.nlm.nih.gov/genomes/VirusVariation/vvsearch2/"
     params = {
         # Search criteria
@@ -40,6 +42,7 @@ def build_query_url(ncbi_taxon_id: str):
             f'VirusLineageId_ss:({ncbi_taxon_id})', # NCBI Taxon id for virus
             'Division_s:("VRL")', # Restrict to viral sequences, avoid PAT
             '{!tag=SLen_i}SLen_i:([5000 TO 15000])', # Longer than 5K bp, shorter than 15k bp
+            '{!tag=CollectionDate_s}CollectionDate_s:([2013-01-01T00:00:00.00Z TO ' + today + 'T00:00:00.00Z ])', # after 2013
             #'{!tag=UpdateDate_dt}UpdateDate_dt:([2022-01-01T00:00:00.00Z TO 2022-12-01T00:00:00.00Z ])', # recent
         ],
 
