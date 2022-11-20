@@ -1,3 +1,6 @@
+if not config:
+    configfile: "config/config_zika.yaml"
+
 rule all:
     input:
         auspice_json = "auspice/zika.json",
@@ -17,10 +20,10 @@ rule download:
     """Downloading sequences and metadata from data.nextstrain.org"""
     output:
         sequences = "data/sequences.fasta.zst",
-        metadata = "data/metadata.tsv.zst"
+        metadata = "data/metadata.tsv.zst",
     params:
-        sequences_url = "https://data.nextstrain.org/files/zika/sequences.fasta.zst",
-        metadata_url = "https://data.nextstrain.org/files/zika/metadata.tsv.zst"
+        sequences_url = "https://data.nextstrain.org/files/workflows/zika/sequences_all.fasta.zst",
+        metadata_url = "https://data.nextstrain.org/files/workflows/zika/metadata_all.tsv.zst"
     shell:
         """
         curl -fsSL --compressed {params.sequences_url:q} --output {output.sequences}
@@ -30,8 +33,8 @@ rule download:
 rule decompress:
     """Decompressing sequences and metadata"""
     input:
-        sequences = "data/sequences.fasta.zst",
-        metadata = "data/metadata.tsv.zst"
+        sequences = "data/sequences_all.fasta.zst",
+        metadata = "data/metadata_all.tsv.zst"
     output:
         sequences = "data/sequences.fasta",
         metadata = "data/metadata.tsv"
@@ -40,6 +43,20 @@ rule decompress:
         zstd -d -c {input.sequences} > {output.sequences}
         zstd -d -c {input.metadata} > {output.metadata}
         """
+
+rule wrangle_metadata:
+    input:
+        metadata="data/metadata.tsv"
+    output:
+        metadata="results/wrangled_metadata.tsv",
+    params:
+        strain_id=lambda w: config.get("strain_id_field", "strain"),
+    shell:
+        """
+        csvtk -t rename -f strain -n strain_original {input.metadata} \
+          | csvtk -t mutate -f {params.strain_id} -n strain > {output.metadata}
+        """
+
 
 rule filter:
     """
@@ -51,7 +68,7 @@ rule filter:
     """
     input:
         sequences = "data/sequences.fasta",
-        metadata = "data/metadata.tsv",
+        metadata = "results/wrangled_metadata.tsv",
         exclude = files.dropped_strains
     output:
         sequences = "results/filtered.fasta"
@@ -117,7 +134,7 @@ rule refine:
     input:
         tree = "results/tree_raw.nwk",
         alignment = "results/aligned.fasta",
-        metadata = "data/metadata.tsv"
+        metadata = "results/wrangled_metadata.tsv"
     output:
         tree = "results/tree.nwk",
         node_data = "results/branch_lengths.json"
@@ -182,7 +199,7 @@ rule traits:
     """
     input:
         tree = "results/tree.nwk",
-        metadata = "data/metadata.tsv"
+        metadata = "results/wrangled_metadata.tsv"
     output:
         node_data = "results/traits.json",
     params:
@@ -203,7 +220,7 @@ rule export:
     """Exporting data files for for auspice"""
     input:
         tree = "results/tree.nwk",
-        metadata = "data/metadata.tsv",
+        metadata = "results/wrangled_metadata.tsv",
         branch_lengths = "results/branch_lengths.json",
         traits = "results/traits.json",
         nt_muts = "results/nt_muts.json",
@@ -212,7 +229,8 @@ rule export:
         auspice_config = files.auspice_config,
         description = files.description
     output:
-        auspice_json = rules.all.input.auspice_json
+        auspice_json = "results/raw_zika.json",
+        root_sequence = "results/raw_zika_root-sequence.json",
     shell:
         """
         augur export v2 \
@@ -224,6 +242,27 @@ rule export:
             --description {input.description} \
             --include-root-sequence \
             --output {output.auspice_json}
+        """
+
+rule final_strain_name:
+    input:
+        auspice_json="results/raw_zika.json",
+        metadata="results/wrangled_metadata.tsv",
+        root_sequence="results/raw_zika_root-sequence.json",
+    output:
+        auspice_json=rules.all.input.auspice_json,
+        root_sequence="auspice/zika_root-sequence.json",
+    params:
+        display_strain_field=lambda w: config.get("display_strain_field", "strain"),
+    shell:
+        """
+        python3 bin/set_final_strain_name.py \
+            --metadata {input.metadata} \
+            --input-auspice-json {input.auspice_json} \
+            --display-strain-name {params.display_strain_field} \
+            --output {output.auspice_json}
+
+        cp {input.root_sequence} {output.root_sequence}
         """
 
 rule clean:
