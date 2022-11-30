@@ -5,6 +5,10 @@ results/
 auspice/
 build/
 
+ingest/.snakemake
+ingest/data
+ingest/logs
+
 # Sensitive environment variables
 environment*
 
