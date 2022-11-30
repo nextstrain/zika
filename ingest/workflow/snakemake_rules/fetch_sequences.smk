@@ -16,11 +16,7 @@ workflow.global_resources.setdefault("concurrent_deploys", 2)
 
 def download_serotype(wildcards):
     serotype = {
-        'all': '12637',
-        'denv1': '11053',
-        'denv2': '11060',
-        'denv3': '11069',
-        'denv4': '11070'
+        'all': '64320',
     }
     return serotype[wildcards.serotype]
 

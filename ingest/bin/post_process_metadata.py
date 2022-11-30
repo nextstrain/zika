@@ -41,24 +41,6 @@ def _set_paper_url(record):
     )
 
 
-def _set_dengue_serotype(record):
-    """Set dengue serotype from viruslineage_ids"""
-    dengue_types = {
-        "11053": "denv1",
-        "11060": "denv2",
-        "11069": "denv3",
-        "11070": "denv4",
-    }
-
-    ids = set(record["viruslineage_ids"].split(","))
-
-    for taxid, serotype in dengue_types.items():
-        if taxid in ids:
-            return serotype
-
-    return ""
-
-
 def main():
     args = parse_args()
 
@@ -67,7 +49,6 @@ def main():
         record["strain"] = _set_strain_name(record)
         record["url"] = _set_url(record)
         record["paper_url"] = _set_paper_url(record)
-        record["serotype"] = _set_dengue_serotype(record)
         record["authors"] = record["abbr_authors"]
         stdout.write(json.dumps(record) + "\n")
 

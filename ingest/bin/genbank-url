@@ -9,7 +9,7 @@ The URL this program builds is based on the URL for SARS-CoV-2 constructed with
 
 and observing the network activity at
 
-    https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=Dengue%20virus,%20taxid:12637
+    https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=Zika%20virus,%20taxid:64320
 """
 from urllib.parse import urlencode
 import argparse
@@ -22,7 +22,7 @@ def parse_args():
     parser.add_argument(
         "--ncbi-taxon-id",
         help="NCBI Taxon ID.",
-        default="12637",
+        default="64320",
         required=True
     )
     return parser.parse_args()
@@ -57,7 +57,7 @@ def build_query_url(ncbi_taxon_id: str):
                 ('database',                'SourceDB_s'),
                 ('strain',                  'Isolate_s'),
                 ('strain_s',               'Strain_s'), # Derive strain name if Isolate_s is empty
-                ('viruslineage_ids',        'VirusLineageId_ss'), # Derive denv1 to 4 based on lineage ID
+                ('viruslineage_ids',        'VirusLineageId_ss'), # Allows derivation of subtypes based on lineage ID
                 ('region',                  'Region_s'),
                 ('location',                'CountryFull_s'),
                 ('collected',               'CollectionDate_s'),

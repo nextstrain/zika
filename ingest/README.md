@@ -1,11 +1,11 @@
-# nextstrain.org/dengue/ingest
+# nextstrain.org/zika/ingest
 
-This is the ingest pipeline for Dengue virus sequences.
+This is the ingest pipeline for Zika virus sequences.
 
 ## Usage
 
 > NOTE: All command examples assume you are within the `ingest` directory.
-> If running commands from the outer `dengue` directory, please replace the `.` with `ingest`
+> If running commands from the outer `zika` directory, please replace the `.` with `ingest`
 
 Fetch sequences with
 

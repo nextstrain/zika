@@ -18,7 +18,7 @@ if not slack_envvars_defined:
     )
     sys.exit(1)
 
-S3_SRC = "s3://nextstrain-data/files/workflows/dengue"
+S3_SRC = "s3://nextstrain-data/files/workflows/zika"
 
 
 rule notify_on_genbank_record_change:

@@ -5,7 +5,7 @@ if not config:
 
 send_slack_notifications = config.get("send_slack_notifications", False)
 
-serotypes = ["all", "denv1", "denv2", "denv3", "denv4"]
+serotypes = ["all"]
 
 
 def _get_all_targets(wildcards):
