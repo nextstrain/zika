@@ -1,3 +1,6 @@
+if not config:
+    configfile: "config/config_zika.yaml"
+
 rule all:
     input:
         auspice_json = "auspice/zika.json",
@@ -41,6 +44,38 @@ rule decompress:
         zstd -d -c {input.metadata} > {output.metadata}
         """
 
+
+rule wrangle_metadata:
+    input:
+        metadata="data/metadata.tsv",
+    output:
+        metadata="results/wrangled_metadata.tsv",
+    params:
+        strain_id=lambda w: config.get("strain_id_field", "strain"),
+        wrangle_metadata_url="https://raw.githubusercontent.com/nextstrain/monkeypox/644d07ebe3fa5ded64d27d0964064fb722797c5d/scripts/wrangle_metadata.py",
+    shell:
+        """
+        # (1) Pick curl or wget based on availability    
+        if which curl > /dev/null; then
+            download_cmd="curl -fsSL --output"
+        elif which wget > /dev/null; then
+            download_cmd="wget -O"
+        else
+            echo "ERROR: Neither curl nor wget found. Please install one of them."
+            exit 1
+        fi
+        # (2) Download the required scripts if not already present
+        [[ -d bin ]] || mkdir bin
+        [[ -f bin/wrangle_metadata.py ]] || $download_cmd bin/wrangle_metadata.py {params.wrangle_metadata_url}
+        chmod +x bin/*
+        
+        # (3) Run the script
+        python3 ./bin/wrangle_metadata.py --metadata {input.metadata} \
+            --strain-id {params.strain_id} \
+            --output {output.metadata}
+        """
+
+
 rule filter:
     message:
         """
@@ -52,7 +87,7 @@ rule filter:
         """
     input:
         sequences = rules.decompress.output.sequences,
-        metadata = rules.decompress.output.metadata,
+        metadata = rules.wrangle_metadata.output.metadata,
         exclude = files.dropped_strains
     output:
         sequences = "results/filtered.fasta"
@@ -120,7 +155,7 @@ rule refine:
     input:
         tree = rules.tree.output.tree,
         alignment = rules.align.output,
-        metadata = rules.decompress.output.metadata
+        metadata = rules.wrangle_metadata.output.metadata
     output:
         tree = "results/tree.nwk",
         node_data = "results/branch_lengths.json"
@@ -186,7 +221,7 @@ rule traits:
         """
     input:
         tree = rules.refine.output.tree,
-        metadata = rules.decompress.output.metadata
+        metadata = rules.wrangle_metadata.output.metadata
     output:
         node_data = "results/traits.json",
     params:
@@ -207,7 +242,7 @@ rule export:
     message: "Exporting data files for for auspice"
     input:
         tree = rules.refine.output.tree,
-        metadata = rules.decompress.output.metadata,
+        metadata = rules.wrangle_metadata.output.metadata,
         branch_lengths = rules.refine.output.node_data,
         traits = rules.traits.output.node_data,
         nt_muts = rules.ancestral.output.node_data,
@@ -216,7 +251,8 @@ rule export:
         auspice_config = files.auspice_config,
         description = files.description
     output:
-        auspice_json = rules.all.input.auspice_json
+        auspice_json="results/raw_zika.json",
+        root_sequence="results/raw_zika_root-sequence.json",
     shell:
         """
         augur export v2 \
@@ -228,6 +264,41 @@ rule export:
             --description {input.description} \
             --include-root-sequence \
             --output {output.auspice_json}
+        """
+
+rule final_strain_name:
+    input:
+        auspice_json=rules.export.output.auspice_json,
+        metadata=rules.wrangle_metadata.output.metadata,
+        root_sequence=rules.export.output.root_sequence,
+    output:
+        auspice_json=rules.all.input.auspice_json,
+        root_sequence="auspice/zika_root-sequence.json",
+    params:
+        display_strain_field=lambda w: config.get("display_strain_field", "strain"),
+        set_final_strain_name_url="https://raw.githubusercontent.com/nextstrain/monkeypox/644d07ebe3fa5ded64d27d0964064fb722797c5d/scripts/set_final_strain_name.py",
+    shell:
+        """
+        # (1) Pick curl or wget based on availability
+        if which curl > /dev/null; then
+            download_cmd="curl -fsSL --output"
+        elif which wget > /dev/null; then
+            download_cmd="wget -O"
+        else
+            echo "ERROR: Neither curl nor wget found. Please install one of them."
+            exit 1
+        fi
+        # (2) Download the required scripts if not already present
+        [[ -d bin ]] || mkdir bin
+        [[ -f bin/set_final_strain_name.py ]] || $download_cmd bin/set_final_strain_name.py {params.set_final_strain_name_url}
+        chmod +x bin/*
+        # (3) Run the script
+        python3 bin/set_final_strain_name.py \
+            --metadata {input.metadata} \
+            --input-auspice-json {input.auspice_json} \
+            --display-strain-name {params.display_strain_field} \
+            --output {output.auspice_json}
+        cp {input.root_sequence} {output.root_sequence}
         """
 
 rule clean:
