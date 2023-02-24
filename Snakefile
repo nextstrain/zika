@@ -1,5 +1,4 @@
-if not config:
-    configfile: "config/config_zika.yaml"
+configfile: "config/config_zika.yaml"
 
 rule all:
     input:
