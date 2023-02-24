@@ -6,6 +6,11 @@
   "build_url": "https://github.com/nextstrain/zika",
   "colorings": [
     {
+      "key": "strain_original",
+      "title": "strain name",
+      "type": "categorical"
+    },
+    {
       "key": "gt",
       "title": "genotype",
       "type": "categorical"
