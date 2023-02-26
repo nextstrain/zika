@@ -50,9 +50,9 @@ rule should be able to be reasoned with on its own.
 ## Input data
 
 This build starts by downloading sequences from
-[https://data.nextstrain.org/files/zika/sequences.fasta.xz](data.nextstrain.org/files/zika/sequences.fasta.xz)
+[https://data.nextstrain.org/files/zika/sequences.fasta.xz](https://data.nextstrain.org/files/zika/sequences.fasta.xz)
 and metadata from
-[https://data.nextstrain.org/files/zika/metadata.tsv.gz](data.nextstrain.org/files/zika/metadata.tsv.gz).
+[https://data.nextstrain.org/files/zika/metadata.tsv.gz](https://data.nextstrain.org/files/zika/metadata.tsv.gz).
 These are publicly provisioned data by the Nextstrain team by pulling sequences
 from NCBI GenBank via ViPR and performing additional bespoke curation. Our
 curation is described
