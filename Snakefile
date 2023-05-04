@@ -51,8 +51,8 @@ rule filter:
           - minimum genome length of {params.min_length} (50% of Zika virus genome)
         """
     input:
-        sequences = rules.decompress.output.sequences,
-        metadata = rules.decompress.output.metadata,
+        sequences = "data/sequences.fasta",
+        metadata = "data/metadata.tsv",
         exclude = files.dropped_strains
     output:
         sequences = "results/filtered.fasta"
@@ -81,7 +81,7 @@ rule align:
           - filling gaps with N
         """
     input:
-        sequences = rules.filter.output.sequences,
+        sequences = "results/filtered.fasta",
         reference = files.reference
     output:
         alignment = "results/aligned.fasta"
@@ -98,7 +98,7 @@ rule align:
 rule tree:
     message: "Building tree"
     input:
-        alignment = rules.align.output.alignment
+        alignment = "results/aligned.fasta"
     output:
         tree = "results/tree_raw.nwk"
     shell:
@@ -118,9 +118,9 @@ rule refine:
           - filter tips more than {params.clock_filter_iqd} IQDs from clock expectation
         """
     input:
-        tree = rules.tree.output.tree,
-        alignment = rules.align.output,
-        metadata = rules.decompress.output.metadata
+        tree = "results/tree_raw.nwk",
+        alignment = "results/aligned.fasta",
+        metadata = "data/metadata.tsv"
     output:
         tree = "results/tree.nwk",
         node_data = "results/branch_lengths.json"
@@ -146,8 +146,8 @@ rule refine:
 rule ancestral:
     message: "Reconstructing ancestral sequences and mutations"
     input:
-        tree = rules.refine.output.tree,
-        alignment = rules.align.output
+        tree = "results/tree.nwk",
+        alignment = "results/aligned.fasta"
     output:
         node_data = "results/nt_muts.json"
     params:
@@ -164,8 +164,8 @@ rule ancestral:
 rule translate:
     message: "Translating amino acid sequences"
     input:
-        tree = rules.refine.output.tree,
-        node_data = rules.ancestral.output.node_data,
+        tree = "results/tree.nwk",
+        node_data = "results/nt_muts.json",
         reference = files.reference
     output:
         node_data = "results/aa_muts.json"
@@ -185,8 +185,8 @@ rule traits:
           - increase uncertainty of reconstruction by {params.sampling_bias_correction} to partially account for sampling bias
         """
     input:
-        tree = rules.refine.output.tree,
-        metadata = rules.decompress.output.metadata
+        tree = "results/tree.nwk",
+        metadata = "data/metadata.tsv"
     output:
         node_data = "results/traits.json",
     params:
@@ -206,12 +206,12 @@ rule traits:
 rule export:
     message: "Exporting data files for for auspice"
     input:
-        tree = rules.refine.output.tree,
-        metadata = rules.decompress.output.metadata,
-        branch_lengths = rules.refine.output.node_data,
-        traits = rules.traits.output.node_data,
-        nt_muts = rules.ancestral.output.node_data,
-        aa_muts = rules.translate.output.node_data,
+        tree = "results/tree.nwk",
+        metadata = "data/metadata.tsv",
+        branch_lengths = "results/branch_lengths.json",
+        traits = "results/traits.json",
+        nt_muts = "results/nt_muts.json",
+        aa_muts = "results/aa_muts.json",
         colors = files.colors,
         auspice_config = files.auspice_config,
         description = files.description
