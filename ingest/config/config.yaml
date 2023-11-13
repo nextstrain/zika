@@ -1,7 +1,7 @@
 # Sources of sequences to include in the ingest run
 sources: ['genbank']
 # Pathogen NCBI Taxonomy ID
-ncbi_taxon_id: '10244'
+ncbi_taxon_id: '64320'
 # Renames the NCBI dataset headers
 ncbi_field_map: 'source-data/ncbi-dataset-field-map.tsv'
 
@@ -41,7 +41,7 @@ transform:
   abbr_authors_field: 'abbr_authors'
   # General geolocation rules to apply to geolocation fields
   geolocation_rules_url: 'https://raw.githubusercontent.com/nextstrain/ncov-ingest/master/source-data/gisaid_geoLocationRules.tsv'
-  # Local geolocation rules that are only applicable to mpox data
+  # Local geolocation rules that are only applicable to zika data
   # Local rules can overwrite the general geolocation rules provided above
   local_geolocation_rules: 'source-data/geolocation-rules.tsv'
   # User annotations file

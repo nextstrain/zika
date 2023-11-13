@@ -1,6 +1,6 @@
-# nextstrain.org/mpox/ingest
+# nextstrain.org/zika/ingest
 
-This is the ingest pipeline for mpox virus sequences.
+This is the ingest pipeline for zika virus sequences.
 
 ## Software requirements
 
@@ -9,7 +9,7 @@ Follow the [standard installation instructions](https://docs.nextstrain.org/en/l
 ## Usage
 
 > NOTE: All command examples assume you are within the `ingest` directory.
-> If running commands from the outer `mpox` directory, please replace the `.` with `ingest`
+> If running commands from the outer `zika` directory, please replace the `.` with `ingest`
 
 Fetch sequences with
 
