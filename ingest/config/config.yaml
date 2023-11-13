@@ -100,8 +100,7 @@ transform:
     'release_date',
     'update_date',
     'sra_accessions',
-    'abbr_authors',
     'authors',
-    'institution'
+    'institution',
   ]
 

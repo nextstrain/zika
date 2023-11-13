@@ -85,6 +85,8 @@ rule transform:
                 --abbr-authors-field {params.abbr_authors_field} \
             | ./vendored/apply-geolocation-rules \
                 --geolocation-rules {input.all_geolocation_rules} \
+            | ./bin/post_process_metadata.py \
+                --accession-field {params.id_field} \
             | ./vendored/merge-user-metadata \
                 --annotations {input.annotations} \
                 --id-field {params.annotations_id} \
