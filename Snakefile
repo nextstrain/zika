@@ -1,3 +1,6 @@
+if not config:
+    configfile: "config/config_zika.yaml"
+
 rule all:
     input:
         auspice_json = "auspice/zika.json",
@@ -59,12 +62,14 @@ rule filter:
         group_by = "country year month",
         sequences_per_group = 40,
         min_date = 2012,
-        min_length = 5385
+        min_length = 5385,
+        strain_id = config.get("strain_id_field", "strain"),
     shell:
         """
         augur filter \
             --sequences {input.sequences} \
             --metadata {input.metadata} \
+            --metadata-id-columns {params.strain_id} \
             --exclude {input.exclude} \
             --output {output.sequences} \
             --group-by {params.group_by} \
@@ -124,13 +129,15 @@ rule refine:
     params:
         coalescent = "opt",
         date_inference = "marginal",
-        clock_filter_iqd = 4
+        clock_filter_iqd = 4,
+        strain_id = config.get("strain_id_field", "strain"),
     shell:
         """
         augur refine \
             --tree {input.tree} \
             --alignment {input.alignment} \
             --metadata {input.metadata} \
+            --metadata-id-columns {params.strain_id} \
             --output-tree {output.tree} \
             --output-node-data {output.node_data} \
             --timetree \
@@ -187,12 +194,14 @@ rule traits:
         node_data = "results/traits.json",
     params:
         columns = "region country",
-        sampling_bias_correction = 3
+        sampling_bias_correction = 3,
+        strain_id = config.get("strain_id_field", "strain"),
     shell:
         """
         augur traits \
             --tree {input.tree} \
             --metadata {input.metadata} \
+            --metadata-id-columns {params.strain_id} \
             --output {output.node_data} \
             --columns {params.columns} \
             --confidence \
@@ -212,18 +221,45 @@ rule export:
         auspice_config = files.auspice_config,
         description = files.description
     output:
-        auspice_json = rules.all.input.auspice_json
+        auspice_json = "results/raw_zika.json",
+        root_sequence = "results/raw_zika_root-sequence.json",
+    params:
+        strain_id = config.get("strain_id_field", "strain"),
     shell:
         """
         augur export v2 \
             --tree {input.tree} \
             --metadata {input.metadata} \
+            --metadata-id-columns {params.strain_id} \
             --node-data {input.branch_lengths} {input.traits} {input.nt_muts} {input.aa_muts} \
             --colors {input.colors} \
             --auspice-config {input.auspice_config} \
             --description {input.description} \
             --include-root-sequence \
             --output {output.auspice_json}
+        """
+
+rule final_strain_name:
+    input:
+        auspice_json="results/raw_zika.json",
+        metadata="data/metadata.tsv",
+        root_sequence="results/raw_zika_root-sequence.json",
+    output:
+        auspice_json="auspice/zika.json",
+        root_sequence="auspice/zika_root-sequence.json",
+    params:
+        strain_id=config["strain_id_field"],
+        display_strain_field=config.get("display_strain_field", "strain"),
+    shell:
+        """
+        python3 scripts/set_final_strain_name.py \
+            --metadata {input.metadata} \
+            --metadata-id-columns {params.strain_id} \
+            --input-auspice-json {input.auspice_json} \
+            --display-strain-name {params.display_strain_field} \
+            --output {output.auspice_json}
+
+        cp {input.root_sequence} {output.root_sequence}
         """
 
 rule clean:
