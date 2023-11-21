@@ -16,6 +16,8 @@ rule files:
 
 files = rules.files.params
 
+include: "rules/usvi.smk"
+
 rule download:
     """Downloading sequences and metadata from data.nextstrain.org"""
     output:
@@ -53,8 +55,8 @@ rule filter:
       - minimum genome length of {params.min_length} (50% of Zika virus genome)
     """
     input:
-        sequences = "data/sequences.fasta",
-        metadata = "data/metadata.tsv",
+        sequences = "data/sequences_all.fasta",
+        metadata = "data/metadata_all.tsv",
         exclude = files.dropped_strains
     output:
         sequences = "results/filtered.fasta"
@@ -122,7 +124,7 @@ rule refine:
     input:
         tree = "results/tree_raw.nwk",
         alignment = "results/aligned.fasta",
-        metadata = "data/metadata.tsv"
+        metadata = "data/metadata_all.tsv"
     output:
         tree = "results/tree.nwk",
         node_data = "results/branch_lengths.json"
@@ -189,7 +191,7 @@ rule traits:
     """
     input:
         tree = "results/tree.nwk",
-        metadata = "data/metadata.tsv"
+        metadata = "data/metadata_all.tsv"
     output:
         node_data = "results/traits.json",
     params:
@@ -212,7 +214,7 @@ rule export:
     """Exporting data files for for auspice"""
     input:
         tree = "results/tree.nwk",
-        metadata = "data/metadata.tsv",
+        metadata = "data/metadata_all.tsv",
         branch_lengths = "results/branch_lengths.json",
         traits = "results/traits.json",
         nt_muts = "results/nt_muts.json",
@@ -242,7 +244,7 @@ rule export:
 rule final_strain_name:
     input:
         auspice_json="results/raw_zika.json",
-        metadata="data/metadata.tsv",
+        metadata="data/metadata_all.tsv",
         root_sequence="results/raw_zika_root-sequence.json",
     output:
         auspice_json="auspice/zika.json",

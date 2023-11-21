@@ -6,7 +6,6 @@ def replace_name_recursive(node, lookup, saveoldcolumn):
     if node["name"] in lookup:
         if saveoldcolumn == "accession":
             node["node_attrs"][saveoldcolumn] = node["name"]
-            node["node_attrs"]["url"] = "https://www.ncbi.nlm.nih.gov/nuccore/" + node["name"]
         elif saveoldcolumn == "genbank_accession":
             node["node_attrs"][saveoldcolumn] = {}
             node["node_attrs"][saveoldcolumn]["value"] = node["name"]
