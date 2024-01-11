@@ -4,17 +4,6 @@ rule all:
     input:
         auspice_json = "auspice/zika.json",
 
-rule files:
-    params:
-        input_fasta = "data/zika.fasta",
-        dropped_strains = "config/dropped_strains.txt",
-        reference = "config/zika_reference.gb",
-        colors = "config/colors.tsv",
-        auspice_config = "config/auspice_config.json",
-        description = "config/description.md"
-
-files = rules.files.params
-
 include: "rules/usvi.smk"
 include: "rules/prepare_sequences.smk"
 include: "rules/construct_phylogeny.smk"

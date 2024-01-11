@@ -60,7 +60,7 @@ rule filter:
     input:
         sequences = "data/sequences_all.fasta",
         metadata = "data/metadata_all.tsv",
-        exclude = files.dropped_strains
+        exclude = "config/dropped_strains.txt",
     output:
         sequences = "results/filtered.fasta"
     params:
@@ -90,7 +90,7 @@ rule align:
     """
     input:
         sequences = "results/filtered.fasta",
-        reference = files.reference
+        reference = "config/zika_reference.gb"
     output:
         alignment = "results/aligned.fasta"
     shell:
