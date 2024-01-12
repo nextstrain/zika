@@ -3,42 +3,25 @@
 This is the [Nextstrain](https://nextstrain.org) build for Zika, visible at
 [nextstrain.org/zika](https://nextstrain.org/zika).
 
-The build encompasses fetching data, preparing it for analysis, doing quality
-control, performing analyses, and saving the results in a format suitable for
-visualization (with [auspice][]).  This involves running components of
-Nextstrain such as [fauna][] and [augur][].
+## Software requirements
 
-All Zika-specific steps and functionality for the Nextstrain pipeline should be
-housed in this repository.
-
-_This build requires Augur v6._
-
-[![Build Status](https://github.com/nextstrain/zika/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/nextstrain/zika/actions/workflows/ci.yaml)
+Follow the [standard installation instructions](https://docs.nextstrain.org/en/latest/install.html) for Nextstrain's suite of software tools.
 
 ## Usage
 
 If you're unfamiliar with Nextstrain builds, you may want to follow our
-[quickstart guide][] first and then come back here.
+[Running a Pathogen Workflow guide][] first and then come back here.
 
-There are two main ways to run & visualise the output from this build:
+The easiest way to run this pathogen build is using the Nextstrain
+command-line tool:
 
-The first, and easiest, way to run this pathogen build is using the [Nextstrain
-command-line tool][nextstrain-cli]:
-```
-nextstrain build . 
-nextstrain view auspice/
-```
-
-See the [nextstrain-cli README][] for how to install the `nextstrain` command.
-
-The second is to install augur & auspice using conda, following [these instructions](https://nextstrain.org/docs/getting-started/local-installation#install-augur--auspice-with-conda-recommended).
-The build may then be run via:
-```
-snakemake
-auspice --datasetDir auspice/
-```
+    nextstrain build .
 
 Build output goes into the directories `data/`, `results/` and `auspice/`.
+
+Once you've run the build, you can view the results in auspice:
+
+    nextstrain view auspice/
 
 ## Configuration
 
@@ -46,43 +29,25 @@ Configuration takes place entirely with the `Snakefile`. This can be read top-to
 specifies its file inputs and output and also its parameters. There is little redirection and each
 rule should be able to be reasoned with on its own.
 
+### Using GenBank data
 
-## Input data
+This build starts by pulling preprocessed sequence and metadata files from: 
 
-This build starts by downloading sequences from
-https://data.nextstrain.org/files/zika/sequences.fasta.xz
-and metadata from
-https://data.nextstrain.org/files/zika/metadata.tsv.gz.
-These are publicly provisioned data by the Nextstrain team by pulling sequences
-from NCBI GenBank via ViPR and performing 
-[additional bespoke curation](https://github.com/nextstrain/fauna/blob/master/builds/ZIKA.md).
+* https://data.nextstrain.org/files/zika/sequences.fasta.zst
+* https://data.nextstrain.org/files/zika/metadata.tsv.zst
 
-Data from GenBank follows Open Data principles, such that we can make input data
-and intermediate files available for further analysis. Open Data is data that
-can be freely used, re-used and redistributed by anyone - subject only, at most,
-to the requirement to attribute and sharealike.
+The above datasets have been preprocessed and cleaned from GenBank and are updated at regular intervals.
 
-We gratefully acknowledge the authors, originating and submitting laboratories
-of the genetic sequences and metadata for sharing their work in open databases.
-Please note that although data generators have generously shared data in an open
-fashion, that does not mean there should be free license to publish on this
-data. Data generators should be cited where possible and collaborations should
-be sought in some circumstances. Please try to avoid scooping someone else's
-work. Reach out if uncertain. Authors, paper references (where available) and
-links to GenBank entries are provided in the metadata file.
+### Using example data
 
-A faster build process can be run working from example data by copying over
-sequences and metadata from `example_data/` to `data/` via:
-```
-mkdir -p data/
-cp -v example_data/* data/
-```
+Alternatively, you can run the build using the
+example data provided in this repository.  To run the build by copying the
+example sequences into the `data/` directory, use the following:
+
+    nextstrain build .  --configfile profiles/ci/profiles_config.yaml
 
 [Nextstrain]: https://nextstrain.org
-[fauna]: https://github.com/nextstrain/fauna
-[augur]: https://github.com/nextstrain/augur
-[auspice]: https://github.com/nextstrain/auspice
-[snakemake cli]: https://snakemake.readthedocs.io/en/stable/executable.html#all-options
-[nextstrain-cli]: https://github.com/nextstrain/cli
-[nextstrain-cli README]: https://github.com/nextstrain/cli/blob/master/README.md
-[quickstart guide]: https://nextstrain.org/docs/getting-started/quickstart
+[augur]: https://docs.nextstrain.org/projects/augur/en/stable/
+[auspice]: https://docs.nextstrain.org/projects/auspice/en/stable/index.html
+[Installing Nextstrain guide]: https://docs.nextstrain.org/en/latest/install.html
+[Running a Pathogen Workflow guide]: https://docs.nextstrain.org/en/latest/tutorials/running-a-workflow.html
