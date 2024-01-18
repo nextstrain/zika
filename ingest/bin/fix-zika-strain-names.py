@@ -8,10 +8,10 @@ import re
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Reformat a NCBI Virus metadata.tsv file for a pathogen build."
+        description="Modify zika strain names by referencing historical modifications from the fauna repo."
     )
-    parser.add_argument("--accession-field", default='accession',
-        help="Field from the records to use as the sequence ID in the FASTA file.")
+    parser.add_argument("--strain-field", default='strain',
+        help="Field from the records to use as the strain name to be fixed.")
 
     return parser.parse_args()
 
@@ -48,8 +48,7 @@ def main():
 
     for index, record in enumerate(stdin):
         record = json.loads(record)
-        record["strain"] = _set_strain_name(record)
-        record["authors"] = record["abbr_authors"]
+        record[args.strain_field] = _set_strain_name(record)
         stdout.write(json.dumps(record) + "\n")
 
 
