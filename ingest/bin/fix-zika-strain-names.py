@@ -1,4 +1,10 @@
 #! /usr/bin/env python3
+"""
+Parses GenBank's 'strain' field of the NDJSON record from stdin and applies Zika-specific strain name corrections
+based on historical modifications from the fauna repo.
+
+Outputs the modified record to stdout.
+"""
 
 import argparse
 import json
