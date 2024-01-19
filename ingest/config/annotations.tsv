@@ -1,0 +1,237 @@
+KX922703	strain	USA/2016/FL021
+KY765326	strain	NIC/6188_13A1/2016
+KX922707	strain	USA/2016/FL039
+KU922923	strain	MEX/InDRE/2016
+KY075934	strain	PuertoRico/2016/FL016U
+KY765327	strain	NIC/5005_13A1/2016
+KX922705	strain	USA/2016/FL032
+KY075938	strain	Aedes_aegypti/USA/2016/FL06
+KX922704	strain	USA/2016/FL030
+KX673530	strain	PHE_Guadeloupe
+KY075935	strain	USA/2016/FL022
+KX838906	strain	Aedes_aegypti/USA/2016/FL03
+KY075933	strain	PuertoRico/2016/FL008U
+KX838904	strain	Aedes_aegypti/USA/2016/FL01
+KX838905	strain	Aedes_aegypti/USA/2016/FL02
+KY765320	strain	NIC/6406_13A1/2016
+KY075936	strain	USA/2016/FL036
+KY075932	strain	Martinique/2016/FL001Sa
+KY765321	strain	NIC/4886_12A1/2016
+KY075939	strain	Aedes_aegypti/USA/2016/FL08
+KX922706	strain	USA/2016/FL038
+KY075937	strain	Aedes_aegypti/USA/2016/FL05
+KX922708	strain	Aedes_aegypti/USA/2016/FL04
+KY014295	strain	USA/2016/FL010
+MT377503	strain	V151144
+MF988734	strain	SG_EHI_/33164Y17
+KU853013	strain	Dominican_Republic/2016/PD2
+KY785443	strain	USA/2016/FL028
+KX906952	strain	2016_HND_19563
+KY120348	strain	MEX_CIENI551
+KX856011	strain	Aedes_sp/MEX_I_44/2016
+KY785421	strain	USA/2016/FL019
+KU527068	strain	Natal_RGN
+MF438286	strain	Cuba_2017
+KF993678	strain	THA/PLCal_ZV/2013
+KY631494	strain	ENCB165P4
+KY785440	strain	USA/2016/FL035
+KY785451	strain	Martinique/2016/FL001
+MF664436	strain	Dominican_Republic/2016/ZB
+KY648934	strain	Aedes_aegypti/MEX/MEX_I_44/2016
+KX879603	strain	EC/Esmeraldas/062/2016
+OL414716	strain	Faranah/18
+MN185326	strain	French_Guiana_Aedes_aegypti_T1010
+MN185328	strain	French_Guiana_Aedes_aegypti_T1141
+KX827268	strain	USA/UT_1/2016
+KU853012	strain	Dominican_Republic/2016/PD1
+MK028857	strain	Puerto_Rico/2015/PRVABC59
+KY785457	strain	USA/2016/FL029
+MH513600	strain	BR/Sinop/H366_2P/2015
+KY927808	strain	ZZ_1
+KX087102	strain	COL/FLR/2015
+KX879604	strain	EC/Esmeraldas/089/2016
+KF993678	country	Thailand
+KF993678	division	Thailand
+KF993678	location	Thailand
+KF993678	region	Southeast Asia
+KU647676	country	Martinique
+KU647676	division	Martinique
+KU647676	location	Martinique
+KU647676	region	North America
+KU740184	country	Venezuela
+KU740184	division	Venezuela
+KU740184	location	Venezuela
+KU740184	region	South America
+KU744693	country	Venezuela
+KU744693	division	Venezuela
+KU744693	location	Venezuela
+KU744693	region	South America
+KU758877	country	French Guiana
+KU758877	division	French Guiana
+KU758877	location	French Guiana
+KU758877	region	South America
+KU761560	country	American Samoa
+KU761560	division	American Samoa
+KU761560	location	American Samoa
+KU761560	region	Oceania
+KU761561	country	American Samoa
+KU761561	division	American Samoa
+KU761561	location	American Samoa
+KU761561	region	Oceania
+KU761564	country	Venezuela
+KU761564	division	Venezuela
+KU761564	location	Venezuela
+KU761564	region	South America
+KU820898	country	Venezuela
+KU820898	division	Venezuela
+KU820898	location	Venezuela
+KU820898	region	South America
+KU853012	country	Dominican Republic
+KU853012	division	Dominican Republic
+KU853012	location	Dominican Republic
+KU853012	region	North America
+KU866423	country	American Samoa
+KU866423	division	American Samoa
+KU866423	location	American Samoa
+KU866423	region	Oceania
+KU955589	country	American Samoa
+KU955589	division	American Samoa
+KU955589	location	American Samoa
+KU955589	region	Oceania
+KU955590	country	Venezuela
+KU955590	division	Venezuela
+KU955590	location	Venezuela
+KU955590	region	South America
+KU963796	country	American Samoa
+KU963796	division	American Samoa
+KU963796	location	American Samoa
+KU963796	region	Oceania
+KU991811	country	Brazil
+KU991811	division	Brazil
+KU991811	location	Brazil
+KU991811	region	South America
+KX056898	country	Venezuela
+KX056898	division	Venezuela
+KX056898	location	Venezuela
+KX056898	region	South America
+KX117076	country	American Samoa
+KX117076	division	American Samoa
+KX117076	location	American Samoa
+KX117076	region	Oceania
+KX185891	country	American Samoa
+KX185891	division	American Samoa
+KX185891	location	American Samoa
+KX185891	region	Oceania
+KX253996	country	American Samoa
+KX253996	division	American Samoa
+KX253996	location	American Samoa
+KX253996	region	Oceania
+KX266255	country	American Samoa
+KX266255	division	American Samoa
+KX266255	location	American Samoa
+KX266255	region	Oceania
+KX269878	country	Haiti
+KX269878	division	Haiti
+KX269878	location	Haiti
+KX269878	region	North America
+KX673530	country	Guadeloupe
+KX673530	division	Guadeloupe
+KX673530	location	Guadeloupe
+KX673530	region	North America
+KY120352	country	Brazil
+KY120352	division	Brazil
+KY120352	location	Brazil
+KY120352	region	South America
+KY120353	country	Philippines
+KY120353	division	Philippines
+KY120353	location	Philippines
+KY120353	region	Southeast Asia
+KY553111	country	Philippines
+KY553111	division	Philippines
+KY553111	location	Philippines
+KY553111	region	Southeast Asia
+KY785451	country	Martinique
+KY785451	division	Martinique
+KY785451	location	Martinique
+KY785451	region	North America
+KY785454	country	El Salvador
+KY785454	division	El Salvador
+KY785454	location	El Salvador
+KY785454	region	North America
+KY962729	country	Philippines
+KY962729	division	Philippines
+KY962729	location	Philippines
+KY962729	region	Southeast Asia
+LC191864	country	Fiji
+LC191864	division	Fiji
+LC191864	location	Fiji
+LC191864	region	Oceania
+LC219720	country	Vietnam
+LC219720	division	Vietnam
+LC219720	location	Vietnam
+LC219720	region	Southeast Asia
+LC369584	country	Thailand
+LC369584	division	Thailand
+LC369584	location	Thailand
+LC369584	region	Southeast Asia
+MF098764	country	Dominican Republic
+MF098764	division	Dominican Republic
+MF098764	location	Dominican Republic
+MF098764	region	North America
+MF098765	country	Dominican Republic
+MF098765	division	Dominican Republic
+MF098765	location	Dominican Republic
+MF098765	region	North America
+MF098766	country	Dominican Republic
+MF098766	division	Dominican Republic
+MF098766	location	Dominican Republic
+MF098766	region	North America
+MF098767	country	Saint Barthelemy
+MF098767	division	Saint Barthelemy
+MF098767	location	Saint Barthelemy
+MF098767	region	North America
+MF098768	country	Dominican Republic
+MF098768	division	Dominican Republic
+MF098768	location	Dominican Republic
+MF098768	region	North America
+MF098769	country	Dominican Republic
+MF098769	division	Dominican Republic
+MF098769	location	Dominican Republic
+MF098769	region	North America
+MF098770	country	Mexico
+MF098770	division	Mexico
+MF098770	location	Mexico
+MF098770	region	North America
+MF098771	country	Mexico
+MF098771	division	Mexico
+MF098771	location	Mexico
+MF098771	region	North America
+MF593625	country	Guatemala
+MF593625	division	Guatemala
+MF593625	location	Guatemala
+MF593625	region	North America
+MF664436	country	Dominican Republic
+MF664436	division	Dominican Republic
+MF664436	location	Dominican Republic
+MF664436	region	North America
+MF692778	country	Thailand
+MF692778	division	Thailand
+MF692778	location	Thailand
+MF692778	region	Southeast Asia
+MF988734	country	Cuba
+MF988734	division	Cuba
+MF988734	location	Cuba
+MF988734	region	North America
+MK829154	country	Angola
+MK829154	division	Angola
+MK829154	location	Angola
+MK829154	region	Africa
+MN185326	country	French Guiana
+MN185326	division	French Guiana
+MN185326	location	French Guiana
+MN185326	region	South America
+MN185328	country	French Guiana
+MN185328	division	French Guiana
+MN185328	location	French Guiana
+MN185328	region	South America
+KY328289	date	2016-05-15
