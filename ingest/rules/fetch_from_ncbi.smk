@@ -7,6 +7,10 @@ defined in the config. If adding other sources, add a new rule upstream
 of rule `fetch_all_sequences` to create the file `data/{source}.ndjson` or the
 file must exist as a static file in the repo.
 
+Fetch with NCBI Datasets (https://www.ncbi.nlm.nih.gov/datasets/)
+    - requires `ncbi_taxon_id` config
+    - Only returns metadata fields that are available through NCBI Datasets
+
 Produces final output as
 
     sequences_ndjson = "data/sequences.ndjson"
