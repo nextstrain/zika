@@ -55,7 +55,7 @@ rule all:
 
 
 include: "rules/fetch_from_ncbi.smk"
-include: "rules/transform.smk"
+include: "rules/curate.smk"
 
 
 if config.get("upload", False):
