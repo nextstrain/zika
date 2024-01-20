@@ -27,23 +27,24 @@ ncbi_datasets_fields:
 # Params for the curate rule
 curate:
   # NCBI fields to rename to Nextstrain field names.
+  # List of field names to change where the key is the original field name and
+  # the value is the new field name
   # This is the first step in the pipeline, so any references to field names
   # in the configs below should use the new field names
-  field_map: [
-    'accession=genbank_accession',
-    'accession-rev=genbank_accession_rev',
-    'isolate-lineage=strain',
-    'sourcedb=database',
-    'geo-region=region',
-    'geo-location=location',
-    'host-name=host',
-    'isolate-collection-date=date',
-    'release-date=release_date',
-    'update-date=update_date',
-    'sra-accs=sra_accessions',
-    'submitter-names=authors',
-    'submitter-affiliations=institution',
-  ]
+  field_map:
+    accession: genbank_accession
+    accession-rev: genbank_accession_rev
+    isolate-lineage: strain
+    sourcedb: database
+    geo-region: region
+    geo-location: location
+    host-name: host
+    isolate-collection-date: date
+    release-date: release_date
+    update-date: update_date
+    sra-accs: sra_accessions
+    submitter-names: authors
+    submitter-affiliations: institution
   # Standardized strain name regex
   # Currently accepts any characters because we do not have a clear standard for strain names
   strain_regex: '^.+$'
