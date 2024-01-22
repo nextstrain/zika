@@ -18,4 +18,3 @@ rule copy_example_data:
         """
 
 ruleorder: copy_example_data > decompress
-ruleorder: copy_example_data > decompress_usvi
