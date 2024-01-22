@@ -64,11 +64,10 @@ rule curate:
         titlecase_fields=config["curate"]["titlecase"]["fields"],
         authors_field=config["curate"]["authors_field"],
         authors_default_value=config["curate"]["authors_default_value"],
-        abbr_authors_field=config["curate"]["abbr_authors_field"],
         annotations_id=config["curate"]["annotations_id"],
         metadata_columns=config["curate"]["metadata_columns"],
-        id_field=config["curate"]["id_field"],
-        sequence_field=config["curate"]["sequence_field"],
+        id_field=config["curate"]["output_id_field"],
+        sequence_field=config["curate"]["output_sequence_field"],
     shell:
         """
         (cat {input.sequences_ndjson} \
