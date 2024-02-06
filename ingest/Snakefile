@@ -54,8 +54,8 @@ rule all:
         _get_all_targets,
 
 
-include: "rules/fetch_sequences.smk"
-include: "rules/transform.smk"
+include: "rules/fetch_from_ncbi.smk"
+include: "rules/curate.smk"
 
 
 if config.get("upload", False):
