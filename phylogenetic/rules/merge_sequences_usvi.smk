@@ -43,5 +43,6 @@ rule append_usvi:
           -n accession \
           -e '$genbank_accession' \
         | csvtk concat -tl - {input.usvi_metadata} \
+        | tsv-select -H -f accession --rest last \
         > {output.metadata}
         """
