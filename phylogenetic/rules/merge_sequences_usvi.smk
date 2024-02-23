@@ -22,7 +22,13 @@ This part of the workflow usually includes the following steps:
 """
 
 rule append_usvi:
-    """Appending USVI sequences"""
+    """Appending USVI sequences
+
+    Notable columns:
+    - accession: Either the GenBank accession or USVI accession.
+    - genbank_accession: GenBank accession for Auspice to generate a URL to the NCBI GenBank record. Empty for USVI sequences.
+    - url: URL used in Auspice, to either link to the USVI github repo (https://github.com/blab/zika-usvi/) or link to the NCBI GenBank record ('https://www.ncbi.nlm.nih.gov/nuccore/*')
+    """
     input:
         sequences = "data/sequences.fasta",
         metadata = "data/metadata.tsv",
