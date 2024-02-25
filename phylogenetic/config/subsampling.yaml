@@ -1,0 +1,18 @@
+focal:
+  filter: >-
+    --query "country=='USA'"
+    --subsample-max-sequences 50
+contextual:
+  priorities:
+    type: proximity
+    focus: focal
+    num_per_focal: 5
+background:
+  filter: "--group-by country month --subsample-max-sequences 100"
+  exclude:
+    - contextual
+    - focal
+output:
+  - background
+  - contextual
+  - focal

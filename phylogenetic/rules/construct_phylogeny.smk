@@ -22,7 +22,7 @@ See Augur's usage docs for these commands for more details.
 rule tree:
     """Building tree"""
     input:
-        alignment = "results/aligned.fasta"
+        alignment = "results/subsampled.fasta"
     output:
         tree = "results/tree_raw.nwk"
     shell:
@@ -42,8 +42,8 @@ rule refine:
     """
     input:
         tree = "results/tree_raw.nwk",
-        alignment = "results/aligned.fasta",
-        metadata = "data/metadata_all.tsv"
+        alignment = "results/subsampled.fasta",
+        metadata = "results/subsampled.tsv"
     output:
         tree = "results/tree.nwk",
         node_data = "results/branch_lengths.json"

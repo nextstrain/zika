@@ -35,7 +35,7 @@ rule ancestral:
     """Reconstructing ancestral sequences and mutations"""
     input:
         tree = "results/tree.nwk",
-        alignment = "results/aligned.fasta"
+        alignment = "results/subsampled.fasta"
     output:
         node_data = "results/nt_muts.json"
     params:
@@ -73,7 +73,7 @@ rule traits:
     """
     input:
         tree = "results/tree.nwk",
-        metadata = "data/metadata_all.tsv"
+        metadata = "results/subsampled.tsv"
     output:
         node_data = "results/traits.json",
     params:

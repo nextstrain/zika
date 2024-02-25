@@ -29,7 +29,7 @@ rule export:
     """Exporting data files for for auspice"""
     input:
         tree = "results/tree.nwk",
-        metadata = "data/metadata_all.tsv",
+        metadata = "results/subsampled.tsv",
         branch_lengths = "results/branch_lengths.json",
         traits = "results/traits.json",
         nt_muts = "results/nt_muts.json",
@@ -59,7 +59,7 @@ rule export:
 rule final_strain_name:
     input:
         auspice_json="results/raw_zika.json",
-        metadata="data/metadata_all.tsv",
+        metadata="results/subsampled.tsv",
         root_sequence="results/raw_zika_root-sequence.json",
     output:
         auspice_json="auspice/zika.json",
@@ -69,7 +69,7 @@ rule final_strain_name:
         display_strain_field=config.get("display_strain_field", "strain"),
     shell:
         """
-        python3 scripts/set_final_strain_name.py \
+        python scripts/set_final_strain_name.py \
             --metadata {input.metadata} \
             --metadata-id-columns {params.strain_id} \
             --input-auspice-json {input.auspice_json} \
