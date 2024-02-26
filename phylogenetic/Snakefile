@@ -19,7 +19,10 @@ if "custom_rules" in config:
 rule clean:
     """Removing directories: {params}"""
     params:
-        "data ",
+        "data/metadata.tsv* ",
+        "data/sequences.fasta* ",
+        "data/metadata_all.tsv ",
+        "data/sequences_all.fasta ",
         "results ",
         "auspice"
     shell:
