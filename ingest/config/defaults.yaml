@@ -57,7 +57,7 @@ curate:
     update-date: update_date
     sra-accs: sra_accessions
     submitter-names: authors
-    submitter-affiliations: institution
+    submitter-affiliation: institution
   # Standardized strain name regex
   # Currently accepts any characters because we do not have a clear standard for strain names across pathogens
   strain_regex: '^.+$'
