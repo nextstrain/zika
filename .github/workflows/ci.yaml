@@ -18,7 +18,7 @@ jobs:
       run: |
         nextstrain build \
           phylogenetic \
-          --configfile profiles/ci/profiles_config.yaml
+          --configfile build-configs/ci/profiles_config.yaml
       artifact-name: output-${{ matrix.runtime }}
       artifact-paths: |
         phylogenetic/auspice/
