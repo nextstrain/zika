@@ -34,9 +34,9 @@ rule export:
         traits = "results/traits.json",
         nt_muts = "results/nt_muts.json",
         aa_muts = "results/aa_muts.json",
-        colors = "config/colors.tsv",
-        auspice_config = "config/auspice_config.json",
-        description = "config/description.md"
+        colors = "defaults/colors.tsv",
+        auspice_config = "defaults/auspice_config.json",
+        description = "defaults/description.md"
     output:
         auspice_json = "results/raw_zika.json",
         root_sequence = "results/raw_zika_root-sequence.json",

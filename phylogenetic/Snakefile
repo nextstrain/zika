@@ -1,4 +1,4 @@
-configfile: "config/config_zika.yaml"
+configfile: "defaults/config_zika.yaml"
 
 rule all:
     input:
