@@ -54,7 +54,7 @@ rule translate:
     input:
         tree = "results/tree.nwk",
         node_data = "results/nt_muts.json",
-        reference = "config/zika_reference.gb"
+        reference = "defaults/zika_reference.gb"
     output:
         node_data = "results/aa_muts.json"
     shell:
