@@ -31,7 +31,7 @@ This will produce two files (within the `ingest` directory):
 Run the complete ingest pipeline and upload results to AWS S3 with
 
 ```sh
-nextstrain build . --configfiles defaults/config.yaml defaults/optional.yaml
+nextstrain build . --configfiles defaults/config.yaml build-defaults/nextstrain-automation/config.yaml
 ```
 
 ### Adding new sequences not from GenBank
