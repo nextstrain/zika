@@ -48,9 +48,9 @@ rule refine:
         tree = "results/tree.nwk",
         node_data = "results/branch_lengths.json"
     params:
-        coalescent = "opt",
-        date_inference = "marginal",
-        clock_filter_iqd = 4,
+        coalescent = config["refine"]["coalescent"],
+        date_inference = config["refine"]["date_inference"],
+        clock_filter_iqd = config["refine"]["clock_filter_iqd"],
         strain_id = config.get("strain_id_field", "strain"),
     shell:
         """
