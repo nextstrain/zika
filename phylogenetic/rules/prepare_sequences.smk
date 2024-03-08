@@ -64,10 +64,10 @@ rule filter:
     output:
         sequences = "results/filtered.fasta"
     params:
-        group_by = "country year month",
-        sequences_per_group = 40,
-        min_date = 2012,
-        min_length = 5385,
+        group_by = config["filter"]["group_by"],
+        sequences_per_group = config["filter"]["sequences_per_group"],
+        min_date = config["filter"]["min_date"],
+        min_length = config["filter"]["min_length"],
         strain_id = config.get("strain_id_field", "strain"),
     shell:
         """

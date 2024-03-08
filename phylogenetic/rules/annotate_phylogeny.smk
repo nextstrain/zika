@@ -39,7 +39,7 @@ rule ancestral:
     output:
         node_data = "results/nt_muts.json"
     params:
-        inference = "joint"
+        inference = config["ancestral"]["inference"]
     shell:
         """
         augur ancestral \
@@ -77,8 +77,8 @@ rule traits:
     output:
         node_data = "results/traits.json",
     params:
-        columns = "region country",
-        sampling_bias_correction = 3,
+        columns = config["traits"]["columns"],
+        sampling_bias_correction = config["traits"]["sampling_bias_correction"],
         strain_id = config.get("strain_id_field", "strain"),
     shell:
         """
