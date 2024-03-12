@@ -31,7 +31,12 @@ This will produce two files (within the `ingest` directory):
 Run the complete ingest pipeline and upload results to AWS S3 with
 
 ```sh
-nextstrain build . --configfiles defaults/config.yaml build-defaults/nextstrain-automation/config.yaml
+nextstrain build \
+    --env AWS_ACCESS_KEY_ID \
+    --env AWS_SECRET_ACCESS_KEY \
+    . \
+        upload_all \
+        --configfile build-configs/nextstrain-automation/config.yaml
 ```
 
 ### Adding new sequences not from GenBank
