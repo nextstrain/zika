@@ -15,7 +15,6 @@ cloudfront_domain: "data.nextstrain.org"
 s3_dst: "s3://nextstrain-data/files/workflows/zika"
 
 files_to_upload:
-  genbank.ndjson.zst: data/genbank.ndjson
   metadata.tsv.zst: results/metadata.tsv
   sequences.fasta.zst: results/sequences.fasta
 
