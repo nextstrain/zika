@@ -18,8 +18,3 @@ files_to_upload:
   metadata.tsv.zst: results/metadata.tsv
   sequences.fasta.zst: results/sequences.fasta
 
-# Toggle for Slack notifications
-send_slack_notifications: True
-
-# Toggle for triggering builds
-trigger_rebuild: True
