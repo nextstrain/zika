@@ -27,10 +27,10 @@ Once you've run the build, you can view the results with:
 
 ## Configuration
 
-Configuration takes place entirely with the `Snakefile`. This can be read
-top-to-bottom, each rule specifies its file inputs and output and also its
-parameters. There is little redirection and each rule should be able to be
-reasoned with on its own.
+Configuration for the workflow takes place entirely within the [defaults/config_zika.yaml](defaults/config_zika.yaml).
+The analysis pipeline is contained in [Snakefile](Snakefile) with included [rules](rules).
+Each rule specifies its file inputs and output and pulls its parameters from the config.
+There is little redirection and each rule should be able to be reasoned with on its own.
 
 ### Using GenBank data
 
