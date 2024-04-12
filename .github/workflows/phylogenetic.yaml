@@ -23,9 +23,35 @@ on:
         description: 'Specific container image to use for ingest workflow (will override the default of "nextstrain build")'
         required: false
         type: string
+      trial_name:
+        description: |
+          Trial name for deploying builds.
+          If not set, builds will overwrite existing builds at s3://nextstrain-data/zika*
+          If set, builds will be deployed to s3://nextstrain-staging/zika_trials_<trial_name>_*
+        required: false
+        type: string
 
 jobs:
+  set_config_overrides:
+    runs-on: ubuntu-latest
+    steps:
+      - id: config
+        name: Set config overrides
+        env:
+          TRIAL_NAME: ${{ inputs.trial_name }}
+        run: |
+          config=""
+          if [[ "$TRIAL_NAME" ]]; then
+            config+="--config"
+            config+=" deploy_url='s3://nextstrain-staging/zika_trials_"$TRIAL_NAME"_'"
+          fi
+
+          echo "config=$config" >> "$GITHUB_OUTPUT"
+    outputs:
+      config_overrides: ${{ steps.config.outputs.config }}
+
   phylogenetic:
+    needs: [set_config_overrides]
     permissions:
       id-token: write
     uses: nextstrain/.github/.github/workflows/pathogen-repo-build.yaml@master
@@ -37,13 +63,15 @@ jobs:
       runtime: docker
       env: |
         NEXTSTRAIN_DOCKER_IMAGE: ${{ inputs.image }}
+        CONFIG_OVERRIDES: ${{ needs.set_config_overrides.outputs.config_overrides }}
       run: |
         nextstrain build \
           --env AWS_ACCESS_KEY_ID \
           --env AWS_SECRET_ACCESS_KEY \
           phylogenetic \
             deploy_all \
-            --configfile build-configs/nextstrain-automation/config.yaml
+            --configfile build-configs/nextstrain-automation/config.yaml \
+            $CONFIG_OVERRIDES
       # Specifying artifact name to differentiate ingest build outputs from
       # the phylogenetic build outputs
       artifact-name: phylogenetic-build-output
