@@ -17,6 +17,13 @@ on:
         required: false
         type: string
 
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'Specific container image to use for ingest workflow (will override the default of "nextstrain build")'
+        required: false
+        type: string
+
 jobs:
   ingest:
     permissions:
