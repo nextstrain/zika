@@ -1,3 +1,8 @@
+# Sequences must be FASTA and metadata must be TSV
+# Both files must be zstd compressed
+sequences_url: "https://data.nextstrain.org/files/workflows/zika/sequences.fasta.zst"
+metadata_url: "https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst"
+
 strain_id_field: "accession"
 display_strain_field: "strain"
 
