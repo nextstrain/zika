@@ -3,6 +3,7 @@ configfile: "defaults/config_zika.yaml"
 rule all:
     input:
         auspice_json = "auspice/zika.json",
+        root_sequence = "auspice/zika_root-sequence.json"
 
 include: "rules/prepare_sequences.smk"
 include: "rules/merge_sequences_usvi.smk"
