@@ -38,8 +38,7 @@ rule export:
         auspice_config = "defaults/auspice_config.json",
         description = "defaults/description.md"
     output:
-        auspice_json = "results/raw_zika.json",
-        root_sequence = "results/raw_zika_root-sequence.json",
+        auspice_json = "results/raw_zika.json"
     params:
         strain_id = config.get("strain_id_field", "strain"),
     shell:
@@ -52,18 +51,16 @@ rule export:
             --colors {input.colors} \
             --auspice-config {input.auspice_config} \
             --description {input.description} \
-            --include-root-sequence \
+            --include-root-sequence-inline \
             --output {output.auspice_json}
         """
 
 rule final_strain_name:
     input:
         auspice_json="results/raw_zika.json",
-        metadata="data/metadata_all.tsv",
-        root_sequence="results/raw_zika_root-sequence.json",
+        metadata="data/metadata_all.tsv"
     output:
-        auspice_json="auspice/zika.json",
-        root_sequence="auspice/zika_root-sequence.json",
+        auspice_json="auspice/zika.json"
     params:
         strain_id=config["strain_id_field"],
         display_strain_field=config.get("display_strain_field", "strain"),
@@ -75,6 +72,4 @@ rule final_strain_name:
             --input-auspice-json {input.auspice_json} \
             --display-strain-name {params.display_strain_field} \
             --output {output.auspice_json}
-
-        cp {input.root_sequence} {output.root_sequence}
         """
