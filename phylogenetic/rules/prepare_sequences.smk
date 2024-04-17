@@ -52,9 +52,7 @@ rule decompress:
 rule filter:
     """
     Filtering to
-      - {params.sequences_per_group} sequence(s) per {params.group_by!s}
-      - from {params.min_date} onwards
-      - excluding strains in {input.exclude}
+      - exclude strains in {input.exclude}
       - minimum genome length of {params.min_length} (50% of Zika virus genome)
     """
     input:
@@ -62,11 +60,9 @@ rule filter:
         metadata = "data/metadata_all.tsv",
         exclude = "defaults/dropped_strains.txt",
     output:
+        metadata = "results/filtered.tsv",
         sequences = "results/filtered.fasta"
     params:
-        group_by = config["filter"]["group_by"],
-        sequences_per_group = config["filter"]["sequences_per_group"],
-        min_date = config["filter"]["min_date"],
         min_length = config["filter"]["min_length"],
         strain_id = config.get("strain_id_field", "strain"),
     shell:
@@ -77,10 +73,32 @@ rule filter:
             --metadata-id-columns {params.strain_id} \
             --exclude {input.exclude} \
             --output {output.sequences} \
-            --group-by {params.group_by} \
-            --sequences-per-group {params.sequences_per_group} \
-            --min-date {params.min_date} \
+            --output-metadata {output.metadata} \
             --min-length {params.min_length}
+        """
+
+rule subsample:
+    """
+    Subsampling with config defined in {params.config}.
+    """
+    input:
+        metadata = "results/filtered.tsv",
+        sequences = "results/filtered.fasta",
+    output:
+        metadata = "results/subsampled.tsv",
+        sequences = "results/subsampled.fasta",
+    params:
+        config = config["subsampling"],
+        strain_id = config.get("strain_id_field", "strain"),
+    shell:
+        """
+        augur subsample \
+            --sequences {input.sequences} \
+            --metadata {input.metadata} \
+            --config {params.config} \
+            --metadata-id-columns {params.strain_id} \
+            --output-metadata {output.metadata} \
+            --output-sequences {output.sequences}
         """
 
 rule align:
@@ -89,7 +107,7 @@ rule align:
       - filling gaps with N
     """
     input:
-        sequences = "results/filtered.fasta",
+        sequences = "results/subsampled.fasta",
         reference = "defaults/zika_reference.gb"
     output:
         alignment = "results/aligned.fasta"

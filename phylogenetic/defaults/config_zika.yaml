@@ -2,10 +2,9 @@ strain_id_field: "accession"
 display_strain_field: "strain"
 
 filter:
-  group_by: "country year month"
-  sequences_per_group: 40
-  min_date: 2012
   min_length: 5385
+
+subsampling: "defaults/subsampling.yaml"
 
 refine:
   coalescent: "opt"
