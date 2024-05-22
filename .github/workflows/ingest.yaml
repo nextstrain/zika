@@ -54,7 +54,7 @@ jobs:
     needs: [set_config_overrides]
     permissions:
       id-token: write
-    uses: nextstrain/.github/.github/workflows/pathogen-repo-build.yaml@trs/write-envdir/error-on-unset
+    uses: nextstrain/.github/.github/workflows/pathogen-repo-build.yaml@trs/pathogen-repo-build/missing-session-token-ok
     secrets: inherit
     with:
       # Starting with the default docker runtime
