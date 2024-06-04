@@ -1,8 +1,13 @@
 configfile: "defaults/config_zika.yaml"
 
+genes = ['genome']
+
+wildcard_constraints:
+    gene = "|".join(genes)
+
 rule all:
     input:
-        auspice_json = "auspice/zika.json"
+        auspice_json = expand("auspice/zika_{gene}.json", gene=genes)
 
 include: "rules/prepare_sequences.smk"
 include: "rules/merge_sequences_usvi.smk"

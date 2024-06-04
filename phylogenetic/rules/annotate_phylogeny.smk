@@ -34,10 +34,10 @@ to the ones produced by Augur commands.
 rule ancestral:
     """Reconstructing ancestral sequences and mutations"""
     input:
-        tree = "results/tree.nwk",
-        alignment = "results/aligned.fasta"
+        tree = "results/{gene}/tree.nwk",
+        alignment = "results/{gene}/aligned.fasta"
     output:
-        node_data = "results/nt_muts.json"
+        node_data = "results/{gene}/nt_muts.json"
     params:
         inference = config["ancestral"]["inference"]
     shell:
@@ -52,11 +52,11 @@ rule ancestral:
 rule translate:
     """Translating amino acid sequences"""
     input:
-        tree = "results/tree.nwk",
-        node_data = "results/nt_muts.json",
-        reference = "defaults/zika_reference.gb"
+        tree = "results/{gene}/tree.nwk",
+        node_data = "results/{gene}/nt_muts.json",
+        reference = lambda wildcard: "defaults/zika_reference.gb" if wildcard.gene == "genome" else "results/config/reference_{gene}.gb"
     output:
-        node_data = "results/aa_muts.json"
+        node_data = "results/{gene}/aa_muts.json"
     shell:
         """
         augur translate \
@@ -72,10 +72,10 @@ rule traits:
       - increase uncertainty of reconstruction by {params.sampling_bias_correction} to partially account for sampling bias
     """
     input:
-        tree = "results/tree.nwk",
+        tree = "results/{gene}/tree.nwk",
         metadata = "data/metadata_all.tsv"
     output:
-        node_data = "results/traits.json",
+        node_data = "results/{gene}/traits.json",
     params:
         columns = config["traits"]["columns"],
         sampling_bias_correction = config["traits"]["sampling_bias_correction"],

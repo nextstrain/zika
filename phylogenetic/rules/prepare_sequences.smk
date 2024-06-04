@@ -58,11 +58,11 @@ rule filter:
       - minimum genome length of {params.min_length} (50% of Zika virus genome)
     """
     input:
-        sequences = "data/sequences_all.fasta",
+        sequences = lambda wildcard: "data/sequences_all.fasta" if wildcard.gene in ['genome'] else "results/{gene}/sequences.fasta",
         metadata = "data/metadata_all.tsv",
         exclude = "defaults/dropped_strains.txt",
     output:
-        sequences = "results/filtered.fasta"
+        sequences = "results/{gene}/filtered.fasta"
     params:
         group_by = config["filter"]["group_by"],
         sequences_per_group = config["filter"]["sequences_per_group"],
@@ -89,10 +89,10 @@ rule align:
       - filling gaps with N
     """
     input:
-        sequences = "results/filtered.fasta",
-        reference = "defaults/zika_reference.gb"
+        sequences = "results/{gene}/filtered.fasta",
+        reference = lambda wildcard: "defaults/zika_reference.gb" if wildcard.gene in ['genome'] else "results/config/reference_{gene}.gb",
     output:
-        alignment = "results/aligned.fasta"
+        alignment = "results/{gene}/aligned.fasta"
     shell:
         """
         augur align \

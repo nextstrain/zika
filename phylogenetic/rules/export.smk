@@ -28,17 +28,17 @@ See Augur's usage docs for these commands for more details.
 rule export:
     """Exporting data files for for auspice"""
     input:
-        tree = "results/tree.nwk",
+        tree = "results/{gene}/tree.nwk",
         metadata = "data/metadata_all.tsv",
-        branch_lengths = "results/branch_lengths.json",
-        traits = "results/traits.json",
-        nt_muts = "results/nt_muts.json",
-        aa_muts = "results/aa_muts.json",
+        branch_lengths = "results/{gene}/branch_lengths.json",
+        traits = "results/{gene}/traits.json",
+        nt_muts = "results/{gene}/nt_muts.json",
+        aa_muts = "results/{gene}/aa_muts.json",
         colors = "defaults/colors.tsv",
         auspice_config = "defaults/auspice_config.json",
         description = "defaults/description.md"
     output:
-        auspice_json = "results/raw_zika.json"
+        auspice_json = "results/{gene}/raw_zika.json"
     params:
         strain_id = config.get("strain_id_field", "strain"),
     shell:
@@ -57,10 +57,10 @@ rule export:
 
 rule final_strain_name:
     input:
-        auspice_json="results/raw_zika.json",
+        auspice_json="results/{gene}/raw_zika.json",
         metadata="data/metadata_all.tsv"
     output:
-        auspice_json="auspice/zika.json"
+        auspice_json="auspice/zika_{gene}.json"
     params:
         strain_id=config["strain_id_field"],
         display_strain_field=config.get("display_strain_field", "strain"),
