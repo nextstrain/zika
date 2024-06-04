@@ -67,7 +67,7 @@ rule filter:
         group_by = config["filter"]["group_by"],
         sequences_per_group = config["filter"]["sequences_per_group"],
         min_date = config["filter"]["min_date"],
-        min_length = config["filter"]["min_length"],
+        min_length = lambda wildcard: config["filter"]["min_length"][wildcard.gene],
         strain_id = config.get("strain_id_field", "strain"),
     shell:
         """

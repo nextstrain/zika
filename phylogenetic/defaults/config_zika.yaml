@@ -10,7 +10,9 @@ filter:
   group_by: "country year month"
   sequences_per_group: 40
   min_date: 2012
-  min_length: 5385
+  min_length:
+    genome: 5385
+    ENV: 1000
 
 refine:
   coalescent: "opt"
