@@ -13,6 +13,17 @@ filter:
   min_length:
     genome: 5385
     ENV: 1000
+    CA: 120
+    PRO: 90
+    MP: 70
+    NS1: 350
+    NS2A: 220
+    NS2B: 130
+    NS3: 610
+    NS4A: 120
+    2K: 20
+    NS4B: 250
+    NS5: 903
 
 refine:
   coalescent: "opt"
