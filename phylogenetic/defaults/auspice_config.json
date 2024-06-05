@@ -1,7 +1,6 @@
 {
   "title": "Real-time tracking of Zika virus evolution",
   "maintainers": [
-    {"name": "Jennifer Chang", "url": "https://bedford.io/team/jennifer-chang/"},
     {"name": "the Nextstrain team", "url": "https://nextstrain.org/team"}
   ],
   "build_url": "https://github.com/nextstrain/zika",
