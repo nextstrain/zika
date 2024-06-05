@@ -1,6 +1,6 @@
 configfile: "defaults/config_zika.yaml"
 
-genes = ['genome', 'ENV', 'CA', 'PRO', 'MP', 'NS1', 'NS2A', 'NS2B', 'NS3', 'NS4A', '2K', 'NS4B', 'NS5']
+genes = ['genome', 'ENV']
 
 wildcard_constraints:
     gene = "|".join(genes)
