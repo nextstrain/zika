@@ -3,6 +3,16 @@
   "maintainers": [
     {"name": "the Nextstrain team", "url": "https://nextstrain.org/team"}
   ],
+  "data_provenance": [
+    {
+      "name": "GenBank",
+      "url": "https://www.ncbi.nlm.nih.gov/genbank/"
+    },
+    {
+      "name": "USVI",
+      "url": "https://github.com/blab/zika-usvi/"
+    }
+  ],
   "build_url": "https://github.com/nextstrain/zika",
   "colorings": [
     {
