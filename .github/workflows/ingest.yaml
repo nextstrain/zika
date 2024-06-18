@@ -69,7 +69,8 @@ jobs:
           ingest \
             upload_all \
             --configfile build-configs/nextstrain-automation/config.yaml \
-            $CONFIG_OVERRIDES
+            $CONFIG_OVERRIDES;
+        nextstrain build ingest --report report.html
       # Specifying artifact name to differentiate ingest build outputs from
       # the phylogenetic build outputs
       artifact-name: ingest-build-output
@@ -78,3 +79,4 @@ jobs:
         ingest/benchmarks/
         ingest/logs/
         ingest/.snakemake/log/
+        ingest/report.html
