@@ -10,3 +10,7 @@ We curate sequence data and metadata from NCBI as starting point for our analyse
 * [data.nextstrain.org/files/workflows/zika/metadata.tsv.zst](https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst)
 
 Additionally, this Zika build incorporates data from https://github.com/blab/zika-usvi/.
+
+---
+
+Screenshots may be used under a [CC-BY-4.0 license](https://creativecommons.org/licenses/by/4.0/) and attribution to nextstrain.org must be provided.
