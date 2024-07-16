@@ -1,0 +1,6 @@
+# TODO: If the ingest workflow ever runs too long, we should figure out a way
+# to subset the ingest data. Currently, the CI just runs the default ingest workflow.
+
+# Snakemake requires at least one top level key in a config file, so including
+# a bogus key here that should not be used anywhere in the Snakemake workflow
+bogus_ci_config: "bogus_ci_config"
