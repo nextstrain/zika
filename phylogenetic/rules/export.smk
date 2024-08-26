@@ -38,7 +38,7 @@ rule export:
         auspice_config = "defaults/auspice_config.json",
         description = "defaults/description.md"
     output:
-        auspice_json = "results/raw_zika.json"
+        auspice_json = "auspice/zika.json"
     params:
         strain_id = config.get("strain_id_field", "strain"),
     shell:
@@ -52,24 +52,5 @@ rule export:
             --auspice-config {input.auspice_config} \
             --description {input.description} \
             --include-root-sequence-inline \
-            --output {output.auspice_json}
-        """
-
-rule final_strain_name:
-    input:
-        auspice_json="results/raw_zika.json",
-        metadata="data/metadata_all.tsv"
-    output:
-        auspice_json="auspice/zika.json"
-    params:
-        strain_id=config["strain_id_field"],
-        display_strain_field=config.get("display_strain_field", "strain"),
-    shell:
-        """
-        python3 scripts/set_final_strain_name.py \
-            --metadata {input.metadata} \
-            --metadata-id-columns {params.strain_id} \
-            --input-auspice-json {input.auspice_json} \
-            --display-strain-name {params.display_strain_field} \
             --output {output.auspice_json}
         """

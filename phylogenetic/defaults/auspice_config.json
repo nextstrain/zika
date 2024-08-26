@@ -46,8 +46,12 @@
     "region"
   ],
   "display_defaults": {
-    "map_triplicate": true
+    "map_triplicate": true,
+    "tip_label": "strain"
   },
+  "metadata_columns": [
+    "strain"
+  ],
   "filters": [
     "country",
     "region",
