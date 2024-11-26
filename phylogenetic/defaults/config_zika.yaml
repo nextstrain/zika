@@ -4,7 +4,6 @@ sequences_url: "https://data.nextstrain.org/files/workflows/zika/sequences.fasta
 metadata_url: "https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst"
 
 strain_id_field: "accession"
-display_strain_field: "strain"
 
 filter:
   group_by: "country year month"
