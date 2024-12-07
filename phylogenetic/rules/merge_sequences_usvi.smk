@@ -21,17 +21,35 @@ This part of the workflow usually includes the following steps:
 
 """
 
-rule append_usvi:
-    """Appending USVI sequences
+rule add_metadata_columns:
+    """Add columns to metadata
 
     Notable columns:
-    - accession: Either the GenBank accession or USVI accession.
-    - genbank_accession: GenBank accession for Auspice to generate a URL to the NCBI GenBank record. Empty for USVI sequences.
-    - url: URL used in Auspice, to either link to the USVI github repo (https://github.com/blab/zika-usvi/) or link to the NCBI GenBank record ('https://www.ncbi.nlm.nih.gov/nuccore/*')
+    - genbank_accession: GenBank accession for Auspice to generate a URL to the NCBI GenBank record.
+    - [NEW] accession: The GenBank accession. Added to go alongside USVI accession.
+    - [NEW] url: URL linking to the NCBI GenBank record ('https://www.ncbi.nlm.nih.gov/nuccore/*'). Added to go alongside USVI url.
     """
     input:
+        metadata = "data/metadata.tsv"
+    output:
+        metadata = "data/metadata_modified.tsv"
+    shell:
+        """
+        csvtk mutate2 -tl \
+          -n url \
+          -e '"https://www.ncbi.nlm.nih.gov/nuccore/" + $genbank_accession' \
+          {input.metadata} \
+        | csvtk mutate2 -tl \
+          -n accession \
+          -e '$genbank_accession' \
+        > {output.metadata}
+        """
+
+rule append_usvi:
+    """Appending USVI sequences"""
+    input:
         sequences = "data/sequences.fasta",
-        metadata = "data/metadata.tsv",
+        metadata = "data/metadata_modified.tsv",
         usvi_sequences = "data/sequences_usvi.fasta",
         usvi_metadata = "data/metadata_usvi.tsv"
     output:
@@ -41,14 +59,7 @@ rule append_usvi:
         """
         cat {input.sequences} {input.usvi_sequences} > {output.sequences}
 
-        csvtk mutate2 -tl \
-          -n url \
-          -e '"https://www.ncbi.nlm.nih.gov/nuccore/" + $genbank_accession' \
-          {input.metadata} \
-        | csvtk mutate2 -tl \
-          -n accession \
-          -e '$genbank_accession' \
-        | csvtk concat -tl - {input.usvi_metadata} \
+        csvtk concat -tl {input.metadata} {input.usvi_metadata} \
         | tsv-select -H -f accession --rest last \
         > {output.metadata}
         """
