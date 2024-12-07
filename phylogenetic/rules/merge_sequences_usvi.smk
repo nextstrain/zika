@@ -59,7 +59,8 @@ rule append_usvi:
         """
         cat {input.sequences} {input.usvi_sequences} > {output.sequences}
 
-        csvtk concat -tl {input.metadata} {input.usvi_metadata} \
-        | tsv-select -H -f accession --rest last \
-        > {output.metadata}
+        augur merge \
+          --metadata ingest={input.metadata} usvi={input.usvi_metadata} \
+          --metadata-id-columns accession \
+          --output-metadata {output.metadata}
         """
