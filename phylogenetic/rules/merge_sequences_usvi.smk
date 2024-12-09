@@ -21,26 +21,20 @@ This part of the workflow usually includes the following steps:
 
 """
 
-rule append_usvi:
-    """Appending USVI sequences
+rule add_metadata_columns:
+    """Add columns to metadata
 
     Notable columns:
-    - accession: Either the GenBank accession or USVI accession.
-    - genbank_accession: GenBank accession for Auspice to generate a URL to the NCBI GenBank record. Empty for USVI sequences.
-    - url: URL used in Auspice, to either link to the USVI github repo (https://github.com/blab/zika-usvi/) or link to the NCBI GenBank record ('https://www.ncbi.nlm.nih.gov/nuccore/*')
+    - genbank_accession: GenBank accession for Auspice to generate a URL to the NCBI GenBank record.
+    - [NEW] accession: The GenBank accession. Added to go alongside USVI accession.
+    - [NEW] url: URL linking to the NCBI GenBank record ('https://www.ncbi.nlm.nih.gov/nuccore/*'). Added to go alongside USVI url.
     """
     input:
-        sequences = "data/sequences.fasta",
-        metadata = "data/metadata.tsv",
-        usvi_sequences = "data/sequences_usvi.fasta",
-        usvi_metadata = "data/metadata_usvi.tsv"
+        metadata = "data/metadata.tsv"
     output:
-        sequences = "data/sequences_all.fasta",
-        metadata = "data/metadata_all.tsv"
+        metadata = "data/metadata_modified.tsv"
     shell:
         """
-        cat {input.sequences} {input.usvi_sequences} > {output.sequences}
-
         csvtk mutate2 -tl \
           -n url \
           -e '"https://www.ncbi.nlm.nih.gov/nuccore/" + $genbank_accession' \
@@ -48,7 +42,25 @@ rule append_usvi:
         | csvtk mutate2 -tl \
           -n accession \
           -e '$genbank_accession' \
-        | csvtk concat -tl - {input.usvi_metadata} \
-        | tsv-select -H -f accession --rest last \
         > {output.metadata}
+        """
+
+rule append_usvi:
+    """Appending USVI sequences"""
+    input:
+        sequences = "data/sequences.fasta",
+        metadata = "data/metadata_modified.tsv",
+        usvi_sequences = "data/sequences_usvi.fasta",
+        usvi_metadata = "data/metadata_usvi.tsv"
+    output:
+        sequences = "data/sequences_all.fasta",
+        metadata = "data/metadata_all.tsv"
+    shell:
+        """
+        seqkit rmdup {input.usvi_sequences} {input.sequences} > {output.sequences}
+
+        augur merge \
+          --metadata ingest={input.metadata} usvi={input.usvi_metadata} \
+          --metadata-id-columns accession \
+          --output-metadata {output.metadata}
         """
