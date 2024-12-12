@@ -92,6 +92,8 @@ rule curate:
             | augur curate apply-geolocation-rules \
                 --geolocation-rules {input.all_geolocation_rules} \
             | ./scripts/fix-zika-strain-names.py \
+            |  jq -c --arg GENBANK "{params.id_field}" \
+                '. |= (.url="https://www.ncbi.nlm.nih.gov/nuccore/" + .[$GENBANK])' \
             | augur curate apply-record-annotations \
                 --annotations {input.annotations} \
                 --id-field {params.annotations_id} \

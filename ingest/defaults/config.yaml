@@ -111,4 +111,5 @@ curate:
     'sra_accessions',
     'authors',
     'institution',
+    "url",
   ]
