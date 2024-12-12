@@ -94,6 +94,8 @@ curate:
   output_id_field: 'genbank_accession'
   # The field in the NDJSON record that contains the actual genomic sequence
   output_sequence_field: 'sequence'
+  # The field in the NDJSON record that contains the actual GenBank accession
+  genbank_accession: 'genbank_accession'
   # The list of metadata columns to keep in the final output of the curation pipeline.
   metadata_columns: [
     'genbank_accession',
@@ -111,4 +113,5 @@ curate:
     'sra_accessions',
     'authors',
     'institution',
+    'url',
   ]
