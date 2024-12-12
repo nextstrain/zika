@@ -1,2 +1,2 @@
-genbank_accession	genbank_accession_rev	accession	strain	date	region	country	division	location	length	host	release_date	update_date	sra_accessions	authors	institution	url
-USVI/37/2016		VI37	USVI/37/2016	2016-10-06	North America	Usvi	Saint Croix	Saint Croix	10807	Homo sapiens				Black et al	FH	https://github.com/blab/zika-usvi/
+accession	accession_version	strain	date	region	country	division	location	length	host	release_date	update_date	sra_accessions	authors	institution	url
+VI37	VI37	USVI/37/2016	2016-10-06	North America	Usvi	Saint Croix	Saint Croix	10807	Homo sapiens				Black et al	FH	https://github.com/blab/zika-usvi/
