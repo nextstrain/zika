@@ -45,8 +45,8 @@ curate:
   # The original field names should match the ncbi_datasets_fields provided above.
   # This is the first step in the pipeline, so any references to field names in the configs below should use the new field names
   field_map:
-    accession: genbank_accession
-    accession-rev: genbank_accession_rev
+    accession: accession
+    accession_version: accession_version
     isolate-lineage: strain
     sourcedb: database
     geo-region: region
@@ -62,7 +62,7 @@ curate:
   # Currently accepts any characters because we do not have a clear standard for strain names across pathogens
   strain_regex: '^.+$'
   # Back up strain name field to use if 'strain' doesn't match regex above
-  strain_backup_fields: ['genbank_accession']
+  strain_backup_fields: ['accession']
   # List of date fields to standardize to ISO format YYYY-MM-DD
   date_fields: ['date', 'release_date', 'update_date']
   # List of expected date formats that are present in the date fields provided above
@@ -89,15 +89,17 @@ curate:
   # The path should be relative to the ingest directory
   annotations: "defaults/annotations.tsv"
   # The ID field in the metadata to use to merge the manual annotations
-  annotations_id: 'genbank_accession'
+  annotations_id: 'accession'
   # The ID field in the metadata to use as the sequence id in the output FASTA file
-  output_id_field: 'genbank_accession'
+  output_id_field: 'accession'
   # The field in the NDJSON record that contains the actual genomic sequence
   output_sequence_field: 'sequence'
+  # The field in the NDJSON record that contains the actual GenBank accession
+  genbank_accession: 'accession'
   # The list of metadata columns to keep in the final output of the curation pipeline.
   metadata_columns: [
-    'genbank_accession',
-    'genbank_accession_rev',
+    'accession',
+    'accession_version',
     'strain',
     'date',
     'region',
@@ -111,4 +113,5 @@ curate:
     'sra_accessions',
     'authors',
     'institution',
+    'url',
   ]
