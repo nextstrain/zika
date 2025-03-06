@@ -33,10 +33,10 @@ rule append_usvi:
         metadata = "data/metadata_all.tsv"
     shell:
         """
-        seqkit rmdup {input.usvi_sequences} {input.sequences} > {output.sequences}
-
         augur merge \
           --metadata ingest={input.metadata} usvi={input.usvi_metadata} \
+          --sequences ingest={input.sequences} usvi={input.usvi_sequences}
           --metadata-id-columns accession \
-          --output-metadata {output.metadata}
+          --output-metadata {output.metadata} \
+          --output-sequences {output.sequences}
         """
