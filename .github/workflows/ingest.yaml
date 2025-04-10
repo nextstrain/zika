@@ -60,17 +60,17 @@ jobs:
         NEXTSTRAIN_DOCKER_IMAGE: ${{ inputs.image }}
         TRIAL_NAME: ${{ inputs.trial_name }}
       run: |
-        config=""
+        declare -a config
+
         if [[ "$TRIAL_NAME" ]]; then
-          config+="--config"
-          config+=" s3_dst='s3://nextstrain-data/files/workflows/zika/trials/"$TRIAL_NAME"'"
+          config+=("s3_dst=s3://nextstrain-data/files/workflows/zika/trials/$TRIAL_NAME")
         fi
 
         nextstrain build \
           ingest \
             upload_all \
             --configfile build-configs/nextstrain-automation/config.yaml \
-            $config
+            --config "${config[@]}"
       # Specifying artifact name to differentiate ingest build outputs from
       # the phylogenetic build outputs
       artifact-name: ingest-build-output
