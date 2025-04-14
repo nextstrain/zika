@@ -73,7 +73,7 @@ rule traits:
     """
     input:
         tree = "results/tree.nwk",
-        metadata = "data/metadata_all.tsv"
+        metadata = input_metadata,
     output:
         node_data = "results/traits.json",
     params:
