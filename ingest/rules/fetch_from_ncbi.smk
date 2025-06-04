@@ -1,19 +1,13 @@
 """
-This part of the workflow handles fetching sequences from various sources.
-Uses `config.sources` to determine which sequences to include in final output.
+This part of the workflow handles fetching sequences and metadata from NCBI.
 
-Currently only fetches sequences from GenBank, but other sources can be
-defined in the config. If adding other sources, add a new rule upstream
-of rule `fetch_all_sequences` to create the file `data/{source}.ndjson` or the
-file must exist as a static file in the repo.
+REQUIRED INPUTS:
 
-Fetch with NCBI Datasets (https://www.ncbi.nlm.nih.gov/datasets/)
-    - requires `ncbi_taxon_id` config
-    - Only returns metadata fields that are available through NCBI Datasets
+    None
 
-Produces final output as
+OUTPUTS:
 
-    sequences_ndjson = "data/sequences.ndjson"
+    ndjson = data/ncbi.ndjson
 
 """
 
@@ -79,7 +73,7 @@ rule format_ncbi_datasets_ndjson:
         ncbi_dataset_sequences="data/ncbi_dataset_sequences.fasta",
         ncbi_dataset_tsv="data/ncbi_dataset_report.tsv",
     output:
-        ndjson="data/genbank.ndjson",
+        ndjson="data/ncbi.ndjson",
     log:
         "logs/format_ncbi_datasets_ndjson.txt",
     benchmark:
@@ -94,19 +88,4 @@ rule format_ncbi_datasets_ndjson:
             --unmatched-reporting warn \
             --duplicate-reporting warn \
             2> {log} > {output.ndjson}
-        """
-
-
-def _get_all_sources(wildcards):
-    return [f"data/{source}.ndjson" for source in config["sources"]]
-
-
-rule fetch_all_sequences:
-    input:
-        all_sources=_get_all_sources,
-    output:
-        sequences_ndjson="data/sequences.ndjson",
-    shell:
-        """
-        cat {input.all_sources} > {output.sequences_ndjson}
         """
