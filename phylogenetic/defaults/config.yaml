@@ -4,8 +4,8 @@ sequences_url: "https://data.nextstrain.org/files/workflows/zika/sequences.fasta
 metadata_url: "https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst"
 
 # Config files
-exclude: "defaults/dropped_strains.txt"
-reference: "defaults/zika_reference.gb"
+exclude: "defaults/exclude.txt"
+reference: "defaults/reference.gb"
 colors: "defaults/colors.tsv"
 auspice_config: "defaults/auspice_config.json"
 description: "defaults/description.md"
