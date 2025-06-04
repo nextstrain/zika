@@ -40,13 +40,19 @@ rule ancestral:
         node_data = "results/nt_muts.json"
     params:
         inference = config["ancestral"]["inference"]
+    log:
+        "logs/ancestral.txt",
+    benchmark:
+        "benchmarks/ancestral.txt"
     shell:
-        """
+        r"""
+        exec &> >(tee {log:q})
+
         augur ancestral \
-            --tree {input.tree} \
-            --alignment {input.alignment} \
-            --output-node-data {output.node_data} \
-            --inference {params.inference}
+            --tree {input.tree:q} \
+            --alignment {input.alignment:q} \
+            --output-node-data {output.node_data:q} \
+            --inference {params.inference:q}
         """
 
 rule translate:
@@ -57,13 +63,19 @@ rule translate:
         reference = "defaults/zika_reference.gb"
     output:
         node_data = "results/aa_muts.json"
+    log:
+        "logs/translate.txt",
+    benchmark:
+        "benchmarks/translate.txt"
     shell:
-        """
+        r"""
+        exec &> >(tee {log:q})
+
         augur translate \
-            --tree {input.tree} \
-            --ancestral-sequences {input.node_data} \
-            --reference-sequence {input.reference} \
-            --output {output.node_data} \
+            --tree {input.tree:q} \
+            --ancestral-sequences {input.node_data:q} \
+            --reference-sequence {input.reference:q} \
+            --output {output.node_data:q}
         """
 
 rule traits:
@@ -80,14 +92,20 @@ rule traits:
         columns = config["traits"]["columns"],
         sampling_bias_correction = config["traits"]["sampling_bias_correction"],
         strain_id = config.get("strain_id_field", "strain"),
+    log:
+        "logs/traits.txt",
+    benchmark:
+        "benchmarks/traits.txt"
     shell:
-        """
+        r"""
+        exec &> >(tee {log:q})
+
         augur traits \
-            --tree {input.tree} \
-            --metadata {input.metadata} \
-            --metadata-id-columns {params.strain_id} \
-            --output {output.node_data} \
-            --columns {params.columns} \
+            --tree {input.tree:q} \
+            --metadata {input.metadata:q} \
+            --metadata-id-columns {params.strain_id:q} \
+            --output {output.node_data:q} \
+            --columns {params.columns:q} \
             --confidence \
-            --sampling-bias-correction {params.sampling_bias_correction}
+            --sampling-bias-correction {params.sampling_bias_correction:q}
         """
