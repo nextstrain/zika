@@ -109,6 +109,6 @@ rule subset_metadata:
         metadata_fields=",".join(config["curate"]["metadata_columns"]),
     shell:
         """
-        tsv-select -H -f {params.metadata_fields} \
+        csvtk cut -t -f {params.metadata_fields} \
             {input.metadata} > {output.subset_metadata}
         """
