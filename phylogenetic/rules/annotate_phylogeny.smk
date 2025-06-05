@@ -60,7 +60,7 @@ rule translate:
     input:
         tree = "results/tree.nwk",
         node_data = "results/nt_muts.json",
-        reference = "defaults/zika_reference.gb"
+        reference = config["reference"],
     output:
         node_data = "results/aa_muts.json"
     log:
