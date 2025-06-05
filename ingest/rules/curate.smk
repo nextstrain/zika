@@ -25,8 +25,8 @@ def format_field_map(field_map: dict[str, str]) -> list[str]:
 rule curate:
     input:
         sequences_ndjson="data/ncbi.ndjson",
-        geolocation_rules=config["curate"]["local_geolocation_rules"],
-        annotations=config["curate"]["annotations"],
+        geolocation_rules=resolve_config_path(config["curate"]["local_geolocation_rules"]),
+        annotations=resolve_config_path(config["curate"]["annotations"]),
     output:
         metadata="data/all_metadata.tsv",
         sequences="results/sequences.fasta",
@@ -74,7 +74,7 @@ rule curate:
                 --default-value {params.authors_default_value:q} \
             | augur curate apply-geolocation-rules \
                 --geolocation-rules {input.geolocation_rules:q} \
-            | ./scripts/fix-zika-strain-names.py \
+            | {workflow.basedir}/scripts/fix-zika-strain-names.py \
             | augur curate apply-record-annotations \
                 --annotations {input.annotations:q} \
                 --id-field {params.annotations_id:q} \
