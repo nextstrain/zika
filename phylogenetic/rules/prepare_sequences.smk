@@ -72,7 +72,7 @@ rule filter:
     input:
         sequences = "data/sequences_all.fasta",
         metadata = "data/metadata_all.tsv",
-        exclude = config["exclude"],
+        exclude = resolve_config_path(config["exclude"]),
     output:
         sequences = "results/filtered.fasta"
     params:
@@ -108,7 +108,7 @@ rule align:
     """
     input:
         sequences = "results/filtered.fasta",
-        reference = config["reference"],
+        reference = resolve_config_path(config["reference"]),
     output:
         alignment = "results/aligned.fasta"
     log:

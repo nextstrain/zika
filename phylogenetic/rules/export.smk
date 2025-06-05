@@ -34,9 +34,9 @@ rule export:
         traits = "results/traits.json",
         nt_muts = "results/nt_muts.json",
         aa_muts = "results/aa_muts.json",
-        colors = config["colors"],
-        auspice_config = config["auspice_config"],
-        description = config["description"],
+        colors = resolve_config_path(config["colors"]),
+        auspice_config = resolve_config_path(config["auspice_config"]),
+        description = resolve_config_path(config["description"]),
     output:
         auspice_json = "auspice/zika.json"
     params:
