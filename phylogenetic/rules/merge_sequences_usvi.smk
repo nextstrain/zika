@@ -39,10 +39,10 @@ rule append_usvi:
         r"""
         exec &> >(tee {log:q})
 
-        seqkit rmdup {input.usvi_sequences:q} {input.sequences:q} > {output.sequences:q}
-
         augur merge \
           --metadata ingest={input.metadata:q} usvi={input.usvi_metadata:q} \
+          --sequences {input.sequences:q} {input.usvi_sequences:q} \
           --metadata-id-columns accession \
-          --output-metadata {output.metadata:q}
+          --output-metadata {output.metadata:q} \
+          --output-sequences {output.sequences:q}
         """
