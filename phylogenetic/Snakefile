@@ -4,6 +4,7 @@ rule all:
     input:
         auspice_json = "auspice/zika.json"
 
+include: "rules/config.smk"
 include: "rules/prepare_sequences.smk"
 include: "rules/merge_sequences_usvi.smk"
 include: "rules/construct_phylogeny.smk"

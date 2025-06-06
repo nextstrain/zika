@@ -41,16 +41,22 @@ rule export:
         auspice_json = "auspice/zika.json"
     params:
         strain_id = config.get("strain_id_field", "strain"),
+    log:
+        "logs/export.txt",
+    benchmark:
+        "benchmarks/export.txt"
     shell:
-        """
+        r"""
+        exec &> >(tee {log:q})
+
         augur export v2 \
-            --tree {input.tree} \
-            --metadata {input.metadata} \
-            --metadata-id-columns {params.strain_id} \
-            --node-data {input.branch_lengths} {input.traits} {input.nt_muts} {input.aa_muts} \
-            --colors {input.colors} \
-            --auspice-config {input.auspice_config} \
-            --description {input.description} \
+            --tree {input.tree:q} \
+            --metadata {input.metadata:q} \
+            --metadata-id-columns {params.strain_id:q} \
+            --node-data {input.branch_lengths:q} {input.traits:q} {input.nt_muts:q} {input.aa_muts:q} \
+            --colors {input.colors:q} \
+            --auspice-config {input.auspice_config:q} \
+            --description {input.description:q} \
             --include-root-sequence-inline \
-            --output {output.auspice_json}
+            --output {output.auspice_json:q}
         """

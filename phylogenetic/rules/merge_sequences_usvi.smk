@@ -31,12 +31,18 @@ rule append_usvi:
     output:
         sequences = "data/sequences_all.fasta",
         metadata = "data/metadata_all.tsv"
+    log:
+        "logs/append_usvi.txt",
+    benchmark:
+        "benchmarks/append_usvi.txt"
     shell:
-        """
-        seqkit rmdup {input.usvi_sequences} {input.sequences} > {output.sequences}
+        r"""
+        exec &> >(tee {log:q})
+
+        seqkit rmdup {input.usvi_sequences:q} {input.sequences:q} > {output.sequences:q}
 
         augur merge \
-          --metadata ingest={input.metadata} usvi={input.usvi_metadata} \
+          --metadata ingest={input.metadata:q} usvi={input.usvi_metadata:q} \
           --metadata-id-columns accession \
-          --output-metadata {output.metadata}
+          --output-metadata {output.metadata:q}
         """

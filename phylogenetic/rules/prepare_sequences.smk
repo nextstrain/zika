@@ -29,10 +29,16 @@ rule download:
     params:
         sequences_url = config["sequences_url"],
         metadata_url = config["metadata_url"],
+    log:
+        "logs/download.txt",
+    benchmark:
+        "benchmarks/download.txt"
     shell:
-        """
-        curl -fsSL --compressed {params.sequences_url:q} --output {output.sequences}
-        curl -fsSL --compressed {params.metadata_url:q} --output {output.metadata}
+        r"""
+        exec &> >(tee {log:q})
+
+        curl -fsSL --compressed {params.sequences_url:q} --output {output.sequences:q}
+        curl -fsSL --compressed {params.metadata_url:q} --output {output.metadata:q}
         """
 
 rule decompress:
@@ -43,10 +49,16 @@ rule decompress:
     output:
         sequences = "data/sequences.fasta",
         metadata = "data/metadata.tsv"
+    log:
+        "logs/decompress.txt",
+    benchmark:
+        "benchmarks/decompress.txt"
     shell:
-        """
-        zstd -d -c {input.sequences} > {output.sequences}
-        zstd -d -c {input.metadata} > {output.metadata}
+        r"""
+        exec &> >(tee {log:q})
+
+        zstd -d -c {input.sequences:q} > {output.sequences:q}
+        zstd -d -c {input.metadata:q} > {output.metadata:q}
         """
 
 rule filter:
@@ -64,23 +76,29 @@ rule filter:
     output:
         sequences = "results/filtered.fasta"
     params:
-        group_by = config["filter"]["group_by"],
+        group_by = as_list(config["filter"]["group_by"]),
         sequences_per_group = config["filter"]["sequences_per_group"],
         min_date = config["filter"]["min_date"],
         min_length = config["filter"]["min_length"],
         strain_id = config.get("strain_id_field", "strain"),
+    log:
+        "logs/filter.txt",
+    benchmark:
+        "benchmarks/filter.txt"
     shell:
-        """
+        r"""
+        exec &> >(tee {log:q})
+
         augur filter \
-            --sequences {input.sequences} \
-            --metadata {input.metadata} \
-            --metadata-id-columns {params.strain_id} \
-            --exclude {input.exclude} \
-            --output {output.sequences} \
-            --group-by {params.group_by} \
-            --sequences-per-group {params.sequences_per_group} \
-            --min-date {params.min_date} \
-            --min-length {params.min_length}
+            --sequences {input.sequences:q} \
+            --metadata {input.metadata:q} \
+            --metadata-id-columns {params.strain_id:q} \
+            --exclude {input.exclude:q} \
+            --output {output.sequences:q} \
+            --group-by {params.group_by:q} \
+            --sequences-per-group {params.sequences_per_group:q} \
+            --min-date {params.min_date:q} \
+            --min-length {params.min_length:q}
         """
 
 rule align:
@@ -93,12 +111,18 @@ rule align:
         reference = "defaults/zika_reference.gb"
     output:
         alignment = "results/aligned.fasta"
+    log:
+        "logs/align.txt",
+    benchmark:
+        "benchmarks/align.txt"
     shell:
-        """
+        r"""
+        exec &> >(tee {log:q})
+
         augur align \
-            --sequences {input.sequences} \
-            --reference-sequence {input.reference} \
-            --output {output.alignment} \
+            --sequences {input.sequences:q} \
+            --reference-sequence {input.reference:q} \
+            --output {output.alignment:q} \
             --fill-gaps \
             --remove-reference
         """

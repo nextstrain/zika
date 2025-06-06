@@ -4,8 +4,43 @@ We use this CHANGELOG to document breaking changes, new features, bug fixes,
 and config value changes that may affect both the usage of the workflows and
 the outputs of the workflows.
 
+## 2025
+
+* 06 June 2025: phylogenetic - convert config params `filter.group_by` and `traits.columns` to lists. ([#84][])
+  * Backwards compatible with string param values, which are automatically split into a list.
+* 06 June 2025: ingest - removed path for separate data sources. ([#84][])
+  * The config param `sources` is no longer supported
+* 06 June 2025: Updated workflows to latest internal guidelines. ([#84][])
+  * ingest - fixed handling of TSVs
+  * ingest/phylogenetic - added logs and benchmarks for all rules
+* 04 March 2025: ingest - ncov-ingest geolocation rules with built-in `augur curate` geolocation rules ([#79][])
+  *  The config param `curate.geolocation_rules_url` is no longer supported.
+
+[#79]: https://github.com/nextstrain/zika/pull/79
+[#84]: https://github.com/nextstrain/zika/pull/84
+
 ## 2024
 
+* 17 December 2024: ingest - metadata columns updated. ([#78][])
+  * renamed `genbank_accession` to `accession`
+  * renamed `genbank_accession_rev` to `accession_version`
+  * added column `url`, which includes the automated generated link to the NCBI GenBank record
+* 09 December 2024: phylogenetic - use `augur merge` to merge USVI data. This should not affect final workflow outputs. ([#75][])
+* 26 November 2024: phylogenetic - final Auspice JSON uses config param `strain_id_field` as internal `name` and
+  `defaults/auspice_config.json` defines the default `tip_label` as `strain`. ([#72][])
+  * The config param `display_strain_field` is no longer supported.
+* 16 July 2024: ingest - replace custom scripts with `augur curate` commands. ([#69][])
+  * Requires a new `genbank_location_field` config param.
+* 02 July 2024: phylogenetic - updated `defaults/description.md`. ([#67][])
+* 13 June 2024: phylogenetic - added data provenance in `defaults/auspice_config.json`. ([#65][])
+* 07 June 2024: phylogenetic - updated maintainers in `defaults/auspice_config.json`. ([#64][])
+* 02 May 2024: ingest - fixed handling of internal quotes in NCBI TSVs. ([#58][])
+* 16 April 2024: phylogenetic - updated to export Auspice JSON with an inline root sequence. ([#57][])
+* 08 March 2024: phylogenetic - updated maintainers in `defaults/auspice_config.json`. ([#49][])
+* 08 March 2024: phylogenetic - moved hardcoded params to the config file so they can be overridden with custom config files. ([#48][])
+  * See `defaults/config_zika.yaml` for available config params.
+* 04 March 2024: ingest - added config param `custom_rules` to extend or override the core rules. ([#46])
+* 01 March 2024: ingest/phylogenetic - workflows' default files moved from `/config` to `/defaults`. ([#43][])
 * 24 February 2024: Move accession to the first column of `metadata_all.tsv`. ([PR #36](https://github.com/nextstrain/zika/pull/36))
 * 05 February 2024: Harmonize with [pathogen repo guide](https://github.com/nextstrain/pathogen-repo-guide) ([PR #31](https://github.com/nextstrain/zika/pull/31))
 * 19 January 2024: Add a Quickstart section to the top level README. ([PR #30](https://github.com/nextstrain/zika/pull/30))
@@ -13,6 +48,21 @@ the outputs of the workflows.
   * The addition of the ingest pipeline is a major change. Instead of relying on the `fauna` database, this introduces retrieving data from NCBI datasets directly and conducting subsequent curation.
   * The restructuring of the `phylogenetic` pipeline into a dedicated directory keeps the two workflows modular, and conforms to the [pathogen repo guide](https://github.com/nextstrain/pathogen-repo-guide).
   * Documenting and providing the USVI data in the `phylogenetic/data` directory.
+
+[#43]: https://github.com/nextstrain/zika/pull/43
+[#46]: https://github.com/nextstrain/zika/pull/46
+[#48]: https://github.com/nextstrain/zika/pull/48
+[#49]: https://github.com/nextstrain/zika/pull/49
+[#57]: https://github.com/nextstrain/zika/pull/57
+[#58]: https://github.com/nextstrain/zika/pull/58
+[#64]: https://github.com/nextstrain/zika/pull/64
+[#65]: https://github.com/nextstrain/zika/pull/65
+[#67]: https://github.com/nextstrain/zika/pull/67
+[#69]: https://github.com/nextstrain/zika/pull/69
+[#72]: https://github.com/nextstrain/zika/pull/72
+[#75]: https://github.com/nextstrain/zika/pull/75
+[#78]: https://github.com/nextstrain/zika/pull/78
+
 
 ## 2023
 

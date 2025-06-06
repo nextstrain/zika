@@ -25,11 +25,17 @@ rule tree:
         alignment = "results/aligned.fasta"
     output:
         tree = "results/tree_raw.nwk"
+    log:
+        "logs/tree.txt",
+    benchmark:
+        "benchmarks/tree.txt"
     shell:
-        """
+        r"""
+        exec &> >(tee {log:q})
+
         augur tree \
-            --alignment {input.alignment} \
-            --output {output.tree}
+            --alignment {input.alignment:q} \
+            --output {output.tree:q}
         """
 
 rule refine:
@@ -52,18 +58,24 @@ rule refine:
         date_inference = config["refine"]["date_inference"],
         clock_filter_iqd = config["refine"]["clock_filter_iqd"],
         strain_id = config.get("strain_id_field", "strain"),
+    log:
+        "logs/refine.txt",
+    benchmark:
+        "benchmarks/refine.txt"
     shell:
-        """
+        r"""
+        exec &> >(tee {log:q})
+
         augur refine \
-            --tree {input.tree} \
-            --alignment {input.alignment} \
-            --metadata {input.metadata} \
-            --metadata-id-columns {params.strain_id} \
-            --output-tree {output.tree} \
-            --output-node-data {output.node_data} \
+            --tree {input.tree:q} \
+            --alignment {input.alignment:q} \
+            --metadata {input.metadata:q} \
+            --metadata-id-columns {params.strain_id:q} \
+            --output-tree {output.tree:q} \
+            --output-node-data {output.node_data:q} \
             --timetree \
-            --coalescent {params.coalescent} \
+            --coalescent {params.coalescent:q} \
             --date-confidence \
-            --date-inference {params.date_inference} \
-            --clock-filter-iqd {params.clock_filter_iqd}
+            --date-inference {params.date_inference:q} \
+            --clock-filter-iqd {params.clock_filter_iqd:q}
         """

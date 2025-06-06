@@ -1,36 +1,35 @@
 """
-This part of the workflow handles fetching sequences from various sources.
-Uses `config.sources` to determine which sequences to include in final output.
+This part of the workflow handles fetching sequences and metadata from NCBI.
 
-Currently only fetches sequences from GenBank, but other sources can be
-defined in the config. If adding other sources, add a new rule upstream
-of rule `fetch_all_sequences` to create the file `data/{source}.ndjson` or the
-file must exist as a static file in the repo.
+REQUIRED INPUTS:
 
-Fetch with NCBI Datasets (https://www.ncbi.nlm.nih.gov/datasets/)
-    - requires `ncbi_taxon_id` config
-    - Only returns metadata fields that are available through NCBI Datasets
+    None
 
-Produces final output as
+OUTPUTS:
 
-    sequences_ndjson = "data/sequences.ndjson"
+    ndjson = data/ncbi.ndjson
 
 """
 
 
 rule fetch_ncbi_dataset_package:
-    output:
-        dataset_package=temp("data/ncbi_dataset.zip"),
-    retries: 5  # Requires snakemake 7.7.0 or later
-    benchmark:
-        "benchmarks/fetch_ncbi_dataset_package.txt"
     params:
         ncbi_taxon_id=config["ncbi_taxon_id"],
+    output:
+        dataset_package=temp("data/ncbi_dataset.zip"),
+    # Allow retries in case of network errors
+    retries: 5
+    benchmark:
+        "benchmarks/fetch_ncbi_dataset_package.txt"
+    log:
+        "logs/fetch_ncbi_dataset_package.txt"
     shell:
-        """
-        datasets download virus genome taxon {params.ncbi_taxon_id} \
+        r"""
+        exec &> >(tee {log:q})
+
+        datasets download virus genome taxon {params.ncbi_taxon_id:q} \
             --no-progressbar \
-            --filename {output.dataset_package}
+            --filename {output.dataset_package:q}
         """
 
 
@@ -41,15 +40,18 @@ rule extract_ncbi_dataset_sequences:
         ncbi_dataset_sequences=temp("data/ncbi_dataset_sequences.fasta"),
     benchmark:
         "benchmarks/extract_ncbi_dataset_sequences.txt"
+    log:
+        "logs/extract_ncbi_dataset_sequences.txt"
     shell:
-        """
-        unzip -jp {input.dataset_package} \
-            ncbi_dataset/data/genomic.fna > {output.ncbi_dataset_sequences}
+        r"""
+        exec &> >(tee {log:q})
+
+        unzip -jp {input.dataset_package:q} \
+            ncbi_dataset/data/genomic.fna > {output.ncbi_dataset_sequences:q}
         """
 
 
 rule format_ncbi_dataset_report:
-    # Formats the headers to match the NCBI mnemonic names
     input:
         dataset_package="data/ncbi_dataset.zip",
     output:
@@ -58,19 +60,21 @@ rule format_ncbi_dataset_report:
         ncbi_datasets_fields=",".join(config["ncbi_datasets_fields"]),
     benchmark:
         "benchmarks/format_ncbi_dataset_report.txt"
+    log:
+        "logs/format_ncbi_dataset_report.txt"
     shell:
-        """
+        r"""
+        exec &> >(tee {log:q})
+
         dataformat tsv virus-genome \
-            --package {input.dataset_package} \
+            --package {input.dataset_package:q} \
             --fields {params.ncbi_datasets_fields:q} \
             --elide-header \
             | csvtk fix-quotes -Ht \
             | csvtk add-header -t -n {params.ncbi_datasets_fields:q} \
             | csvtk rename -t -f accession -n accession_version \
-            | csvtk -t mutate -f accession_version -n accession -p "^(.+?)\." \
-            | csvtk del-quotes -t \
-            | tsv-select -H -f accession --rest last \
-            > {output.ncbi_dataset_tsv}
+            | csvtk -t mutate -f accession_version -n accession -p "^(.+?)\." --at 1 \
+            > {output.ncbi_dataset_tsv:q}
         """
 
 
@@ -79,34 +83,21 @@ rule format_ncbi_datasets_ndjson:
         ncbi_dataset_sequences="data/ncbi_dataset_sequences.fasta",
         ncbi_dataset_tsv="data/ncbi_dataset_report.tsv",
     output:
-        ndjson="data/genbank.ndjson",
-    log:
-        "logs/format_ncbi_datasets_ndjson.txt",
+        ndjson="data/ncbi.ndjson",
     benchmark:
         "benchmarks/format_ncbi_datasets_ndjson.txt"
+    log:
+        "logs/format_ncbi_datasets_ndjson.txt",
     shell:
-        """
+        r"""
+        exec &> >(tee {log:q})
+
         augur curate passthru \
-            --metadata {input.ncbi_dataset_tsv} \
-            --fasta {input.ncbi_dataset_sequences} \
+            --metadata {input.ncbi_dataset_tsv:q} \
+            --fasta {input.ncbi_dataset_sequences:q} \
             --seq-id-column accession_version \
             --seq-field sequence \
             --unmatched-reporting warn \
             --duplicate-reporting warn \
-            2> {log} > {output.ndjson}
-        """
-
-
-def _get_all_sources(wildcards):
-    return [f"data/{source}.ndjson" for source in config["sources"]]
-
-
-rule fetch_all_sequences:
-    input:
-        all_sources=_get_all_sources,
-    output:
-        sequences_ndjson="data/sequences.ndjson",
-    shell:
-        """
-        cat {input.all_sources} > {output.sequences_ndjson}
+            > {output.ndjson:q}
         """
