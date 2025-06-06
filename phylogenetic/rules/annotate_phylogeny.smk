@@ -89,7 +89,7 @@ rule traits:
     output:
         node_data = "results/traits.json",
     params:
-        columns = config["traits"]["columns"],
+        columns = as_list(config["traits"]["columns"]),
         sampling_bias_correction = config["traits"]["sampling_bias_correction"],
         strain_id = config.get("strain_id_field", "strain"),
     log:

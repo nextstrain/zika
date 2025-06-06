@@ -76,7 +76,7 @@ rule filter:
     output:
         sequences = "results/filtered.fasta"
     params:
-        group_by = config["filter"]["group_by"],
+        group_by = as_list(config["filter"]["group_by"]),
         sequences_per_group = config["filter"]["sequences_per_group"],
         min_date = config["filter"]["min_date"],
         min_length = config["filter"]["min_length"],
@@ -95,7 +95,7 @@ rule filter:
             --metadata-id-columns {params.strain_id:q} \
             --exclude {input.exclude:q} \
             --output {output.sequences:q} \
-            --group-by {params.group_by} \
+            --group-by {params.group_by:q} \
             --sequences-per-group {params.sequences_per_group:q} \
             --min-date {params.min_date:q} \
             --min-length {params.min_length:q}
