@@ -13,13 +13,45 @@ for Nextstrain's suite of software tools.
 If you're unfamiliar with Nextstrain builds, you may want to follow our
 [Running a Pathogen Workflow guide][] first and then come back here.
 
-The easiest way to run this pathogen build is using the Nextstrain
-command-line tool from within the `phylogenetic/` directory:
+### With `nextstrain run`
 
-    cd phylogenetic/
+If you haven't set up the zika pathogen, then set it up with:
+
+    nextstrain setup zika
+
+Otherwise, make sure you have the latest set up with:
+
+    nextstrain update zika
+
+Run the phylogenetic workflow with:
+
+    nextstrain run zika phylogenetic <analysis-directory>
+
+Your `<analysis-directory>` will contain the workflow's intermediate files
+and the final output `auspice/zika.json`.
+
+You can view the result with
+
+    nextstrain view <analysis-directory>
+
+### With `nextstrain build`
+
+If you don't have a local copy of the zika repository, use Git to download it
+
+    git clone https://github.com/nextstrain/zika.git
+
+Otherwise, update your local copy of the workflow with:
+
+    cd zika
+    git pull --ff-only origin master
+
+Run the phylogenetic workflow workflow with
+
+    cd phylogenetic
     nextstrain build .
 
-Build output goes into the directories `data/`, `results/` and `auspice/`.
+The `phylogenetic` directory will contain the workflow's intermediate files
+and the final output `auspice/zika.json`.
 
 Once you've run the build, you can view the results with:
 
@@ -27,8 +59,8 @@ Once you've run the build, you can view the results with:
 
 ## Configuration
 
-Configuration for the workflow takes place entirely within the [defaults/config_zika.yaml](defaults/config_zika.yaml).
-The analysis pipeline is contained in [Snakefile](Snakefile) with included [rules](rules).
+The default configuration is in [`defaults/config.yaml`](./defaults/config.yaml).
+The workflow is contained in [Snakefile](Snakefile) with included [rules](rules).
 Each rule specifies its file inputs and output and pulls its parameters from the config.
 There is little redirection and each rule should be able to be reasoned with on its own.
 

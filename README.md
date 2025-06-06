@@ -11,14 +11,18 @@ Each folder contains a README.md with more information. The results of running b
 
 Follow the [standard installation instructions](https://docs.nextstrain.org/en/latest/install.html) for Nextstrain's suite of software tools.
 
+After you've installed the Nextstrain CLI, you can set up zika with
+
+    nextstrain setup zika
+
+
 ## Quickstart
 
 Run the default phylogenetic workflow via:
-```
-cd phylogenetic/
-nextstrain build .
-nextstrain view .
-```
+
+    nextstrain run zika phylogenetic zika-analysis
+    nextstrain view zika-analysis
+
 
 ## Documentation
 
