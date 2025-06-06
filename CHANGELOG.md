@@ -6,10 +6,18 @@ the outputs of the workflows.
 
 ## 2025
 
+* 06 June 2025: phylogenetic - convert config params `filter.group_by` and `traits.columns` to lists. ([#84][])
+  * Backwards compatible with string param values, which are automatically split into a list.
+* 06 June 2025: ingest - removed path for separate data sources. ([#84][])
+  * The config param `sources` is no longer supported
+* 06 June 2025: Updated workflows to latest internal guidelines. ([#84][])
+  * ingest - fixed handling of TSVs
+  * ingest/phylogenetic - added logs and benchmarks for all rules
 * 04 March 2025: ingest - ncov-ingest geolocation rules with built-in `augur curate` geolocation rules ([#79][])
   *  The config param `curate.geolocation_rules_url` is no longer supported.
 
 [#79]: https://github.com/nextstrain/zika/pull/79
+[#84]: https://github.com/nextstrain/zika/pull/84
 
 ## 2024
 
