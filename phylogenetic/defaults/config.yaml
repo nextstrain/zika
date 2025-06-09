@@ -3,6 +3,13 @@
 sequences_url: "https://data.nextstrain.org/files/workflows/zika/sequences.fasta.zst"
 metadata_url: "https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst"
 
+# Config files
+exclude: "exclude.txt"
+reference: "reference.gb"
+colors: "colors.tsv"
+auspice_config: "auspice_config.json"
+description: "description.md"
+
 strain_id_field: "accession"
 
 filter:

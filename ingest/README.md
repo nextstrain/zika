@@ -8,51 +8,68 @@ Follow the [standard installation instructions](https://docs.nextstrain.org/en/l
 
 ## Usage
 
-> NOTE: All command examples assume you are within the `ingest` directory.
-> If running commands from the outer `zika` directory, please replace the `.` with `ingest`
+### With `nextstrain run`
 
-Fetch sequences with
+If you haven't set up the zika pathogen, then set it up with:
 
-```sh
-nextstrain build . data/sequences.ndjson
-```
+    nextstrain setup zika
 
-Run the complete ingest pipeline with
+Otherwise, make sure you have the latest set up with:
 
-```sh
-nextstrain build .
-```
+    nextstrain update zika
 
-This will produce two files (within the `ingest` directory):
+Run the ingest workflow with:
+
+    nextstrain run zika ingest <analysis-directory>
+
+Your `<analysis-directory>` will contain the workflow's intermediate files
+and two final outputs:
 
 - `results/metadata.tsv`
 - `results/sequences.fasta`
 
-Run the complete ingest pipeline and upload results to AWS S3 with
+### With `nextstrain build`
 
-```sh
-nextstrain build \
-    --env AWS_ACCESS_KEY_ID \
-    --env AWS_SECRET_ACCESS_KEY \
-    . \
-        upload_all \
-        --configfile build-configs/nextstrain-automation/config.yaml
-```
+If you don't have a local copy of the zika repository, use Git to download it
+
+    git clone https://github.com/nextstrain/zika.git
+
+Otherwise, update your local copy of the workflow with:
+
+    cd zika
+    git pull --ff-only origin master
+
+Run the ingest workflow with
+
+    cd ingest
+    nextstrain build .
+
+The `ingest` directory will contain the workflow's intermediate files
+and two final outputs:
+
+- `results/metadata.tsv`
+- `results/sequences.fasta`
 
 ## Configuration
 
-Configuration takes place in `defaults/config.yaml` by default.
+The default configuration is in [`defaults/config.yaml`](./defaults/config.yaml).
+The workflow is contained in [Snakefile](Snakefile) with included [rules](rules).
+Each rule specifies its file inputs and output and pulls its parameters from the config.
+There is little redirection and each rule should be able to be reasoned with on its own.
 
+### Nextstrain automated workflow
+
+The Nextstrain automated workflow uploads results to AWS S3 with
+
+    nextstrain build \
+        --env AWS_ACCESS_KEY_ID \
+        --env AWS_SECRET_ACCESS_KEY \
+        . \
+            upload_all \
+            --configfile build-configs/nextstrain-automation/config.yaml
 
 ## Input data
 
 ### GenBank data
 
 GenBank sequences and metadata are fetched via [NCBI datasets](https://www.ncbi.nlm.nih.gov/datasets/docs/v2/download-and-install/).
-
-## `ingest/vendored`
-
-This repository uses [`git subrepo`](https://github.com/ingydotnet/git-subrepo) to manage copies of ingest scripts in [ingest/vendored](./vendored), from [nextstrain/ingest](https://github.com/nextstrain/ingest).
-
-See [vendored/README.md](vendored/README.md#vendoring) for instructions on how to update
-the vendored scripts.

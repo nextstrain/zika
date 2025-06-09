@@ -6,6 +6,8 @@ the outputs of the workflows.
 
 ## 2025
 
+* 06 June 2025: Updated workflows to support the `nextstrain run` command. ([#85][])
+  * See individual workflow's `README.md` for detailed instructions on how to use `nextstrain run`.
 * 06 June 2025: phylogenetic - convert config params `filter.group_by` and `traits.columns` to lists. ([#84][])
   * Backwards compatible with string param values, which are automatically split into a list.
 * 06 June 2025: ingest - removed path for separate data sources. ([#84][])
@@ -18,6 +20,7 @@ the outputs of the workflows.
 
 [#79]: https://github.com/nextstrain/zika/pull/79
 [#84]: https://github.com/nextstrain/zika/pull/84
+[#85]: https://github.com/nextstrain/zika/pull/85
 
 ## 2024
 

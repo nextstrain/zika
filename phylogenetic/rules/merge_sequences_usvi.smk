@@ -21,13 +21,16 @@ This part of the workflow usually includes the following steps:
 
 """
 
+
 rule append_usvi:
     """Appending USVI sequences"""
     input:
         sequences = "data/sequences.fasta",
         metadata = "data/metadata.tsv",
-        usvi_sequences = "data/sequences_usvi.fasta",
-        usvi_metadata = "data/metadata_usvi.tsv"
+        # USVI files are expected to be part of the workflow source,
+        # and is _not_ expected to be provided via the analysis directory
+        usvi_sequences = workflow.source_path("../data/sequences_usvi.fasta"),
+        usvi_metadata = workflow.source_path("../data/metadata_usvi.tsv")
     output:
         sequences = "data/sequences_all.fasta",
         metadata = "data/metadata_all.tsv"
