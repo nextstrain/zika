@@ -1,17 +1,18 @@
 """
-This part of the workflow appends USVI data to the main dataset.
+This part of the workflow merges inputs from any of:
+    curated NCBI dataset: via s3 remote
+    additional local data: via path to files
+
+based on what is defined in the config YAML file.
 
 REQUIRED INPUTS:
 
-    usvi_sequences  = data/sequences_usvi.fasta
-    usvi_metadata   = data/metadata_usvi.tsv
-    main_sequences  = data/sequences.fasta
-    main_metadata   = data/metadata.tsv
+    config.yaml  = defines input files within a dictionary in either 'inputs' or 'additional_inputs'
 
 OUTPUTS:
 
-    merged_sequences = data/sequences_all.fasta
-    merged_metadata  = data/metadata_all.tsv
+    input_sequences = gathered and merged sequences
+    input_metadata  = gathered and merged metadata
 
 
 This part of the workflow usually includes the following steps:
@@ -33,17 +34,15 @@ def _parse_config_input(input):
     The structure of `input` is a dictionary with keys:
     - name:string (required)
     - metadata:string (optional) - a s3 URI or a local file path
-    - sequences:string|dict[string,string] (optional) - either a s3 URI or a local file path, in which case
-      it must include a '{segment}' wildcard substring, or a dict of segment → s3 URI or local file path,
-      in which case it must not include the wildcard substring.
+    - sequences:string (optional) - a s3 URI or a local file path
 
     Returns a dictionary with optional keys:
     - metadata:string - the relative path to the metadata file. If the original data was remote then this represents
       the output of a rule which downloads the file
     - metadata_location:string - the URI for the remote file if applicable else `None`
-    - sequences:function. Takes in wildcards and returns the relative path to the sequences FASTA for the provided
-      segment wildcard, or returns `None` if this input doesn't define sequences for the provided segment.
-    - sequences_location:function. Takes in wildcards and returns the URI for the remote file, or `None`, where applicable.
+    - sequences:string - the relative path to the sequences FASTA. If the original data was remote then this represents
+      the output of a rule which downloads the file
+    - sequences_location:string - the URI for the remote file if applicable else `None`
 
     Raises InvalidConfigError
     """
