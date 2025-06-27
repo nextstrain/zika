@@ -1,7 +1,14 @@
 # Sequences must be FASTA and metadata must be TSV
 # Both files must be zstd compressed
-sequences_url: "https://data.nextstrain.org/files/workflows/zika/sequences.fasta.zst"
-metadata_url: "https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst"
+inputs:
+  - name: ncbi
+    metadata: "s3://nextstrain-data/files/workflows/zika/metadata.tsv.zst"
+    sequences: "s3://nextstrain-data/files/workflows/zika/sequences.fasta.zst"
+
+additional_inputs:
+  - name: usvi
+    metadata: "data/metadata_usvi.tsv"
+    sequences: "data/sequences_usvi.fasta"
 
 # Config files
 exclude: "exclude.txt"
