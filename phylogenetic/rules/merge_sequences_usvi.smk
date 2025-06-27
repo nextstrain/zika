@@ -106,26 +106,38 @@ def input_sequences(wildcards):
 rule download_s3_sequences:
     output:
         sequences = "data/{input_name}/sequences.fasta",
+    log:
+        "logs/{input_name}/download_s3_sequences.txt",
+    benchmark:
+        "benchmarks/{input_name}/download_s3_sequences.txt"
     params:
         address = lambda w: input_sources[w.input_name]['sequences_location'],
         no_sign_request=lambda w: "--no-sign-request" \
             if input_sources[w.input_name]['sequences_location'].startswith(NEXTSTRAIN_PUBLIC_BUCKET) \
             else "",
     shell:
-        """
+        r"""
+        exec &> >(tee {log:q})
+
         aws s3 cp {params.no_sign_request:q} {params.address:q} - | zstd -d > {output.sequences}
         """
 
 rule download_s3_metadata:
     output:
         metadata = "data/{input_name}/metadata.tsv",
+    log:
+        "logs/{input_name}/download_s3_metadata.txt",
+    benchmark:
+        "benchmarks/{input_name}/download_s3_metadata.txt"
     params:
         address = lambda w: input_sources[w.input_name]['metadata_location'],
         no_sign_request=lambda w: "--no-sign-request" \
             if input_sources[w.input_name]['metadata_location'].startswith(NEXTSTRAIN_PUBLIC_BUCKET) \
             else "",
     shell:
-        """
+        r"""
+        exec &> >(tee {log:q})
+
         aws s3 cp {params.no_sign_request:q} {params.address:q} - | zstd -d > {output.metadata}
         """
 
@@ -141,8 +153,14 @@ rule merge_metadata:
         id_field = config['strain_id_field'],
     output:
         metadata = "results/metadata_merged.tsv"
+    log:
+        "logs/merge_metadata.txt",
+    benchmark:
+        "benchmarks/merge_metadata.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         augur merge \
             --metadata {params.metadata:q} \
             --metadata-id-columns {params.id_field} \
@@ -158,8 +176,14 @@ rule merge_sequences:
         **{name: info['sequences'] for name,info in input_sources.items() if info.get('sequences', None)}
     output:
         sequences = "results/sequences_merged.fasta"
+    log:
+        "logs/merge_sequences.txt",
+    benchmark:
+        "benchmarks/merge_sequences.txt"
     shell:
         r"""
+        exec &> >(tee {log:q})
+
         seqkit rmdup {input:q} > {output.sequences:q}
         """
 
