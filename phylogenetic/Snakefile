@@ -16,8 +16,8 @@ rule all:
         auspice_json = "auspice/zika.json"
 
 include: "rules/config.smk"
-include: "rules/prepare_sequences.smk"
 include: "rules/merge_sequences_usvi.smk"
+include: "rules/prepare_sequences.smk"
 include: "rules/construct_phylogeny.smk"
 include: "rules/annotate_phylogeny.smk"
 include: "rules/export.smk"
