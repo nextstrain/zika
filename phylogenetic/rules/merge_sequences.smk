@@ -54,7 +54,7 @@ def _parse_config_input(input):
     def _source(uri, *,  s3, local):
         if uri.startswith('s3://'):
             return s3
-        elif uri.lower().startswith('http://') or uri.lower().startswith('https://'):
+        elif uri.lower().startswith(('http://','https://')):
             raise InvalidConfigError("Workflow cannot yet handle HTTP[S] inputs")
         # USVI files are expected to be part of the workflow source,
         # and are _not_ expected to be provided via the analysis directory
