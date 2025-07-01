@@ -47,9 +47,8 @@ def _parse_config_input(input):
     Raises InvalidConfigError
     """
     name = input['name']
-    lambda_none = lambda w: None
 
-    info = {'metadata': None, 'metadata_location': None, 'sequences': lambda_none, 'sequences_location': lambda_none}
+    info = {'metadata': None, 'metadata_location': None, 'sequences': None, 'sequences_location': None}
 
     def _source(uri, *,  s3, local):
         if uri.startswith('s3://'):
