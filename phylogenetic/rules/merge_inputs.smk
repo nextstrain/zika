@@ -98,10 +98,6 @@ def input_sequences(wildcards):
     inputs = [info['sequences'] for info in input_sources.values() if info.get('sequences', None)]
     return inputs[0] if len(inputs)==1 else "results/sequences_merged.fasta"
 
-# def input_sequences(wildcards):
-#     inputs = list(filter(None, [info['sequences'](wildcards) for info in input_sources.values() if info.get('sequences', None)]))
-#     return inputs[0] if len(inputs)==1 else "results/sequences_merged_{segment}.fasta"
-
 rule download_s3_sequences:
     output:
         sequences = "data/{input_name}/sequences.fasta",
