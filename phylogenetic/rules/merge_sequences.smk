@@ -57,7 +57,7 @@ def _parse_config_input(input):
         elif uri.lower().startswith('http://') or uri.lower().startswith('https://'):
             raise InvalidConfigError("Workflow cannot yet handle HTTP[S] inputs")
         # USVI files are expected to be part of the workflow source,
-        # and is _not_ expected to be provided via the analysis directory
+        # and are _not_ expected to be provided via the analysis directory
         elif uri.startswith('data/metadata_usvi.tsv') or uri.startswith('data/sequences_usvi.fasta'):
             return workflow.source_path("../" + uri)
         return local
