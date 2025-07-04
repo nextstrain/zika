@@ -61,6 +61,15 @@ rule filter:
             --min-length {params.min_length:q}
         """
 
+rule upload_filter:
+    """TESTING ONLY TODO XXX REMOVE"""
+    input: "results/filtered.fasta"
+    output: path_or_url("s3://nextstrain-scratch/testing-zika-filtered.fasta")
+    shell:
+        r"""
+        cp {input[0]} {output[0]}
+        """
+
 rule align:
     """
     Aligning sequences to {input.reference}

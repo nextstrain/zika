@@ -1,14 +1,19 @@
 # Sequences must be FASTA and metadata must be TSV
-# Both files must be zstd compressed
+
+# TODO XXX - remove commented lines below - only for testing the snakemake storage stuff
 inputs:
   - name: ncbi
     metadata: "s3://nextstrain-data/files/workflows/zika/metadata.tsv.zst"
     sequences: "s3://nextstrain-data/files/workflows/zika/sequences.fasta.zst"
+    # metadata: "https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst"
+    # sequences: "https://data.nextstrain.org/files/workflows/zika/sequences.fasta.zst"
 
 additional_inputs:
   - name: usvi
     metadata: "data/metadata_usvi.tsv"
     sequences: "data/sequences_usvi.fasta"
+    # metadata: https://raw.githubusercontent.com/nextstrain/zika/refs/heads/main/phylogenetic/data/metadata_usvi.tsv
+    # sequences: https://raw.githubusercontent.com/nextstrain/zika/refs/heads/main/phylogenetic/data/sequences.fasta
 
 # Config files
 exclude: "exclude.txt"
@@ -41,3 +46,4 @@ traits:
     - region
     - country
   sampling_bias_correction: 3
+# 
