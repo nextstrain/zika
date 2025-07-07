@@ -10,10 +10,10 @@ inputs:
 
 additional_inputs:
   - name: usvi
-    metadata: "data/metadata_usvi.tsv"
-    sequences: "data/sequences_usvi.fasta"
-    # metadata: https://raw.githubusercontent.com/nextstrain/zika/refs/heads/main/phylogenetic/data/metadata_usvi.tsv
-    # sequences: https://raw.githubusercontent.com/nextstrain/zika/refs/heads/main/phylogenetic/data/sequences.fasta
+    # metadata: "data/metadata_usvi.tsv"
+    # sequences: "data/sequences_usvi.fasta"
+    metadata: https://raw.githubusercontent.com/nextstrain/zika/refs/heads/main/phylogenetic/data/metadata_usvi.tsv
+    sequences: https://raw.githubusercontent.com/nextstrain/zika/refs/heads/main/phylogenetic/data/sequences_usvi.fasta
 
 # Config files
 exclude: "exclude.txt"
