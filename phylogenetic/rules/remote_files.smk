@@ -27,7 +27,7 @@ def _storage_s3(*, bucket, keep_local, force_signed):
         storage s3_unsigned:
             provider="s3",
             signature_version=UNSIGNED,
-            retries=retries, 
+            retries=retries,
             keep_local=keep_local,
 
         _storage_registry['s3_unsigned'] = storage.s3_unsigned
@@ -40,7 +40,7 @@ def _storage_s3(*, bucket, keep_local, force_signed):
     # the tag appears in the local file path, so reference 'signed' to give a hint about credential errors
     storage s3_signed:
         provider="s3",
-        retries=retries, 
+        retries=retries,
         keep_local=keep_local,
 
     _storage_registry['s3_signed'] = storage.s3_signed
@@ -59,6 +59,15 @@ def _storage_http(*, keep_local):
     _storage_registry['http'] = storage.http
     return _storage_registry['http']
 
+def _storage_gcs(*, keep_local):
+    if provider:=_storage_registry.get('gcs', None):
+        return provider
+
+    storage:
+        provider="gcs",
+        retries=2,
+        keep_local=keep_local
+
 def path_or_url(uri, *, keep_local=True, force_signed=False):
     """
     Returns the URI wrapped by an applicable storage plugin.
@@ -76,7 +85,8 @@ def path_or_url(uri, *, keep_local=True, force_signed=False):
 
     if info.scheme in ['http', 'https']:
         return _storage_http(keep_local=keep_local)(uri)
-    
-    # TODO XXX - Google? We allowed this in ncov <https://github.com/nextstrain/ncov/blob/41cf6470d3140963ff3e02c29241f80ae8ed9c33/workflow/snakemake_rules/remote_files.smk#L62>
+
+    if info.scheme in ['gs', 'gcs']:
+        return _storage_gcs(keep_local=keep_local)(uri)
 
     raise Exception(f"Input address {uri!r} (scheme={info.scheme!r}) is from a non-supported remote")
