@@ -30,6 +30,10 @@ inputs:
     metadata: https://raw.githubusercontent.com/nextstrain/zika/refs/heads/main/phylogenetic/data/metadata_usvi.tsv
     sequences: https://raw.githubusercontent.com/nextstrain/zika/refs/heads/main/phylogenetic/data/sequences_usvi.fasta
 
+  # - name: usvi
+  #   metadata: gs://nextstrain-data/files/workflows/zika/metadata_usvi.tsv.zst
+  #   sequences: gs://nextstrain-data/files/workflows/zika/sequences_usvi.fasta.zst
+
 # Config files
 exclude: "exclude.txt"
 reference: "reference.gb"
