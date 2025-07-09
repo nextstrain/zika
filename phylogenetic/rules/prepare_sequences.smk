@@ -61,14 +61,41 @@ rule filter:
             --min-length {params.min_length:q}
         """
 
-rule upload_filter:
-    """TESTING ONLY TODO XXX REMOVE"""
-    input: "results/filtered.fasta"
-    output: path_or_url("s3://nextstrain-scratch/testing-zika-filtered.fasta")
-    shell:
-        r"""
-        cp {input[0]} {output[0]}
-        """
+
+# rule upload_filter:
+#     """TESTING ONLY TODO XXX REMOVE"""
+#     input:
+#         sequences = input_sequences,
+#         metadata = input_metadata,
+#         exclude = resolve_config_path(config["exclude"]),
+#     output:
+#         sequences = path_or_url("s3://nextstrain-scratch/zika-pr-89/filtered.fasta")
+#     params:
+#         group_by = as_list(config["filter"]["group_by"]),
+#         sequences_per_group = config["filter"]["sequences_per_group"],
+#         min_date = config["filter"]["min_date"],
+#         min_length = config["filter"]["min_length"],
+#         strain_id = config.get("strain_id_field", "strain"),
+#     log:
+#         "logs/filter.txt",
+#     benchmark:
+#         "benchmarks/filter.txt"
+#     shell:
+#         r"""
+#         exec &> >(tee {log:q})
+
+#         augur filter \
+#             --sequences {input.sequences:q} \
+#             --metadata {input.metadata:q} \
+#             --metadata-id-columns {params.strain_id:q} \
+#             --exclude {input.exclude:q} \
+#             --output-sequences {output.sequences:q} \
+#             --group-by {params.group_by:q} \
+#             --sequences-per-group {params.sequences_per_group:q} \
+#             --min-date {params.min_date:q} \
+#             --min-length {params.min_length:q}
+#         """
+
 
 rule align:
     """

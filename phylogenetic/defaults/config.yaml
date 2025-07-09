@@ -1,17 +1,32 @@
 # Sequences must be FASTA and metadata must be TSV
 
-# TODO XXX - remove commented lines below - only for testing the snakemake storage stuff
+# TODO XXX - fixup this mess!
 inputs:
+  # - name: ncbi
+  #   metadata: "s3://nextstrain-scratch/zika-pr-89/metadata.tsv.zst"
+  #   sequences: "s3://nextstrain-scratch/zika-pr-89/sequences.fasta.zst"
+
   - name: ncbi
     metadata: "s3://nextstrain-data/files/workflows/zika/metadata.tsv.zst"
     sequences: "s3://nextstrain-data/files/workflows/zika/sequences.fasta.zst"
-    # metadata: "https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst"
-    # sequences: "https://data.nextstrain.org/files/workflows/zika/sequences.fasta.zst"
 
-additional_inputs:
+  # - name: ncbi
+  #   metadata: "https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst"
+  #   sequences: "https://data.nextstrain.org/workflows/zika/sequences.fasta.zst"
+
+  # - name: usvi
+  #   metadata: s3://nextstrain-data/files/workflows/zika/metadata_usvi.tsv.zst
+  #   sequences: s3://nextstrain-data/files/workflows/zika/sequences_usvi.fasta.zst
+
+  # - name: usvi
+  #   metadata: https://data.nextstrain.org/files/workflows/zika/metadata_usvi.tsv.zst
+  #   sequences: https://data.nextstrain.org/files/workflows/zika/sequences_usvi.fasta.zst
+
+  # - name: usvi
+  #   metadata: metadata_usvi.tsv
+  #   sequences: sequences_usvi.fasta.zst
+
   - name: usvi
-    # metadata: "data/metadata_usvi.tsv"
-    # sequences: "data/sequences_usvi.fasta"
     metadata: https://raw.githubusercontent.com/nextstrain/zika/refs/heads/main/phylogenetic/data/metadata_usvi.tsv
     sequences: https://raw.githubusercontent.com/nextstrain/zika/refs/heads/main/phylogenetic/data/sequences_usvi.fasta
 
