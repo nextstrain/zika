@@ -131,8 +131,11 @@ def path_or_url(uri, *, keep_local=True, retries=2) -> str:
         except RemoteFilesMissingCredentials as e:
             raise Exception(f"AWS credentials are required to access {uri!r}") from e
 
-    if info.scheme in ['http', 'https']:
+    if info.scheme=='https':
         return _storage_http(keep_local=keep_local, retries=retries)(uri)
+    elif info.scheme=='http':
+        raise Exception(f"HTTP remote file support is not implemented in nextstrain workflows (attempting to access {uri!r}).\n"
+            "Please use an HTTPS address instead.")
 
     if info.scheme in ['gs', 'gcs']:
         raise Exception(f"Google Storage is not yet implemented for nextstrain workflows (attempting to access {uri!r}).\n"
