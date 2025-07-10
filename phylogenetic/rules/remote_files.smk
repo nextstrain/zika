@@ -86,14 +86,6 @@ def _storage_http(*, keep_local, retries) -> snakemake.storage.StorageProviderPr
     _storage_registry['http'] = storage.http
     return _storage_registry['http']
 
-def _storage_gcs(*, keep_local, retries) -> snakemake.storage.StorageProviderProxy:
-    if provider:=_storage_registry.get('gcs', None):
-        return provider
-
-    storage:
-        provider="gcs",
-        retries=retries,
-        keep_local=keep_local
 
 def path_or_url(uri, *, keep_local=True, retries=2) -> str:
     """
@@ -143,6 +135,7 @@ def path_or_url(uri, *, keep_local=True, retries=2) -> str:
         return _storage_http(keep_local=keep_local, retries=retries)(uri)
 
     if info.scheme in ['gs', 'gcs']:
-        return _storage_gcs(keep_local=keep_local, retries=retries)(uri)
+        raise Exception(f"Google Storage is not yet implemented for nextstrain workflows (attempting to access {uri!r}).\n"
+            "Please get in touch if you require this functionality and we can add it to our workflows")
 
     raise Exception(f"Input address {uri!r} (scheme={info.scheme!r}) is from a non-supported remote")
