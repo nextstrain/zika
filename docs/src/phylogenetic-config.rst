@@ -1,5 +1,5 @@
 *****************************************************************
-Detailed overview of the phylogenetic workflow
+Phylogenetic configuration
 *****************************************************************
 
 TKTK

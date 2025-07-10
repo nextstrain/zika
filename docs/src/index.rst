@@ -34,16 +34,16 @@ For a detailed list of all configuration options and docs see :doc:`config/TKTK`
     :hidden:
 
     ingest-workflow
-    phylogenetic-workflow
+    phylo-workflow
 
 .. toctree::
     :maxdepth: 1
     :titlesonly:
-    :caption: Customisation
+    :caption: Customisation & configuration
     :hidden:
 
     phylogenetic-config
-
+    shared-vendored-snakemake-config
 
 .. toctree::
    :maxdepth: 1

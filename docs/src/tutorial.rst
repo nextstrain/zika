@@ -29,11 +29,24 @@ Furthermore, we assume that you are in this directory and that it is empty.
 What just happened?
 -------------------
 
-Input data was downloaded from :configvalue:`phylogenetic/defaults/config.yaml:inputs[0].metadata` and :configvalue:`phylogenetic/defaults/config.yaml:inputs[0].sequences`.
+Input data was downloaded from :configvalue:`phylogenetic/defaults/config.yaml:inputs[0].metadata` and :configvalue:`phylogenetic/defaults/config.yaml:inputs[0].sequences` (these files were produced by the ingest pipeline, BTW).
 
-We then ...
+We then ran through a number of analysis steps, for full details see the :doc:`phylo-workflow` page.
 
 To see how you can customise this analysis see the :doc:`config/TKTK` page.
+
+View the results
+======================
+
+Either ``nextstrain view ???`` or take the produced files and drag and drop em on to auspice.us
+
+
+
+
+
+
+
+
 
 
 

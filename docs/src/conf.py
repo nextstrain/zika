@@ -74,6 +74,10 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# Add external directories to the source path
+# This allows including RST files from outside the docs/src directory
+html_extra_path = ['../../shared/vendored']
+
 # A string of reStructuredText that will be included at the end of every source
 # file that is read. This is a possible place to add substitutions that should
 # be available in every file.
