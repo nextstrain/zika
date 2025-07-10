@@ -25,16 +25,19 @@ For a detailed list of all configuration options and docs see :doc:`config/TKTK`
     :caption: Tutorials
     :hidden:
 
-    tutorial
+    quickstart
+    customise
 
 .. toctree::
     :maxdepth: 1
     :titlesonly:
-    :caption: Detailed workflow descriptions
+    :caption: Workflow details
     :hidden:
 
     ingest-workflow
     phylo-workflow
+
+
 
 .. toctree::
     :maxdepth: 1
@@ -44,10 +47,5 @@ For a detailed list of all configuration options and docs see :doc:`config/TKTK`
 
     phylogenetic-config
     shared-vendored-snakemake-config
+    shared-vendored-inputs
 
-.. toctree::
-   :maxdepth: 1
-   :titlesonly:
-   :hidden:
-
-   Stuck? Ask us on the discussion board. We're happy to help! <https://discussion.nextstrain.org/>

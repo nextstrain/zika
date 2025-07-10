@@ -33,7 +33,7 @@ Input data was downloaded from :configvalue:`phylogenetic/defaults/config.yaml:i
 
 We then ran through a number of analysis steps, for full details see the :doc:`phylo-workflow` page.
 
-To see how you can customise this analysis see the :doc:`config/TKTK` page.
+To see how you can customise this analysis, by using your own data or changing some of the analysis parameters, see the :doc:`customise` page.
 
 View the results
 ======================

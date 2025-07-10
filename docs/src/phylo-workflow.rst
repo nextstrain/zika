@@ -2,4 +2,4 @@
 Detailed overview of the phylogenetic workflow
 *****************************************************************
 
-TKTK
+TKTK - see the ingest workflow for ideas
