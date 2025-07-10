@@ -1,0 +1,19 @@
+# -----------------------------------------------------------------------------
+# This snakefile is an ad-hoc way to test out concepts for docs using nextstrain run
+# -----------------------------------------------------------------------------
+
+rule build:
+    params: workflow.basedir
+    shell:
+        r"""
+        cd {params[0]}
+        make clean && make html
+        """
+
+rule open:
+    # open is MacOS specific I think?
+    params: workflow.basedir
+    shell:
+        r"""
+        open {params[0]}/build/html/index.html
+        """
