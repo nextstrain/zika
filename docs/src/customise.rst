@@ -1,5 +1,5 @@
 *****************************************************************
-Customisation of workflow
+Customisation of workflow: using your own data
 *****************************************************************
 
 .. note::
@@ -17,3 +17,16 @@ We'll start by creating a config (overlay) YAML, ``config.yaml`` in our analysis
 .. note::
     You can choose a different name for the file, but if you do you'll have to supply it to the command via --configfile <filename> as only config.yaml will be automatically detected.
 
+Currently the default inputs for the workflow are:
+
+:configvalue:`phylogenetic/defaults/config.yaml:inputs`
+
+
+Let's add a similar block in our custom ``config.yaml`` defining some additional inputs:
+
+.. code-block:: yaml
+
+   additional_inputs:
+     - name: unreleased-data
+       metadata: https://data.nextstrain.org/something.tsv.zst
+       sequences: https://data.nextstrain.org/something.fasta.zst

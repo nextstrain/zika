@@ -8,15 +8,22 @@ Etc etc etc.
 
 Our analysis of `nextstrain.org/zika <https://nextstrain.org/zika>`_ is achieved via two workflows:
 
-1. :doc:`ingest <./TKTK>` -- Download data from GenBank, clean and curate it to produce a metadata file and a sequences file
-2. :doc:`phylogenetic <./TKTK>` -- Filter sequences, align, construct phylogeny, and export for visualization
+1. :doc:`ingest <./ingest-workflow>` -- Download data from GenBank, clean and curate it to produce a metadata file and a sequences file
+2. :doc:`phylogenetic <./phylo-workflow>` -- Filter sequences, align, construct phylogeny, and export for visualization
 
 
 For a quickstart tutorial, including installation instructions, which will run through each of these workflows see here TKTK.
 
-To see a full description of each of the workflows see the :doc:`ingest <./TKTK>` and :doc:`phylogenetic <./TKTK>` pages.
+To see a full description of each of the workflows see the :doc:`ingest <./ingest-workflow>` and :doc:`phylogenetic <./phylo-workflow>` pages.
 
-For a detailed list of all configuration options and docs see :doc:`config/TKTK`.
+For a detailed list of all configuration options and docs see :doc:`config <./phylogenetic-config>`.
+
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    self
 
 
 .. toctree::
