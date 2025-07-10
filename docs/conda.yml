@@ -15,3 +15,4 @@ dependencies:
     - sphinx-copybutton
     - sphinx-markdown-tables
     - sphinx-tabs
+    - PyYAML

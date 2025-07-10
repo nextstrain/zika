@@ -13,6 +13,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('.'))
 
 
 # -- Project information -----------------------------------------------------
@@ -62,6 +63,7 @@ extensions = [
     'sphinx_markdown_tables',
     'sphinx.ext.intersphinx',
     'nextstrain.sphinx.theme',
+    'extensions.config_value_role',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

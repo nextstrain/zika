@@ -29,4 +29,11 @@ Furthermore, we assume that you are in this directory and that it is empty.
 What just happened?
 -------------------
 
-We downloaded data from 
+Input data was downloaded from :configvalue:`phylogenetic/defaults/config.yaml:inputs[0].metadata` and :configvalue:`phylogenetic/defaults/config.yaml:inputs[0].sequences`.
+
+We then ...
+
+To see how you can customise this analysis see the :doc:`config/TKTK` page.
+
+
+

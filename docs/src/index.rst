@@ -27,44 +27,23 @@ For a detailed list of all configuration options and docs see :doc:`config/TKTK`
 
     tutorial
 
+.. toctree::
+    :maxdepth: 1
+    :titlesonly:
+    :caption: Detailed workflow descriptions
+    :hidden:
+
+    ingest-workflow
+    phylogenetic-workflow
 
 .. toctree::
-   :maxdepth: 1
-   :titlesonly:
-   :caption: Visualization & Interpretation
-   :hidden:
+    :maxdepth: 1
+    :titlesonly:
+    :caption: Customisation
+    :hidden:
 
-   visualization/sharing
-   visualization/interpretation
-   visualization/narratives
+    phylogenetic-config
 
-.. toctree::
-   :maxdepth: 1
-   :titlesonly:
-   :caption: Guides
-   :hidden:
-
-   guides/update-workflow
-   guides/data-prep/index
-   guides/workflow-config-file
-   guides/customizing-visualization
-   guides/run-analysis-on-terra
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Reference
-   :hidden:
-
-   reference/nextstrain-overview
-   reference/files
-   reference/workflow-config-file
-   reference/remote_inputs
-   reference/metadata-fields
-   reference/naming_clades
-   reference/data_submitter_faq
-   reference/troubleshoot
-   reference/change_log
-   reference/glossary
 
 .. toctree::
    :maxdepth: 1
