@@ -59,11 +59,13 @@ extensions = [
     'recommonmark',
     'sphinx.ext.autodoc',
     'sphinxarg.ext',
+    'sphinx.ext.graphviz',
     'sphinx.ext.napoleon',
     'sphinx_markdown_tables',
     'sphinx.ext.intersphinx',
     'nextstrain.sphinx.theme',
     'extensions.config_value_role',
+    'extensions.snakemake_dag',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
