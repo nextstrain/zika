@@ -22,55 +22,7 @@ This part of the workflow usually includes the following steps:
 
 """
 
-
-# ------------- helper functions to collect, merge & download input files ------------------- #
-NEXTSTRAIN_PUBLIC_BUCKET = "s3://nextstrain-data/"
-
-def _parse_config_input(input):
-    """
-    Parses information from an individual config-defined input, i.e. an element within `config.inputs` or `config.additional_inputs`
-    and returns information snakemake rules can use to obtain the underlying data.
-
-    The structure of `input` is a dictionary with keys:
-    - name:string (required)
-    - metadata:string (optional) - a s3 URI or a local file path
-    - sequences:string (optional) - a s3 URI or a local file path
-
-    Returns a dictionary with optional keys:
-    - metadata:string - the relative path to the metadata file. If the original data was remote then this represents
-      the output of a rule which downloads the file
-    - metadata_location:string - the URI for the remote file if applicable else `None`
-    - sequences:string - the relative path to the sequences FASTA. If the original data was remote then this represents
-      the output of a rule which downloads the file
-    - sequences_location:string - the URI for the remote file if applicable else `None`
-
-    Raises InvalidConfigError
-    """
-    name = input['name']
-
-    info = {'metadata': None, 'metadata_location': None, 'sequences': None, 'sequences_location': None}
-
-    def _source(uri, *,  s3, local):
-        if uri.startswith('s3://'):
-            return s3
-        elif uri.lower().startswith(('http://','https://')):
-            raise InvalidConfigError("Workflow cannot yet handle HTTP[S] inputs")
-        # USVI files are expected to be part of the workflow source,
-        # and are _not_ expected to be provided via the analysis directory
-        elif uri.startswith('data/metadata_usvi.tsv') or uri.startswith('data/sequences_usvi.fasta'):
-            return workflow.source_path("../" + uri)
-        return local
-
-    if location:=input.get('metadata', False):
-        info['metadata'] = _source(location,  s3=f"data/{name}/metadata.tsv", local=location)
-        info['metadata_location'] = _source(location,  s3=location, local=None)
-
-    if location:=input.get('sequences', False):
-        info['sequences'] = _source(location,  s3=f"data/{name}/sequences.fasta", local=location)
-        info['sequences_location'] = _source(location,  s3=location, local=None)
-
-    return info
-
+include: "remote_files.smk"
 
 def _gather_inputs():
     all_inputs = [*config['inputs'], *config.get('additional_inputs', [])]
@@ -85,7 +37,11 @@ def _gather_inputs():
     if not all(['name' in i and ('sequences' in i or 'metadata' in i) for i in all_inputs]):
         raise InvalidConfigError("Each input (config.inputs and config.additional_inputs) must have a 'name' and 'metadata' and/or 'sequences'")
 
-    return {i['name']: _parse_config_input(i) for i in all_inputs}
+    available_keys = set(['name', 'metadata', 'sequences'])
+    if any([len(set(el.keys())-available_keys)>0 for el in all_inputs]):
+        raise InvalidConfigError(f"Each input (config.inputs and config.additional_inputs) can only include keys of {', '.join(available_keys)}")
+
+    return {el['name']: {k:(v if k=='name' else path_or_url(v)) for k,v in el.items()} for el in all_inputs}
 
 input_sources = _gather_inputs()
 
@@ -96,44 +52,6 @@ def input_metadata(wildcards):
 def input_sequences(wildcards):
     inputs = [info['sequences'] for info in input_sources.values() if info.get('sequences', None)]
     return inputs[0] if len(inputs)==1 else "results/sequences_merged.fasta"
-
-rule download_s3_sequences:
-    output:
-        sequences = "data/{input_name}/sequences.fasta",
-    log:
-        "logs/{input_name}/download_s3_sequences.txt",
-    benchmark:
-        "benchmarks/{input_name}/download_s3_sequences.txt"
-    params:
-        address = lambda w: input_sources[w.input_name]['sequences_location'],
-        no_sign_request=lambda w: "--no-sign-request" \
-            if input_sources[w.input_name]['sequences_location'].startswith(NEXTSTRAIN_PUBLIC_BUCKET) \
-            else "",
-    shell:
-        r"""
-        exec &> >(tee {log:q})
-
-        aws s3 cp {params.no_sign_request:q} {params.address:q} - | zstd -d > {output.sequences}
-        """
-
-rule download_s3_metadata:
-    output:
-        metadata = "data/{input_name}/metadata.tsv",
-    log:
-        "logs/{input_name}/download_s3_metadata.txt",
-    benchmark:
-        "benchmarks/{input_name}/download_s3_metadata.txt"
-    params:
-        address = lambda w: input_sources[w.input_name]['metadata_location'],
-        no_sign_request=lambda w: "--no-sign-request" \
-            if input_sources[w.input_name]['metadata_location'].startswith(NEXTSTRAIN_PUBLIC_BUCKET) \
-            else "",
-    shell:
-        r"""
-        exec &> >(tee {log:q})
-
-        aws s3 cp {params.no_sign_request:q} {params.address:q} - | zstd -d > {output.metadata}
-        """
 
 rule merge_metadata:
     """
