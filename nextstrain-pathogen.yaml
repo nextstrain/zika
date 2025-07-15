@@ -8,3 +8,26 @@
 ---
 compatibility:
   nextstrain run: true
+# [Discussion] Realistically we won't implement buildpacks for a number of months
+# and so that can't block our dependency checking. We can try to second guess the
+# correct syntax or (easier) deliberately choose a top-level key name which won't
+# be used by buildpacks and then migrate to the buildpacks syntax when we implement
+# them for each repo.
+dependencies:
+  # nextstrain-augur is the name of the python package, so this will check we have augur>=30 installed 
+  nextstrain-augur: ">=30"
+  # augur is the name of the CLI (not a python package which I have), so this will check we have augur>=33
+  # installed as a CLI *as long as* we don't have a python package called 'augur'
+  # (We don't need to list 'augur' and 'nextstrain-augur' - this is for testing!)
+  # Note: Augur 33 doesn't exist, so this is reported as a "Version incompatibilities"
+  augur: ">=33"
+  snakemake: ">=9,<10"
+  nextclade: '>=3.15'
+  nextstrain: '>=10.2'
+  # The following program should be reported under "Not found dependencies"
+  this-program-doesnt-exist: '>=1.1'
+  # The following program should be reported under "Declaration errors" as '1' is not a valid specifier
+  invalid-specifier: '1'
+  # I have a executable program called 'program-which-exits-2' which exits 2 every time. This dependency
+  # is reported under "Unexpected errors" for me, but may be "Not found dependencies" for you
+  program-which-exits-2: '>3.0'

@@ -122,6 +122,7 @@ Potential Nextstrain CLI scripts
 Snakemake workflow functions that are shared across many pathogen workflows that don’t really belong in any of our existing tools.
 
 - [config.smk](snakemake/config.smk) - Shared functions for parsing workflow configs.
+- [versioning.smk](snakemake/versioning.smk) - Shared functions for enforcing dependency versions.
 
 ## Software requirements
 
