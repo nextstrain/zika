@@ -7,4 +7,6 @@
 # used by `nextstrain setup` and `nextstrain run`.
 ---
 compatibility:
-  nextstrain run: true
+  nextstrain run:
+    ingest: ~
+    phylogenetic: ~
