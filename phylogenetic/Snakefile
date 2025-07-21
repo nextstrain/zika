@@ -1,7 +1,7 @@
 
 # Utility functions shared across all workflows.
 include: "../shared/vendored/snakemake/config.smk"
-
+include: "../shared/vendored/snakemake/versioning.smk"
 
 # Use default configuration values. Extend with Snakemake's --configfile/--config options.Add commentMore actions
 configfile: os.path.join(workflow.basedir, "defaults/config.yaml")
@@ -10,6 +10,7 @@ configfile: os.path.join(workflow.basedir, "defaults/config.yaml")
 if os.path.exists("config.yaml"):
     configfile: "config.yaml"
 
+check_pathogen_required_versions()
 
 rule all:
     input:
