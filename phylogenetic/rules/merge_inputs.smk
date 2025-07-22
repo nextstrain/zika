@@ -61,7 +61,7 @@ rule merge_metadata_and_sequences:
         **{f"{name}_sequences": info['sequences'] for name,info in input_sources.items() if info.get('sequences', None)},
     params:
         metadata = lambda w, input: [f"{k.removesuffix('_metadata')}={v}" for k, v in input.items() if k.endswith("_metadata")],
-        sequences = lambda w, input: [f"{k.removesuffix('_sequences')}={v}" for k, v in input.items() if k.endswith("_sequences")],
+        sequences = lambda w, input: [v for k, v in input.items() if k.endswith("_sequences")],
         id_field = config['strain_id_field'],
     output:
         metadata = "results/metadata_merged.tsv",
