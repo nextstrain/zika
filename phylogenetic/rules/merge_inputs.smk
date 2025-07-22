@@ -22,8 +22,6 @@ This part of the workflow usually includes the following steps:
 
 """
 
-include: "../../shared/vendored/snakemake/remote_files.smk"
-
 def _gather_inputs():
     all_inputs = [*config['inputs'], *config.get('additional_inputs', [])]
 

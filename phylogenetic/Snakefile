@@ -16,6 +16,7 @@ rule all:
         auspice_json = "auspice/zika.json"
 
 include: "rules/config.smk"
+include: "../shared/vendored/snakemake/remote_files.smk"
 include: "rules/merge_inputs.smk"
 include: "rules/prepare_sequences.smk"
 include: "rules/construct_phylogeny.smk"
