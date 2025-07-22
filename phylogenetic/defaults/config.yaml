@@ -1,5 +1,3 @@
-# Sequences must be FASTA and metadata must be TSV
-# Both files must be zstd compressed
 inputs:
   - name: ncbi
     metadata: "s3://nextstrain-data/files/workflows/zika/metadata.tsv.zst"
