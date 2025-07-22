@@ -2,8 +2,6 @@ inputs:
   - name: ncbi
     metadata: "example_data/metadata.tsv"
     sequences: "example_data/sequences.fasta"
-
-additional_inputs:
   - name: usvi
     metadata: "example_data/metadata_usvi.tsv"
     sequences: "example_data/sequences_usvi.fasta"
