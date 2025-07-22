@@ -51,22 +51,25 @@ def input_sequences(wildcards):
     inputs = [info['sequences'] for info in input_sources.values() if info.get('sequences', None)]
     return inputs[0] if len(inputs)==1 else "results/sequences_merged.fasta"
 
-rule merge_metadata:
+rule merge_metadata_and_sequences:
     """
-    This rule should only be invoked if there are multiple defined metadata inputs
+    This rule should only be invoked if there are multiple defined metadata or sequences inputs
     (config.inputs + config.additional_inputs)
     """
     input:
-        **{name: info['metadata'] for name,info in input_sources.items() if info.get('metadata', None)}
+        **{f"{name}_metadata": info['metadata'] for name,info in input_sources.items() if info.get('metadata', None)},
+        **{f"{name}_sequences": info['sequences'] for name,info in input_sources.items() if info.get('sequences', None)},
     params:
-        metadata = lambda w, input: list(map("=".join, input.items())),
+        metadata = lambda w, input: [f"{k.removesuffix('_metadata')}={v}" for k, v in input.items() if k.endswith("_metadata")],
+        sequences = lambda w, input: [f"{k.removesuffix('_sequences')}={v}" for k, v in input.items() if k.endswith("_sequences")],
         id_field = config['strain_id_field'],
     output:
-        metadata = "results/metadata_merged.tsv"
+        metadata = "results/metadata_merged.tsv",
+        sequences = "results/sequences_merged.fasta",
     log:
-        "logs/merge_metadata.txt",
+        "logs/merge_metadata_and_sequences.txt",
     benchmark:
-        "benchmarks/merge_metadata.txt"
+        "benchmarks/merge_metadata_and_sequences.txt"
     shell:
         r"""
         exec &> >(tee {log:q})
@@ -74,27 +77,9 @@ rule merge_metadata:
         augur merge \
             --metadata {params.metadata:q} \
             --metadata-id-columns {params.id_field} \
-            --output-metadata {output.metadata}
-        """
-
-rule merge_sequences:
-    """
-    This rule should only be invoked if there are multiple defined sequences inputs
-    (config.inputs + config.additional_inputs) for this particular segment
-    """
-    input:
-        **{name: info['sequences'] for name,info in input_sources.items() if info.get('sequences', None)}
-    output:
-        sequences = "results/sequences_merged.fasta"
-    log:
-        "logs/merge_sequences.txt",
-    benchmark:
-        "benchmarks/merge_sequences.txt"
-    shell:
-        r"""
-        exec &> >(tee {log:q})
-
-        seqkit rmdup {input:q} > {output.sequences:q}
+            --sequences {params.sequences:q} \
+            --output-metadata {output.metadata} \
+            --output-sequences {output.sequences}
         """
 
 # -------------------------------------------------------------------------------------------- #
