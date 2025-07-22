@@ -7,8 +7,8 @@ inputs:
 
 additional_inputs:
   - name: usvi
-    metadata: "data/metadata_usvi.tsv"
-    sequences: "data/sequences_usvi.fasta"
+    metadata: "s3://nextstrain-data/files/workflows/zika/metadata_usvi.tsv.zst"
+    sequences: "s3://nextstrain-data/files/workflows/zika/sequences_usvi.fasta.zst"
 
 # Config files
 exclude: "exclude.txt"
