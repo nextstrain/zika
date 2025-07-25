@@ -73,8 +73,8 @@ rule merge_metadata:
 
         augur merge \
             --metadata {params.metadata:q} \
-            --metadata-id-columns {params.id_field} \
-            --output-metadata {output.metadata}
+            --metadata-id-columns {params.id_field:q} \
+            --output-metadata {output.metadata:q}
         """
 
 rule merge_sequences:
