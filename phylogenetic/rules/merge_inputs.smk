@@ -94,7 +94,9 @@ rule merge_sequences:
         r"""
         exec &> >(tee {log:q})
 
-        seqkit rmdup {input:q} > {output.sequences:q}
+        augur merge \
+            --sequences {input:q} \
+            --output-sequences {output.sequences:q}
         """
 
 # -------------------------------------------------------------------------------------------- #
