@@ -68,11 +68,20 @@ There is little redirection and each rule should be able to be reasoned with on 
 
 This build starts by pulling preprocessed sequence and metadata files from:
 
-* https://data.nextstrain.org/files/zika/sequences.fasta.zst
-* https://data.nextstrain.org/files/zika/metadata.tsv.zst
+* https://data.nextstrain.org/files/workflows/zika/sequences.fasta.zst
+* https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst
 
 The above datasets have been preprocessed and cleaned from GenBank using the
 [ingest/](../ingest/) workflow and are updated at regular intervals.
+
+### Using USVI data
+
+This build also merges in USVI data from:
+
+* https://data.nextstrain.org/files/workflows/zika/sequences_usvi.fasta.zst
+* https://data.nextstrain.org/files/workflows/zika/metadata_usvi.tsv.zst
+
+The above dataset was pulled from https://github.com/blab/zika-usvi/ with [additional processing steps to remove duplicates](https://github.com/nextstrain/zika/blob/f8a6423a7f6b6f1b30b6496d8433b99eff0d54ff/phylogenetic/data/README.md).
 
 ### Using example data
 
