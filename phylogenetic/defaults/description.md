@@ -9,7 +9,8 @@ We curate sequence data and metadata from NCBI as starting point for our analyse
 * [data.nextstrain.org/files/workflows/zika/sequences.fasta.zst](https://data.nextstrain.org/files/workflows/zika/sequences.fasta.zst)
 * [data.nextstrain.org/files/workflows/zika/metadata.tsv.zst](https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst)
 
-Additionally, this Zika build incorporates data from https://github.com/blab/zika-usvi/.
+Additionally, this Zika build incorporates data from https://github.com/blab/zika-usvi/ with additional processing steps documented [here](https://github.com/nextstrain/zika/blob/f8a6423a7f6b6f1b30b6496d8433b99eff0d54ff/phylogenetic/data/README.md).
+
 
 ---
 
