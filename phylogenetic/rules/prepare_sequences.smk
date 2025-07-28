@@ -21,46 +21,6 @@ This part of the workflow usually includes the following steps:
 See Augur's usage docs for these commands for more details.
 """
 
-rule download:
-    """Downloading sequences and metadata from data.nextstrain.org"""
-    output:
-        sequences = "data/sequences.fasta.zst",
-        metadata = "data/metadata.tsv.zst"
-    params:
-        sequences_url = config["sequences_url"],
-        metadata_url = config["metadata_url"],
-    log:
-        "logs/download.txt",
-    benchmark:
-        "benchmarks/download.txt"
-    shell:
-        r"""
-        exec &> >(tee {log:q})
-
-        curl -fsSL --compressed {params.sequences_url:q} --output {output.sequences:q}
-        curl -fsSL --compressed {params.metadata_url:q} --output {output.metadata:q}
-        """
-
-rule decompress:
-    """Decompressing sequences and metadata"""
-    input:
-        sequences = "data/sequences.fasta.zst",
-        metadata = "data/metadata.tsv.zst"
-    output:
-        sequences = "data/sequences.fasta",
-        metadata = "data/metadata.tsv"
-    log:
-        "logs/decompress.txt",
-    benchmark:
-        "benchmarks/decompress.txt"
-    shell:
-        r"""
-        exec &> >(tee {log:q})
-
-        zstd -d -c {input.sequences:q} > {output.sequences:q}
-        zstd -d -c {input.metadata:q} > {output.metadata:q}
-        """
-
 rule filter:
     """
     Filtering to
@@ -70,8 +30,8 @@ rule filter:
       - minimum genome length of {params.min_length} (50% of Zika virus genome)
     """
     input:
-        sequences = "data/sequences_all.fasta",
-        metadata = "data/metadata_all.tsv",
+        sequences = input_sequences,
+        metadata = input_metadata,
         exclude = resolve_config_path(config["exclude"]),
     output:
         sequences = "results/filtered.fasta"

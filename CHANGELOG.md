@@ -6,6 +6,25 @@ the outputs of the workflows.
 
 ## 2025
 
+* 25 July 2025: Major update to the configuration of inputs [#80]() from a flat:
+
+```
+sequences_url: "https://data.nextstrain.org/files/workflows/zika/sequences.fasta.zst"
+metadata_url: "https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst"
+```
+
+to named dictionary key of multiple inputs:
+
+```
+inputs:
+  - name: ncbi
+    metadata: "s3://nextstrain-data/files/workflows/zika/metadata.tsv.zst"
+    sequences: "s3://nextstrain-data/files/workflows/zika/sequences.fasta.zst"
+  - name: usvi
+    metadata: "s3://nextstrain-data/files/workflows/zika/metadata_usvi.tsv.zst"
+    sequences: "s3://nextstrain-data/files/workflows/zika/sequences_usvi.fasta.zst"
+```
+
 * 06 June 2025: Updated workflows to support the `nextstrain run` command. ([#85][])
   * See individual workflow's `README.md` for detailed instructions on how to use `nextstrain run`.
 * 06 June 2025: phylogenetic - convert config params `filter.group_by` and `traits.columns` to lists. ([#84][])
