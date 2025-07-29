@@ -6,16 +6,18 @@ the outputs of the workflows.
 
 ## 2025
 
-* 25 July 2025: Major update to the configuration of inputs [#80]() from a flat:
+* 25 July 2025: phylogenetic - Major update to the definition of inputs. ([#80][])
 
-```
+The configuration has been updated from top level keys:
+
+```yaml
 sequences_url: "https://data.nextstrain.org/files/workflows/zika/sequences.fasta.zst"
 metadata_url: "https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst"
 ```
 
 to named dictionary key of multiple inputs:
 
-```
+```yaml
 inputs:
   - name: ncbi
     metadata: "s3://nextstrain-data/files/workflows/zika/metadata.tsv.zst"
@@ -38,6 +40,7 @@ inputs:
   *  The config param `curate.geolocation_rules_url` is no longer supported.
 
 [#79]: https://github.com/nextstrain/zika/pull/79
+[#80]: https://github.com/nextstrain/zika/pull/80
 [#84]: https://github.com/nextstrain/zika/pull/84
 [#85]: https://github.com/nextstrain/zika/pull/85
 
