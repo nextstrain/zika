@@ -85,9 +85,8 @@ The above dataset was pulled from https://github.com/blab/zika-usvi/ with [addit
 
 ### Using example data
 
-Alternatively, you can run the build using the
-example data provided in this repository.  To run the build by copying the
-example sequences into the `data/` directory, use the following:
+Alternatively, you can run the build using the example data provided in this
+repository by running:
 
     nextstrain build .  --configfile build-configs/ci/config.yaml
 
