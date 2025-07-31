@@ -1,0 +1,1 @@
+../../shared/vendored/snakemake/config.rst
