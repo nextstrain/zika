@@ -7,6 +7,8 @@
 # used by `nextstrain setup` and `nextstrain run`.
 ---
 compatibility:
-  nextstrain run:
-    ingest: ~
-    phylogenetic: ~
+  nextstrain run: true
+
+workflows:
+  ingest: ~
+  phylogenetic: ~
