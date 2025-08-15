@@ -78,6 +78,12 @@ rule translate:
             --output {output.node_data:q}
         """
 
+def conditional(option_str, argument):
+    """Used for config-defined arguments whose presence necessitates a command-line option
+    (e.g. --foo) prepended and whose absense should result in no option/arguments in the CLI command.
+    """
+    return f"{option_str} {argument}" if argument else ""
+
 rule traits:
     """
     Inferring ancestral traits for {params.columns!s}
@@ -92,6 +98,8 @@ rule traits:
         columns = as_list(config["traits"]["columns"]),
         sampling_bias_correction = config["traits"]["sampling_bias_correction"],
         strain_id = config.get("strain_id_field", "strain"),
+        branch_labels = conditional('--branch-labels', config['traits'].get('branch_labels', False)),
+        branch_confidence = conditional('--branch-confidence', config['traits'].get('branch_confidence', False)),
     log:
         "logs/traits.txt",
     benchmark:
@@ -107,5 +115,6 @@ rule traits:
             --output {output.node_data:q} \
             --columns {params.columns:q} \
             --confidence \
+            {params.branch_labels} {params.branch_confidence} \
             --sampling-bias-correction {params.sampling_bias_correction:q}
         """
