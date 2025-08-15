@@ -1,3 +1,7 @@
+from snakemake.utils import min_version
+
+# Minimum Snakemake version needed for the storage plugins used in remote_files.smk
+min_version("8.0.0")
 
 # Utility functions shared across all workflows.
 include: "../shared/vendored/snakemake/config.smk"
