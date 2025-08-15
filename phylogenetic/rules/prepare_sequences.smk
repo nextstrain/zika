@@ -75,11 +75,13 @@ rule align:
         "logs/align.txt",
     benchmark:
         "benchmarks/align.txt"
+    threads: 8
     shell:
         r"""
         exec &> >(tee {log:q})
 
         augur align \
+            --nthreads {threads} \
             --sequences {input.sequences:q} \
             --reference-sequence {input.reference:q} \
             --output {output.alignment:q} \
