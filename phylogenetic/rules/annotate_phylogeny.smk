@@ -30,6 +30,7 @@ See Augur's usage docs for these commands for more details.
 Custom node data files can also be produced by build-specific scripts in addition
 to the ones produced by Augur commands.
 """
+from collections.abc import Iterable
 
 rule ancestral:
     """Reconstructing ancestral sequences and mutations"""
@@ -82,7 +83,12 @@ def conditional(option_str, argument):
     """Used for config-defined arguments whose presence necessitates a command-line option
     (e.g. --foo) prepended and whose absense should result in no option/arguments in the CLI command.
     """
-    return f"{option_str} {argument}" if argument else ""
+    if not argument:
+        return ""
+    if isinstance(argument, Iterable) and not isinstance(argument, str):
+        return [option_str, *argument]
+    else:
+        return [option_str, argument]
 
 rule traits:
     """
@@ -115,6 +121,7 @@ rule traits:
             --output {output.node_data:q} \
             --columns {params.columns:q} \
             --confidence \
-            {params.branch_labels} {params.branch_confidence} \
+            {params.branch_labels:q} \
+            {params.branch_confidence:q} \
             --sampling-bias-correction {params.sampling_bias_correction:q}
         """

@@ -38,6 +38,7 @@ traits:
     - country
   sampling_bias_correction: 3
   # branch_labels [optional] columns to annotate as branch labels when their inferred value changes across the tree
-  branch_labels: "region"
+  branch_labels:
+    - region
   # branch_confidence [optional] minimum confidence of inferred state changes to be considered as branch labels
 
