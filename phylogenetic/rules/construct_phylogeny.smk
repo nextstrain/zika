@@ -29,11 +29,13 @@ rule tree:
         "logs/tree.txt",
     benchmark:
         "benchmarks/tree.txt"
+    threads: 8
     shell:
         r"""
         exec &> >(tee {log:q})
 
         augur tree \
+            --nthreads {threads} \
             --alignment {input.alignment:q} \
             --output {output.tree:q}
         """
