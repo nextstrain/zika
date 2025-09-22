@@ -4,7 +4,7 @@ export a Nextstrain dataset.
 
 REQUIRED INPUTS:
 
-    metadata        = data/metadata_all.tsv
+    metadata        = [from input_metadata function]
     tree            = results/tree.nwk
     branch_lengths  = results/branch_lengths.json
     node_data       = results/*.json
