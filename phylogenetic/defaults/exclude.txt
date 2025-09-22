@@ -1,5 +1,5 @@
 MG827392
-KX369547 # PF13/251013_18 # reference included in config/zika_reference.gb
+KX369547 # PF13/251013_18 # reference included in reference.gb
 KY553111 # AFMC_U # too basal
 KY962729 # AFMC_S # too basal
 KY120353 # Boracay/16423 # too basal
