@@ -3,7 +3,7 @@ This part of the workflow constructs the phylogenetic tree.
 
 REQUIRED INPUTS:
 
-    metadata            = [from input_metadata function]
+    metadata            = results/metadata.tsv
     prepared_sequences  = results/aligned.fasta
 
 OUTPUTS:
@@ -51,7 +51,7 @@ rule refine:
     input:
         tree = "results/tree_raw.nwk",
         alignment = "results/aligned.fasta",
-        metadata = input_metadata,
+        metadata = "results/metadata.tsv",
     output:
         tree = "results/tree.nwk",
         node_data = "results/branch_lengths.json"

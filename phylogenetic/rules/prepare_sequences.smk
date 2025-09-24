@@ -3,8 +3,8 @@ This part of the workflow prepares sequences for constructing the phylogenetic t
 
 REQUIRED INPUTS:
 
-    metadata_url    = url to metadata.tsv.zst
-    sequences_url   = url to sequences.fasta.zst
+    metadata_url    = results/metadata.tsv
+    sequences_url   = results/sequences.fasta
     reference   = path to reference sequence or genbank
 
 OUTPUTS:
@@ -30,8 +30,8 @@ rule filter:
       - minimum genome length of {params.min_length} (50% of Zika virus genome)
     """
     input:
-        sequences = input_sequences,
-        metadata = input_metadata,
+        sequences = "results/sequences.fasta",
+        metadata = "results/metadata.tsv",
         exclude = resolve_config_path(config["exclude"]),
     output:
         sequences = "results/filtered.fasta"

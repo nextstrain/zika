@@ -4,7 +4,7 @@ export a Nextstrain dataset.
 
 REQUIRED INPUTS:
 
-    metadata        = [from input_metadata function]
+    metadata        = results/metadata.tsv
     tree            = results/tree.nwk
     branch_lengths  = results/branch_lengths.json
     node_data       = results/*.json
@@ -29,7 +29,7 @@ rule export:
     """Exporting data files for for auspice"""
     input:
         tree = "results/tree.nwk",
-        metadata = input_metadata,
+        metadata = "results/metadata.tsv",
         branch_lengths = "results/branch_lengths.json",
         traits = "results/traits.json",
         nt_muts = "results/nt_muts.json",
