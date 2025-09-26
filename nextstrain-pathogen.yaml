@@ -6,5 +6,10 @@
 # This file's *contents* is the "registration metadata" for the pathogen repo,
 # used by `nextstrain setup` and `nextstrain run`.
 ---
-compatibility:
-  nextstrain run: true
+workflows:
+  ingest:
+    compatibility:
+      nextstrain run: True
+  phylogenetic:
+    compatibility:
+      nextstrain run: True
