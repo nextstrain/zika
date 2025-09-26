@@ -6,6 +6,9 @@ the outputs of the workflows.
 
 ## 2025
 
+* 26 September 2025: Updated workflow compatibility declaration in `nextstrain-pathogen.yaml`.
+  **This requires Nextstrain CLI >=10.3.0** to setup and update the pathogen without error messages.
+  However, workflows will still run with Nextstrain CLI <10.3.0 [#101][]
 * 25 July 2025: phylogenetic - Major update to the definition of inputs. ([#80][])
 
 The configuration has been updated from top level keys:
@@ -43,6 +46,7 @@ inputs:
 [#80]: https://github.com/nextstrain/zika/pull/80
 [#84]: https://github.com/nextstrain/zika/pull/84
 [#85]: https://github.com/nextstrain/zika/pull/85
+[#101]: https://github.com/nextstrain/zika/pull/101
 
 ## 2024
 
