@@ -90,3 +90,4 @@ OR488127 # strain Mother_head_182, highly diverged with MRCA around 1940
 OR488126 # strain Mother_head_76, highly diverged with MRCA around 1940
 MG674718 # passage history: suckling mouse 4 times on the basic of ZKC2/2016 strain
 MG674719 # passage history: suckling mouse 6 times on the basic of ZKC2/2016 strain
+PQ432999 # This is a highly divergent African lineage virus
