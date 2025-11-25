@@ -114,6 +114,9 @@ repository by running:
 
     nextstrain build .  --configfile build-configs/ci/config.yaml
 
+Note: this only works with `nextstrain build`. Within repo input files are _not_
+supported by `nextstrain run`.
+
 ### Deploying build
 
 To run the workflow and automatically deploy the build to nextstrain.org,
