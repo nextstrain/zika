@@ -64,24 +64,48 @@ The workflow is contained in [Snakefile](Snakefile) with included [rules](rules)
 Each rule specifies its file inputs and output and pulls its parameters from the config.
 There is little redirection and each rule should be able to be reasoned with on its own.
 
-### Using GenBank data
+### Default input data
 
-This build starts by pulling preprocessed sequence and metadata files from:
+The default build starts from the public Nextstrain data that have been preprocessed
+and cleaned from NCBI GenBank and the USVI data from https://github.com/blab/zika-usvi.
 
-* https://data.nextstrain.org/files/workflows/zika/sequences.fasta.zst
-* https://data.nextstrain.org/files/workflows/zika/metadata.tsv.zst
+```yaml
+inputs:
+  - name: ncbi
+    metadata: "s3://nextstrain-data/files/workflows/zika/metadata.tsv.zst"
+    sequences: "s3://nextstrain-data/files/workflows/zika/sequences.fasta.zst"
+  - name: usvi
+    metadata: "s3://nextstrain-data/files/workflows/zika/metadata_usvi.tsv.zst"
+    sequences: "s3://nextstrain-data/files/workflows/zika/sequences_usvi.fasta.zst"
+```
 
-The above datasets have been preprocessed and cleaned from GenBank using the
-[ingest/](../ingest/) workflow and are updated at regular intervals.
+The NCBI Genbank data are preprocessed using the [ingest/](../ingest/)
+workflow and are automatically updated when new data are available.
+The USVI records were pulled from https://github.com/blab/zika-usvi/
+with [additional processing steps to remove duplicates][]. These are static
+unless we make changes to the expected metadata columns.
 
-### Using USVI data
+### Adding your own data
 
-This build also merges in USVI data from:
+If you want to add your own data to the default input, specify your inputs with
+the `additional_inputs` config parameter.
 
-* https://data.nextstrain.org/files/workflows/zika/sequences_usvi.fasta.zst
-* https://data.nextstrain.org/files/workflows/zika/metadata_usvi.tsv.zst
+```yaml
+additional_inputs:
+  - name: private
+    metadata: data/metadata.tsv
+    sequences: data/sequences.fasta
+```
 
-The above dataset was pulled from https://github.com/blab/zika-usvi/ with [additional processing steps to remove duplicates](https://github.com/nextstrain/zika/blob/f8a6423a7f6b6f1b30b6496d8433b99eff0d54ff/phylogenetic/data/README.md).
+If you want to run the builds _without_ the default data and only use your own
+data, you can do so by specifying the `inputs` parameter.
+
+```yaml
+inputs:
+  - name: private
+    metadata: data/metadata.tsv
+    sequences: data/sequences.fasta
+```
 
 ### Using example data
 
@@ -109,3 +133,4 @@ nextstrain build \
 [auspice]: https://docs.nextstrain.org/projects/auspice/en/stable/index.html
 [Installing Nextstrain guide]: https://docs.nextstrain.org/en/latest/install.html
 [Running a Pathogen Workflow guide]: https://docs.nextstrain.org/en/latest/tutorials/running-a-workflow.html
+[additional processing steps to remove duplicates]: https://github.com/nextstrain/zika/blob/f8a6423a7f6b6f1b30b6496d8433b99eff0d54ff/phylogenetic/data/README.md
