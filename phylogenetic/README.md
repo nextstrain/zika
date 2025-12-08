@@ -82,7 +82,7 @@ inputs:
 The NCBI Genbank data are preprocessed using the [ingest/](../ingest/)
 workflow and are automatically updated when new data are available.
 The USVI records were pulled from https://github.com/blab/zika-usvi/
-with [additional processing steps to remove duplicates][]. These are static
+with [additional processing steps to remove duplicates][]. These are not updated
 unless we make changes to the expected metadata columns.
 
 ### Adding your own data
@@ -106,6 +106,14 @@ inputs:
     metadata: data/metadata.tsv
     sequences: data/sequences.fasta
 ```
+
+#### Metadata format
+
+Please see the Augur docs on [How do I prepare metadata?][] and inspect the
+default Nextstrain metadata TSV for Zika specific columns.
+
+If using the [default config](defaults/config.yaml), then the columns required
+are `accession`, `date`, `country`, and `region`.  
 
 ### Using example data
 
@@ -137,3 +145,4 @@ nextstrain build \
 [Installing Nextstrain guide]: https://docs.nextstrain.org/en/latest/install.html
 [Running a Pathogen Workflow guide]: https://docs.nextstrain.org/en/latest/tutorials/running-a-workflow.html
 [additional processing steps to remove duplicates]: https://github.com/nextstrain/zika/blob/f8a6423a7f6b6f1b30b6496d8433b99eff0d54ff/phylogenetic/data/README.md
+[How do I prepare metadata?]: https://docs.nextstrain.org/projects/augur/page/faq/metadata.html
