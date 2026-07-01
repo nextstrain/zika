@@ -26,7 +26,7 @@ additional_inputs:
 ```
 
 The `id_field` key for each input is passed through to `augur merge
---metadata-id-columns`.
+--metadata-id-columns`. The merged metadata's id field is always named `id`.
 
 Supports any of the compression formats that are supported by `augur read-file`,
 see <https://docs.nextstrain.org/projects/augur/page/usage/cli/read-file.html>
@@ -84,7 +84,8 @@ rule merge_metadata:
         augur merge \
             --metadata {params.metadata:q} \
             --metadata-id-columns {params.id_field:q} \
-            --output-metadata {output.metadata:q}
+            --output-metadata {output.metadata:q} \
+            --output-metadata-id-column id
         """
 
 
