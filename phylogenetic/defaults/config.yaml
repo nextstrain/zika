@@ -1,9 +1,11 @@
 inputs:
   - name: ncbi
     metadata: "s3://nextstrain-data/files/workflows/zika/metadata.tsv.zst"
+    id_field: "accession"
     sequences: "s3://nextstrain-data/files/workflows/zika/sequences.fasta.zst"
   - name: usvi
     metadata: "s3://nextstrain-data/files/workflows/zika/metadata_usvi.tsv.zst"
+    id_field: "accession"
     sequences: "s3://nextstrain-data/files/workflows/zika/sequences_usvi.fasta.zst"
 
 # Config files
@@ -12,8 +14,6 @@ reference: "reference.gb"
 colors: "colors.tsv"
 auspice_config: "auspice_config.json"
 description: "description.md"
-
-strain_id_field: "accession"
 
 filter:
   group_by:

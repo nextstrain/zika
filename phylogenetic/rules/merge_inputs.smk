@@ -15,13 +15,18 @@ are combined with the default inputs:
 inputs:
     - name: default
       metadata: <path-or-url>
+      id_field: <metadata-id-field-name>
       sequences: <path-or-url>
 
 additional_inputs:
     - name: private
       metadata: <path-or-url>
+      id_field: <metadata-id-field-name>
       sequences: <path-or-url>
 ```
+
+The `id_field` key for each input is passed through to `augur merge
+--metadata-id-columns`.
 
 Supports any of the compression formats that are supported by `augur read-file`,
 see <https://docs.nextstrain.org/projects/augur/page/usage/cli/read-file.html>
@@ -45,8 +50,10 @@ def _gather_inputs():
         raise InvalidConfigError("At least one input must have 'metadata'")
     if not any (['sequences' in i for i in all_inputs]):
         raise InvalidConfigError("At least one input must have 'sequences'")
+    if not all(['id_field' in i for i in all_inputs if 'metadata' in i]):
+        raise InvalidConfigError("Each input with 'metadata' must also have an 'id_field'")
 
-    available_keys = set(['name', 'metadata', 'sequences'])
+    available_keys = set(['name', 'metadata', 'id_field', 'sequences'])
     if any([len(set(el.keys())-available_keys)>0 for el in all_inputs]):
         raise InvalidConfigError(f"Each input (config.inputs and config.additional_inputs) can only include keys of {', '.join(available_keys)}")
 
@@ -63,7 +70,7 @@ rule merge_metadata:
         **{name: info['metadata'] for name,info in input_sources.items() if info.get('metadata', None)}
     params:
         metadata = lambda w, input: list(map("=".join, input.items())),
-        id_field = config['strain_id_field'],
+        id_field = [f"{name}={info['id_field']}" for name,info in input_sources.items() if info.get('metadata', None)],
     output:
         metadata = "results/metadata.tsv"
     log:
