@@ -40,7 +40,6 @@ rule filter:
         sequences_per_group = config["filter"]["sequences_per_group"],
         min_date = config["filter"]["min_date"],
         min_length = config["filter"]["min_length"],
-        strain_id = config.get("strain_id_field", "strain"),
     log:
         "logs/filter.txt",
     benchmark:
@@ -52,7 +51,6 @@ rule filter:
         augur filter \
             --sequences {input.sequences:q} \
             --metadata {input.metadata:q} \
-            --metadata-id-columns {params.strain_id:q} \
             --exclude {input.exclude:q} \
             --output {output.sequences:q} \
             --group-by {params.group_by:q} \

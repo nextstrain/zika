@@ -59,7 +59,6 @@ rule refine:
         coalescent = config["refine"]["coalescent"],
         date_inference = config["refine"]["date_inference"],
         clock_filter_iqd = config["refine"]["clock_filter_iqd"],
-        strain_id = config.get("strain_id_field", "strain"),
     log:
         "logs/refine.txt",
     benchmark:
@@ -72,7 +71,6 @@ rule refine:
             --tree {input.tree:q} \
             --alignment {input.alignment:q} \
             --metadata {input.metadata:q} \
-            --metadata-id-columns {params.strain_id:q} \
             --output-tree {output.tree:q} \
             --output-node-data {output.node_data:q} \
             --timetree \

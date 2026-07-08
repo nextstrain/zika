@@ -3,6 +3,16 @@ from snakemake.utils import min_version
 # Minimum Snakemake version needed for the storage plugins used in remote_files.smk
 min_version("8.0.0")
 
+from packaging import version
+from augur.__version__ import __version__ as augur_version
+import sys
+
+min_augur_version = "34.0.0"
+if version.parse(augur_version) < version.parse(min_augur_version):
+  print("This pipeline needs a newer version of augur than you currently have...")
+  print(f"Current augur version: {augur_version}. Minimum required: {min_augur_version}")
+  sys.exit(1)
+
 # Utility functions shared across all workflows.
 include: "../shared/vendored/snakemake/config.smk"
 

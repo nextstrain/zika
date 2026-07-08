@@ -73,9 +73,11 @@ and cleaned from NCBI GenBank and the USVI data from https://github.com/blab/zik
 inputs:
   - name: ncbi
     metadata: "s3://nextstrain-data/files/workflows/zika/metadata.tsv.zst"
+    id_field: "accession"
     sequences: "s3://nextstrain-data/files/workflows/zika/sequences.fasta.zst"
   - name: usvi
     metadata: "s3://nextstrain-data/files/workflows/zika/metadata_usvi.tsv.zst"
+    id_field: "accession"
     sequences: "s3://nextstrain-data/files/workflows/zika/sequences_usvi.fasta.zst"
 ```
 

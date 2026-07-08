@@ -109,7 +109,6 @@ rule traits:
     params:
         columns = as_list(config["traits"]["columns"]),
         sampling_bias_correction = config["traits"]["sampling_bias_correction"],
-        strain_id = config.get("strain_id_field", "strain"),
         branch_labels = conditional('--branch-labels', config['traits'].get('branch_labels', False)),
         branch_confidence = conditional('--branch-confidence', config['traits'].get('branch_confidence', False)),
     log:
@@ -123,7 +122,6 @@ rule traits:
         augur traits \
             --tree {input.tree:q} \
             --metadata {input.metadata:q} \
-            --metadata-id-columns {params.strain_id:q} \
             --output {output.node_data:q} \
             --columns {params.columns:q} \
             --confidence \

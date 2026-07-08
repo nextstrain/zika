@@ -39,8 +39,6 @@ rule export:
         description = resolve_config_path(config["description"]),
     output:
         auspice_json = "auspice/zika.json"
-    params:
-        strain_id = config.get("strain_id_field", "strain"),
     log:
         "logs/export.txt",
     benchmark:
@@ -52,7 +50,6 @@ rule export:
         augur export v2 \
             --tree {input.tree:q} \
             --metadata {input.metadata:q} \
-            --metadata-id-columns {params.strain_id:q} \
             --node-data {input.branch_lengths:q} {input.traits:q} {input.nt_muts:q} {input.aa_muts:q} \
             --colors {input.colors:q} \
             --auspice-config {input.auspice_config:q} \
