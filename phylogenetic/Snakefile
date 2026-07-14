@@ -15,6 +15,7 @@ if version.parse(augur_version) < version.parse(min_augur_version):
 
 # Utility functions shared across all workflows.
 include: "../shared/vendored/snakemake/config.smk"
+set_search_paths()
 
 
 # Use default configuration values. Extend with Snakemake's --configfile/--config options.Add commentMore actions
@@ -30,7 +31,6 @@ rule all:
         auspice_json = "auspice/zika.json"
 
 include: "rules/config.smk"
-include: "../shared/vendored/snakemake/remote_files.smk"
 include: "rules/merge_inputs.smk"
 include: "rules/prepare_sequences.smk"
 include: "rules/construct_phylogeny.smk"
