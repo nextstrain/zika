@@ -9,7 +9,7 @@ min_version(
 include: "../shared/vendored/snakemake/config.smk"
 
 
-# Use default configuration values. Extend with Snakemake's --configfile/--config options.Add commentMore actions
+# Use default configuration values. Extend with Snakemake's --configfile/--config options.
 configfile: os.path.join(workflow.basedir, "defaults/config.yaml")
 
 # Use custom configuration from analysis directory (i.e. working dir), if any.

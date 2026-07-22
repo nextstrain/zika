@@ -45,7 +45,7 @@ Otherwise, update your local copy of the workflow with:
     cd zika
     git pull --ff-only origin master
 
-Run the phylogenetic workflow workflow with
+Run the phylogenetic workflow with
 
     cd phylogenetic
     nextstrain build .

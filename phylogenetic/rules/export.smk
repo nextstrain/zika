@@ -26,7 +26,7 @@ See Augur's usage docs for these commands for more details.
 """
 
 rule export:
-    """Exporting data files for for auspice"""
+    """Exporting data files for auspice"""
     input:
         tree = "results/tree.nwk",
         metadata = "results/metadata.tsv",
