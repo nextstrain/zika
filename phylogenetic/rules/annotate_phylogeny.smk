@@ -1,5 +1,5 @@
 """
-This part of the workflow creates additonal annotations for the phylogenetic tree.
+This part of the workflow creates additional annotations for the phylogenetic tree.
 
 REQUIRED INPUTS:
 
