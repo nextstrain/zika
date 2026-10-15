@@ -6,6 +6,8 @@ the outputs of the workflows.
 
 ## 2026
 
+* 15 October 2026: phylogenetic - support use of cached remote inputs.
+    * See https://github.com/nextstrain/shared/pull/87 for more details.
 * 08 July 2026: The config param `strain_id_field` has been replaced by input-specific
   `id_field` params. Restore previous default behavior by setting `id_field:
   accession` on each of your inputs.
