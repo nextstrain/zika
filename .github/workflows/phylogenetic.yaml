@@ -99,7 +99,7 @@ jobs:
       )
     permissions:
       id-token: write
-    uses: nextstrain/.github/.github/workflows/pathogen-repo-build.yaml@master
+    uses: nextstrain/.github/.github/workflows/pathogen-repo-build.yaml@use-job-context
     secrets: inherit
     with:
       # Starting with the default docker runtime
